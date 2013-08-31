@@ -15,6 +15,7 @@
     mc:Ignorable="d"
     local:TiltEffect.IsTiltEnabled="True"
     shell:SystemTray.IsVisible="True"
+    shell:SystemTray.Opacity="0"
     Loaded="LoginPage_Loaded"
     Style="{StaticResource TransitionPageStyle}">
 

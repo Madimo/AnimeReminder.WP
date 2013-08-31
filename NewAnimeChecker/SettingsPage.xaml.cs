@@ -46,6 +46,11 @@ namespace NewAnimeChecker
                 NavigationService.GoBack();
             }
         }
+
+        private async void SetLockscreen_Click(object sender, RoutedEventArgs e)
+        {
+            var op = await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings-lock:"));
+        }
         #endregion
 
         #region 邮件提醒开关
@@ -157,10 +162,12 @@ namespace NewAnimeChecker
             if (UpdateScheduledTask != null && UpdateScheduledTask.IsScheduled == true)
             {
                 TaskAgentSwitch.IsChecked = true;
+                SetLockscreenButton.IsEnabled = true;
             }
             else
             {
                 TaskAgentSwitch.IsChecked = false;
+                SetLockscreenButton.IsEnabled = false;
             }
         }
 
@@ -181,6 +188,7 @@ namespace NewAnimeChecker
                     settings.Add("UpdateInterval", 0);
                 settings.Save();
                 ListPicker.IsEnabled = true;
+                SetLockscreenButton.IsEnabled = true;
                 ScheduledActionService.LaunchForTest(agentName, TimeSpan.FromSeconds(30));
             }
             catch (InvalidOperationException exception)
@@ -208,6 +216,7 @@ namespace NewAnimeChecker
             if (UpdateScheduledTask != null)
                 ScheduledActionService.Remove(agentName);
             ListPicker.IsEnabled = false;
+            SetLockscreenButton.IsEnabled = false;
         }
         #endregion
 

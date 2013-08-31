@@ -26,6 +26,16 @@ namespace NewAnimeChecker
         }
         #endregion
 
+        #region 导航事件处理
+        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
+        {
+            if (IsolatedStorageSettings.ApplicationSettings.Contains("MustRefresh"))
+                IsolatedStorageSettings.ApplicationSettings.Remove("MustRefresh");
+            IsolatedStorageSettings.ApplicationSettings.Add("MustRefresh", true);
+            IsolatedStorageSettings.ApplicationSettings.Save();
+        }
+        #endregion
+
         #region 控件事件处理
         private void AddPage_Loaded(object sender, RoutedEventArgs e)
         {

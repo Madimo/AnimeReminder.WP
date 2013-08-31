@@ -5,14 +5,18 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.IO;
 using System.IO.IsolatedStorage;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Info;
+using Microsoft.Phone.Tasks;
 using Microsoft.Phone.Shell;
 using NewAnimeChecker.Resources;
 using System.Diagnostics;
 using HttpLibrary;
-using Delay;
 
 namespace NewAnimeChecker
 {
@@ -94,10 +98,6 @@ namespace NewAnimeChecker
         #region 导航事件处理
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            if (e.NavigationMode != System.Windows.Navigation.NavigationMode.Back)
-            {
-                State["ViewModel"] = App.ViewModel.SubscriptionItems;
-            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -105,8 +105,22 @@ namespace NewAnimeChecker
             if (settings.Contains("UserKey"))
             {
                Pivot.Title = (string)settings["UserName"];
-               RefreshSubscription();
-               RefreshUpdatedSchedule();
+               if (e.NavigationMode == NavigationMode.Back && settings.Contains("MustRefresh"))
+               {
+                   if ((bool)settings["MustRefresh"])
+                   {
+                       RefreshSubscription();
+                       RefreshUpdatedSchedule();
+                       settings["MustRefresh"] = false;
+                   }
+               }
+               else
+               {
+                   if (!settings.Contains("MustRefresh"))
+                       settings.Add("MustRefresh", false);
+                   RefreshSubscription();
+                   RefreshUpdatedSchedule();
+               }
             }
             else
             {
@@ -205,26 +219,25 @@ namespace NewAnimeChecker
         }
         #endregion
 
-        #region 刷新 今日更新
+        #region 刷新 最近更新
         public async void RefreshUpdatedSchedule()
         {
             SetBusy("RefreshUpdatedSchedule");
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://apianime.ricter.info/get_schedule?hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://apianime.ricter.info/get_update_schedule?hash=" + new Random().Next());
                 App.ViewModel.ScheduleItems.Clear();
                 string[] List = result.Split('\n');
                 for (int i = 0; i < List.Length; ++i)
                 {
                     string[] item = List[i].Split('|');
-                    if (item.Length < 4)
+                    if (item.Length < 3)
                         return;
-                    string id      = item[0];
-                    string time    = item[1];
-                    string website = item[2];
-                    string name    = item[3];
-                    App.ViewModel.ScheduleItems.Add(new ViewModels.ScheduleModel() { ID = id, Name = name, Website = website, Time = time });
+                    string time = item[0];
+                    string name = item[1];
+                    string id   = item[2];
+                    App.ViewModel.ScheduleItems.Add(new ViewModels.ScheduleModel() { ID = id, Name = name, Time = time });
                 }
             }
             catch (Exception exception)
@@ -324,6 +337,31 @@ namespace NewAnimeChecker
         #endregion
 
         #region 控件事件处理
+        private void Pivot_Loaded(object sender, RoutedEventArgs e)
+        {
+            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (isf.FileExists("Background.jpg"))
+                {
+                    using (IsolatedStorageFileStream file = isf.OpenFile("Background.jpg", FileMode.Open))
+                    {
+                        try
+                        {
+                            BitmapImage bitmap = new BitmapImage();
+                            bitmap.SetSource(file);
+                            ImageBrush brush = new ImageBrush();
+                            brush.ImageSource = bitmap;            
+                            Pivot.Background = brush;
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine(ex.Message);
+                        }
+                    }
+                }
+            }
+        }
+
         private void Refresh_Click(object sender, EventArgs e)
         {
             if (Pivot.SelectedIndex == 0)
@@ -376,6 +414,64 @@ namespace NewAnimeChecker
                     }
                     break;
             }
+        }
+
+        private void ApplicationBar_StateChanged(object sender, ApplicationBarStateChangedEventArgs e)
+        {
+            if (e.IsMenuVisible == true)
+                ApplicationBar.Opacity = 0.9;
+            else
+                ApplicationBar.Opacity = 0.5;
+        }
+
+        private void GoMarket_Click(object sender, EventArgs e)
+        {
+            MarketplaceReviewTask market = new MarketplaceReviewTask();
+            market.Show();
+        }
+        #endregion
+
+        #region 更换背景
+        private void ChangeBackground_Click(object sender, EventArgs e)
+        {
+            PhotoChooserTask photoChooser = new PhotoChooserTask();
+            photoChooser.Completed += new EventHandler<PhotoResult>(PhotoChooserCompleted);
+            photoChooser.ShowCamera = true;
+            photoChooser.PixelWidth = (int)Application.Current.Host.Content.ActualWidth;
+            photoChooser.PixelHeight = (int)Application.Current.Host.Content.ActualHeight;
+            photoChooser.Show();
+        }
+
+        public void PhotoChooserCompleted(object sender, PhotoResult e)
+        {
+            if (e.TaskResult == TaskResult.OK)
+            {
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.SetSource(e.ChosenPhoto);
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = bitmap;
+                Pivot.Background = brush;
+                using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    using (IsolatedStorageFileStream fileStream = isf.OpenFile("Background.jpg", FileMode.Create))
+                    {
+                        Image image = new Image();
+                        image.Source = bitmap;
+                        WriteableBitmap wb = new WriteableBitmap(image, null);
+                        Extensions.SaveJpeg(wb, fileStream, wb.PixelWidth, wb.PixelHeight, 0, 100);
+                    }
+                }
+            }
+        }
+
+        private void RestoreBackground_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("", "恢复默认背景？", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
+                return;
+            IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
+            if (isf.FileExists("Background.jpg"))
+                isf.DeleteFile("Background.jpg");
+            Pivot.Background = new SolidColorBrush(Colors.Black);
         }
         #endregion
     }

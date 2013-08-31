@@ -54,6 +54,9 @@ namespace NewAnimeChecker
             // 语言显示初始化
             InitializeLanguage();
 
+            // 锁定为黑色主题
+            ThemeManager.ToDarkTheme();
+
             // 调试时显示图形分析信息。
             if (Debugger.IsAttached)
             {

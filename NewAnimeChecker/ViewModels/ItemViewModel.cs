@@ -130,23 +130,6 @@ namespace NewAnimeChecker.ViewModels
             }
         }
 
-        private string _Website;
-        public string Website
-        {
-            get
-            {
-                return _Website;
-            }
-            set
-            {
-                if (value != _Website)
-                {
-                    _Website = value;
-                    NotifyPropertyChanged("Website");
-                }
-            }
-        }
-
         private string _Time;
         public string Time
         {
