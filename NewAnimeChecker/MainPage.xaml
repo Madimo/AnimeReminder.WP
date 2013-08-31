@@ -1,0 +1,98 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="NewAnimeChecker.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:delay="clr-namespace:Delay"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="True"
+    Style="{StaticResource TransitionPageStyle}">
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator x:Name="ProgressBar" IsIndeterminate="True"/>
+    </shell:SystemTray.ProgressIndicator>
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <phone:Pivot Name="Pivot" Title="新番提醒" SelectionChanged="Pivot_SelectionChanged">
+            <phone:PivotItem Header="我的订阅" Margin="12,28,12,0">
+                <phone:LongListSelector Name="LongListSelector" ItemsSource="{Binding SubscriptionItems}" Margin="-13,0,0,0">
+                    <phone:LongListSelector.ListHeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel></StackPanel>
+                        </DataTemplate>
+                    </phone:LongListSelector.ListHeaderTemplate>
+                    <phone:LongListSelector.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,0">
+                                <toolkit:ContextMenuService.ContextMenu>
+                                    <toolkit:ContextMenu IsZoomEnabled="True">
+                                        <toolkit:MenuItem Header="删除"  Click="Delete_Click"/>
+                                    </toolkit:ContextMenu>
+                                </toolkit:ContextMenuService.ContextMenu>
+                                <Grid Height="95">
+                                    <Rectangle Fill="{StaticResource PhoneForegroundBrush}" Visibility="{Binding Updated}" Height="95" Width="10" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                                    <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" Margin="20,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                    <TextBlock Text="{Binding Epi}" TextWrapping="NoWrap" Margin="20,60,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                </Grid>
+                            </StackPanel>
+                        </DataTemplate>
+                    </phone:LongListSelector.ItemTemplate>
+                    <phone:LongListSelector.ListFooterTemplate>
+                        <DataTemplate>
+                            <StackPanel Height="70"></StackPanel>
+                        </DataTemplate>
+                    </phone:LongListSelector.ListFooterTemplate>
+                </phone:LongListSelector>
+            </phone:PivotItem>
+            <phone:PivotItem Header="今日更新" Margin="12,28,12,0">
+                <phone:LongListSelector ItemsSource="{Binding ScheduleItems}">
+                    <phone:LongListSelector.ListHeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel></StackPanel>
+                        </DataTemplate>
+                    </phone:LongListSelector.ListHeaderTemplate>
+                    <phone:LongListSelector.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,17">
+                                <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                <TextBlock Text="{Binding Time}" TextWrapping="NoWrap" Margin="10,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </phone:LongListSelector.ItemTemplate>
+                    <phone:LongListSelector.ListFooterTemplate>
+                        <DataTemplate>
+                            <StackPanel Height="60"></StackPanel>
+                        </DataTemplate>
+                    </phone:LongListSelector.ListFooterTemplate>
+                </phone:LongListSelector>
+            </phone:PivotItem>
+        </phone:Pivot>
+    </Grid>
+    
+    <phone:PhoneApplicationPage.Resources>
+        <shell:ApplicationBar x:Key="AppBar0" Mode="Default" Opacity="0.8" IsVisible="True" IsMenuEnabled="True">
+            <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Add.png" Text="添加" Click="Add_Click"/>
+            <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Refresh.png" Text="刷新" Click="Refresh_Click"/>
+            <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Check.png" Text="已看" Click="MarkRead_Click"/>
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="设置" Click="Settings_Click"/>
+                <shell:ApplicationBarMenuItem Text="关于" Click="About_Click"/>
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+
+        <shell:ApplicationBar x:Key="AppBar1" Mode="Default" Opacity="0.8" IsVisible="True" IsMenuEnabled="True">
+            <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Refresh.png" Text="刷新" Click="Refresh_Click"/>
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="设置" Click="Settings_Click"/>
+                <shell:ApplicationBarMenuItem Text="关于" Click="About_Click"/>
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.Resources>
+
+</phone:PhoneApplicationPage>

@@ -1,0 +1,49 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="NewAnimeChecker.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:NewAnimeChecker"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    local:TiltEffect.IsTiltEnabled="True"
+    shell:SystemTray.IsVisible="True"
+    Loaded="LoginPage_Loaded"
+    Style="{StaticResource TransitionPageStyle}">
+
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator x:Name="ProgressBar" IsIndeterminate="True"/>
+    </shell:SystemTray.ProgressIndicator>
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <phone:Pivot Title="新番提醒">
+            <phone:PivotItem Header="登陆">
+                <Grid Margin="0,0,0,0">
+                    <TextBox Name="UserNameBox" HorizontalAlignment="Left" Height="70" Margin="10,10,0,0" TextWrapping="Wrap" Foreground="Gray" Text="邮箱" VerticalAlignment="Top" Width="436" InputScope="EmailUserName" GotFocus="LoginTextBox_GotFocus" LostFocus="LoginTextBox_LostFocus" KeyDown="UserNameBox_KeyDown"/>
+                    <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" VerticalAlignment="Top" Height="70" Margin="10,80,0,0" Width="436" Visibility="Collapsed" LostFocus="LoginPasswordBox_LostFocus" KeyDown="PasswordBox_KeyDown"/>
+                    <TextBox x:Name="FakePasswordBox" HorizontalAlignment="Left" Height="70" Margin="10,80,0,0" TextWrapping="Wrap" Foreground="Gray" Text="密码" VerticalAlignment="Top" Width="436" InputScope="Text" GotFocus="LoginTextBox_GotFocus" LostFocus="LoginTextBox_LostFocus" RenderTransformOrigin="0.491,0.457"/>
+                    <Button x:Name="LoginButton" Content="登陆" HorizontalAlignment="Left" Height="78" Margin="10,150,0,0" VerticalAlignment="Top" Width="436" Click="Login_Click" RenderTransformOrigin="0.477,0.538"/>
+                </Grid>
+            </phone:PivotItem>
+            <phone:PivotItem Header="注册">
+                <Grid Margin="0,0,0,0">
+                    <TextBox Name="RegUserNameBox" HorizontalAlignment="Left" Height="70" Margin="10,10,0,0" TextWrapping="Wrap" Foreground="Gray" Text="邮箱" VerticalAlignment="Top" Width="436" InputScope="EmailUserName" GotFocus="RegTextBox_GotFocus" LostFocus="RegTextBox_LostFocus" KeyDown="RegUserNameBox_KeyDown"/>
+                    <TextBox x:Name="RegFakePasswordBox" HorizontalAlignment="Left" Height="70" Margin="10,80,0,0" TextWrapping="Wrap" Foreground="Gray" Text="密码" VerticalAlignment="Top" Width="436" InputScope="Text" GotFocus="RegTextBox_GotFocus" LostFocus="RegTextBox_LostFocus"/>
+                    <PasswordBox Name="RegPasswordBox" HorizontalAlignment="Left" VerticalAlignment="Top" Height="70" Margin="10,80,0,0" Width="436" Visibility="Collapsed" LostFocus="RegPasswordBox_LostFocus" KeyDown="RegPasswordBox_KeyDown"/>
+                    <TextBox x:Name="RegFakeRepasswordBox" HorizontalAlignment="Left" Height="70" Margin="10,150,0,0" TextWrapping="Wrap" Foreground="Gray" Text="密码确认" VerticalAlignment="Top" Width="436" InputScope="Chat" GotFocus="RegTextBox_GotFocus" LostFocus="RegTextBox_LostFocus"/>
+                    <PasswordBox Name="RegRepasswordBox" HorizontalAlignment="Left" VerticalAlignment="Top" Height="70" Margin="10,150,0,0" Width="436" Visibility="Collapsed" LostFocus="RegRePasswordBox_LostFocus" KeyDown="RegRepasswordBox_KeyDown"/>
+                    <Button x:Name="RegButton" Content="注册" HorizontalAlignment="Left" Height="78" Margin="10,302,0,0" VerticalAlignment="Top" Width="436" RenderTransformOrigin="0.477,0.538" Click="RegButton_Click"/>
+                    <CheckBox Name="CheckBox" Content="我同意" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="162,225,0,0"/>
+                    <HyperlinkButton Content="用户注册协议" NavigateUri="http://anime.ricter.info/help" TargetName="_blank" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="276,246,0,0"/>
+                </Grid>
+            </phone:PivotItem>
+        </phone:Pivot>
+    </Grid>
+
+</phone:PhoneApplicationPage>
