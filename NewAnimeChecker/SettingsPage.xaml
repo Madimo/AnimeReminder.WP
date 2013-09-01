@@ -34,7 +34,7 @@
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <Button Content="注销当前帐号" Click="Logout_Click" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="436"/>
             <toolkit:ToggleSwitch Name="EmailReminderSwitch" Content="邮件提醒功能" Checked="EmailReminderSwitch_Checked" Unchecked="EmailReminderSwitch_Unchecked" IsEnabled="False" Margin="10,64,10,423" Height="120" Loaded="EmailReminderSwitch_Loaded"/>
-            <toolkit:ToggleSwitch Name="TaskAgentSwitch" Content="推送订阅更新" Margin="10,145,10,335" Height="120" VerticalContentAlignment="Top" Checked="TaskAgentSwitch_Checked" Unchecked="TaskAgentSwitch_Unchecked" Loaded="TaskAgentSwitch_Loaded"/>
+            <toolkit:ToggleSwitch Name="TaskAgentSwitch" Content="推送订阅更新" Margin="10,145,10,335" Height="120" Checked="TaskAgentSwitch_Checked" Unchecked="TaskAgentSwitch_Unchecked" Loaded="TaskAgentSwitch_Loaded"/>
             <Button Name="SetLockscreenButton" Content="设置锁屏通知" Click="SetLockscreen_Click" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top" Width="436"/>
             <toolkit:ListPicker Name="ListPicker" Margin="22,327,22,10" Loaded="ListPicker_Loaded" SelectionChanged="ListPicker_SelectionChanged">
                 <toolkit:ListPickerItem Content="每 2 个小时检查一次" HorizontalAlignment="Left" Width="406"/>

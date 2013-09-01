@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO.IsolatedStorage;
 using System.Resources;
 using System.Windows;
 using System.Windows.Markup;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
@@ -37,9 +39,7 @@ namespace NewAnimeChecker
         /// <returns>电话应用程序的根框架。</returns>
         public static PhoneApplicationFrame RootFrame { get; private set; }
 
-        /// <summary>
-        /// Application 对象的构造函数。
-        /// </summary>
+        #region Application 对象的构造函数
         public App()
         {
             // 未捕获的异常的全局处理程序。
@@ -77,11 +77,32 @@ namespace NewAnimeChecker
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
         }
+        #endregion
 
         // 应用程序启动(例如，从“开始”菜单启动)时执行的代码
         // 此代码在重新激活应用程序时不执行
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            // 加载背景图片
+            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                BitmapImage defaultBackground = new BitmapImage(new Uri("/Assets/Background.jpg", UriKind.Relative));
+                App.Current.Resources.Add("DefaultBackgroundImage", defaultBackground);
+                BitmapImage background = null;
+                if (isf.FileExists("Background"))
+                {
+                    using (IsolatedStorageFileStream file = isf.OpenFile("Background", System.IO.FileMode.Open))
+                    {
+                        background = new BitmapImage();
+                        background.SetSource(file);
+                    }
+                }
+                else
+                {
+                    background = defaultBackground;
+                }
+                App.Current.Resources.Add("BackgroundImage", background);
+            }
         }
 
         // 激活应用程序(置于前台)时执行的代码
@@ -99,6 +120,7 @@ namespace NewAnimeChecker
         // 此代码在应用程序关闭时不执行
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
+            
         }
 
         // 应用程序关闭(例如，用户点击“后退”)时执行的代码
@@ -108,7 +130,7 @@ namespace NewAnimeChecker
             // 确保所需的应用程序状态在此处保持不变。
         }
 
-        // 导航失败时执行的代码
+        #region 导航失败时执行的代码
         private void RootFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             if (Debugger.IsAttached)
@@ -117,8 +139,9 @@ namespace NewAnimeChecker
                 Debugger.Break();
             }
         }
+        #endregion
 
-        // 出现未处理的异常时执行的代码
+        #region 出现未处理的异常时执行的代码
         private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
         {
             if (Debugger.IsAttached)
@@ -127,6 +150,7 @@ namespace NewAnimeChecker
                 Debugger.Break();
             }
         }
+        #endregion
 
         #region 电话应用程序初始化
 
@@ -191,7 +215,7 @@ namespace NewAnimeChecker
 
         #endregion
 
-        // 初始化应用程序在其本地化资源字符串中定义的字体和排列方向。
+        #region 初始化应用程序在其本地化资源字符串中定义的字体和排列方向
         //
         // 若要确保应用程序的字体与受支持的语言相符，并确保
         // 这些语言的 FlowDirection 都采用其传统方向，ResourceLanguage
@@ -246,5 +270,6 @@ namespace NewAnimeChecker
                 throw;
             }
         }
+        #endregion
     }
 }

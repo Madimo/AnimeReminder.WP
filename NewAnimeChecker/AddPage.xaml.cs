@@ -8,8 +8,9 @@ using System.Net;
 using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using HttpLibrary;
@@ -40,6 +41,9 @@ namespace NewAnimeChecker
         private void AddPage_Loaded(object sender, RoutedEventArgs e)
         {
             Pivot.Title = IsolatedStorageSettings.ApplicationSettings["UserName"];
+            ImageBrush brush = new ImageBrush();
+            brush.ImageSource = (BitmapImage)App.Current.Resources["BackgroundImage"];
+            Pivot.Background = brush;
             SearchBox.Focus();
         }
 

@@ -451,12 +451,12 @@ namespace NewAnimeChecker
             {
                 BitmapImage bitmap = new BitmapImage();
                 bitmap.SetSource(e.ChosenPhoto);
-                ImageBrush brush = new ImageBrush();
-                brush.ImageSource = bitmap;
+                App.Current.Resources.Remove("BackgroundImage");
+                App.Current.Resources.Add("BackgroundImage", bitmap);
                 SetBackground(bitmap);
                 using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    using (IsolatedStorageFileStream fileStream = isf.OpenFile("Background.jpg", FileMode.Create))
+                    using (IsolatedStorageFileStream fileStream = isf.OpenFile("Background", FileMode.Create))
                     {
                         Image image = new Image();
                         image.Source = bitmap;
@@ -471,35 +471,23 @@ namespace NewAnimeChecker
         {
             if (MessageBox.Show("", "恢复默认背景？", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
                 return;
-            IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
-            if (isf.FileExists("Background.jpg"))
+            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                isf.DeleteFile("Background.jpg");
-                BitmapImage bitmap = new BitmapImage(new Uri("/Assets/Background.jpg", UriKind.Relative));
-                SetBackground(bitmap);
+                if (isf.FileExists("Background"))
+                {
+                    BitmapImage bitmap = (BitmapImage)App.Current.Resources["DefaultBackgroundImage"];
+                    App.Current.Resources.Remove("BackgroundImage");
+                    App.Current.Resources.Add("BackgroundImage", bitmap);
+                    isf.DeleteFile("Background");
+                    SetBackground(bitmap);
+                }
             }
         }
 
         private void Background_Loaded(object sender, RoutedEventArgs e)
         {
-            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                if (isf.FileExists("Background.jpg"))
-                {
-                    using (IsolatedStorageFileStream file = isf.OpenFile("Background.jpg", FileMode.Open))
-                    {
-                        BitmapImage bitmap = new BitmapImage();
-                        bitmap.SetSource(file);
-                        BackgroundImage.Source = bitmap;
-                    }
-                }
-                else
-                {
-                    BitmapImage bitmap = new BitmapImage(new Uri("/Assets/Background.jpg", UriKind.Relative));
-                    BackgroundImage.Source = bitmap;
-                }
-             }
-         }
-     }
-     #endregion
+            BackgroundImage.Source = (BitmapImage)App.Current.Resources["BackgroundImage"];
+        }
+        #endregion
+    }
 }

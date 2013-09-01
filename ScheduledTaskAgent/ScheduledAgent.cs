@@ -72,7 +72,7 @@ namespace ScheduledTaskAgent
                             TimeSet = 24;
                             break;
                     }
-                    if (TimeOffset.TotalSeconds >= (double)TimeSet)
+                    if (Debugger.IsAttached || TimeOffset.TotalHours >= (double)TimeSet)
                     {
                         HttpEngine httpRequest = new HttpEngine();
                         string result = await httpRequest.GetAsync("http://apianime.ricter.info/get_subscription_list?key=" + IsolatedStorageSettings.ApplicationSettings["UserKey"] + "&hash=" + new Random().Next());
@@ -132,7 +132,7 @@ namespace ScheduledTaskAgent
                         IsolatedStorageSettings.ApplicationSettings.Save();
                     }
                 }
-                catch (Exception)
+                catch
                 {
 
                 }

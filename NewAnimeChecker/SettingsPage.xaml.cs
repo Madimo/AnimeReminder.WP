@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.IO.IsolatedStorage;
 using System.Threading.Tasks;
@@ -35,6 +37,9 @@ namespace NewAnimeChecker
         private void SettingsPage_Loaded(object sender, RoutedEventArgs e)
         {
             UserName.Text = (string)settings["UserName"];
+            ImageBrush brush = new ImageBrush();
+            brush.ImageSource = (BitmapImage)App.Current.Resources["BackgroundImage"];
+            LayoutRoot.Background = brush;
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)
@@ -189,7 +194,10 @@ namespace NewAnimeChecker
                 settings.Save();
                 ListPicker.IsEnabled = true;
                 SetLockscreenButton.IsEnabled = true;
-                ScheduledActionService.LaunchForTest(agentName, TimeSpan.FromSeconds(30));
+                if (Debugger.IsAttached)
+                {
+                    ScheduledActionService.LaunchForTest(agentName, TimeSpan.FromSeconds(30));
+                }
             }
             catch (InvalidOperationException exception)
             {
@@ -206,7 +214,7 @@ namespace NewAnimeChecker
             catch (SchedulerServiceException)
             {
                 MessageBox.Show("", "启动后台任务失败", MessageBoxButton.OK);
-                TaskAgentSwitch.IsChecked = true;
+                TaskAgentSwitch.IsChecked = false;
             }
         }
 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using System.IO;
@@ -39,6 +40,9 @@ namespace NewAnimeChecker
         #region 控件事件处理
         private void LoginPage_Loaded(object sender, RoutedEventArgs e)
         {
+            ImageBrush brush = new ImageBrush();
+            brush.ImageSource = (BitmapImage)App.Current.Resources["BackgroundImage"];
+            LayoutRoot.Background = brush;
             var settings = IsolatedStorageSettings.ApplicationSettings;
             if (settings.Contains("UserName"))
             {
@@ -229,6 +233,9 @@ namespace NewAnimeChecker
                 IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
                 settings.Add("UserKey", UserKey);
                 settings.Add("UserName", UserNameBox.Text);
+                if (settings.Contains("MustRefresh"))
+                    settings.Remove("MustRefresh");
+                settings.Add("MustRefresh", true);
                 settings.Save();
                 NavigationService.GoBack();
             }
@@ -284,6 +291,9 @@ namespace NewAnimeChecker
                 IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
                 settings.Add("UserKey", UserKey);
                 settings.Add("UserName", RegUserNameBox.Text);
+                if (settings.Contains("MustRefresh"))
+                    settings.Remove("MustRefresh");
+                settings.Add("MustRefresh", true);
                 settings.Save();
                 ProgressBar.IsVisible = false;
                 MessageBox.Show("", "注册成功", MessageBoxButton.OK);
