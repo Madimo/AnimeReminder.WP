@@ -160,6 +160,7 @@
     <Content Include="Assets\ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Background.jpg" />
     <Content Include="Assets\LockImage.png" />
     <Content Include="Assets\Tiles\IconicTileMedium.png" />
     <Content Include="Assets\Tiles\IconicTileSmall.png" />

@@ -21,7 +21,9 @@
     </shell:SystemTray.ProgressIndicator>
     <!-- Pivot控件 -->
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <phone:Pivot Name="Pivot" Title="新番提醒" SelectionChanged="Pivot_SelectionChanged" Loaded="Pivot_Loaded">
+        <Image Name="BackgroundImage" Canvas.ZIndex="0" Margin="0,0,0,0" Loaded="Background_Loaded"/>
+        <Image Name="BackgroundTransform" Canvas.ZIndex="1" Margin="0,0,0,0" Opacity="0"/>
+        <phone:Pivot Name="Pivot" Canvas.ZIndex="2" Title="新番提醒" SelectionChanged="Pivot_SelectionChanged">
             <!-- 第一页 -->
             <phone:PivotItem Header="我的订阅" Margin="12,28,12,0">
                 <phone:LongListSelector Name="LongListSelector" ItemsSource="{Binding SubscriptionItems}" Margin="-13,0,0,0">

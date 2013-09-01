@@ -7,7 +7,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Animation;
 using System.Windows.Navigation;
+using System.Windows.Threading;
 using System.IO;
 using System.IO.IsolatedStorage;
 using Microsoft.Phone.Controls;
@@ -337,31 +339,6 @@ namespace NewAnimeChecker
         #endregion
 
         #region 控件事件处理
-        private void Pivot_Loaded(object sender, RoutedEventArgs e)
-        {
-            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                if (isf.FileExists("Background.jpg"))
-                {
-                    using (IsolatedStorageFileStream file = isf.OpenFile("Background.jpg", FileMode.Open))
-                    {
-                        try
-                        {
-                            BitmapImage bitmap = new BitmapImage();
-                            bitmap.SetSource(file);
-                            ImageBrush brush = new ImageBrush();
-                            brush.ImageSource = bitmap;            
-                            Pivot.Background = brush;
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine(ex.Message);
-                        }
-                    }
-                }
-            }
-        }
-
         private void Refresh_Click(object sender, EventArgs e)
         {
             if (Pivot.SelectedIndex == 0)
@@ -431,7 +408,33 @@ namespace NewAnimeChecker
         }
         #endregion
 
-        #region 更换背景
+        #region 背景图片
+        private void SetBackground(ImageSource image)
+        {
+            BackgroundTransform.Opacity = 0;
+            BackgroundTransform.Source = image;
+
+            DoubleAnimation animation = new DoubleAnimation();
+            animation.From = 0;
+            animation.To = 1;
+            animation.Duration = new Duration(TimeSpan.FromMilliseconds(1500));
+            animation.BeginTime = TimeSpan.FromMilliseconds(1000);
+
+            Storyboard.SetTarget(animation, BackgroundTransform);
+            Storyboard.SetTargetProperty(animation, new PropertyPath(Image.OpacityProperty));
+
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(animation);
+            storyboard.Completed += AnimationCompleted;
+            storyboard.Begin();
+        }
+
+        private void AnimationCompleted(object sender, EventArgs e)
+        {
+            BackgroundImage.Source = BackgroundTransform.Source;
+            BackgroundTransform.Opacity = 0;
+        }
+
         private void ChangeBackground_Click(object sender, EventArgs e)
         {
             PhotoChooserTask photoChooser = new PhotoChooserTask();
@@ -442,7 +445,7 @@ namespace NewAnimeChecker
             photoChooser.Show();
         }
 
-        public void PhotoChooserCompleted(object sender, PhotoResult e)
+        private void PhotoChooserCompleted(object sender, PhotoResult e)
         {
             if (e.TaskResult == TaskResult.OK)
             {
@@ -450,7 +453,7 @@ namespace NewAnimeChecker
                 bitmap.SetSource(e.ChosenPhoto);
                 ImageBrush brush = new ImageBrush();
                 brush.ImageSource = bitmap;
-                Pivot.Background = brush;
+                SetBackground(bitmap);
                 using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
                 {
                     using (IsolatedStorageFileStream fileStream = isf.OpenFile("Background.jpg", FileMode.Create))
@@ -470,10 +473,33 @@ namespace NewAnimeChecker
                 return;
             IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
             if (isf.FileExists("Background.jpg"))
+            {
                 isf.DeleteFile("Background.jpg");
-            Pivot.Background = new SolidColorBrush(Colors.Black);
+                BitmapImage bitmap = new BitmapImage(new Uri("/Assets/Background.jpg", UriKind.Relative));
+                SetBackground(bitmap);
+            }
         }
-        #endregion
-    }
 
+        private void Background_Loaded(object sender, RoutedEventArgs e)
+        {
+            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (isf.FileExists("Background.jpg"))
+                {
+                    using (IsolatedStorageFileStream file = isf.OpenFile("Background.jpg", FileMode.Open))
+                    {
+                        BitmapImage bitmap = new BitmapImage();
+                        bitmap.SetSource(file);
+                        BackgroundImage.Source = bitmap;
+                    }
+                }
+                else
+                {
+                    BitmapImage bitmap = new BitmapImage(new Uri("/Assets/Background.jpg", UriKind.Relative));
+                    BackgroundImage.Source = bitmap;
+                }
+             }
+         }
+     }
+     #endregion
 }
