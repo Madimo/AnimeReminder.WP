@@ -30,10 +30,7 @@ namespace NewAnimeChecker
         #region 导航事件处理
         protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
         {
-            if (IsolatedStorageSettings.ApplicationSettings.Contains("MustRefresh"))
-                IsolatedStorageSettings.ApplicationSettings.Remove("MustRefresh");
-            IsolatedStorageSettings.ApplicationSettings.Add("MustRefresh", true);
-            IsolatedStorageSettings.ApplicationSettings.Save();
+
         }
         #endregion
 
@@ -81,7 +78,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://mediaso.xmp.kankan.xunlei.com/search.php?keyword=" + SearchBox.Text);
+                string result = await httpRequest.GetAsync("http://mediaso.xmp.kankan.xunlei.com/search.php?keyword=" + SearchBox.Text + "&hash=" + new Random().Next());
                 App.ViewModel.SearchResultItems.Clear();
                 string name_flag_begin = "sname=\"";
                 string name_flag_end = "\",";
@@ -137,7 +134,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://apianime.ricter.info/add?key=" + IsolatedStorageSettings.ApplicationSettings["UserKey"] + "&id=" + SelectedItem.ID);
+                string result = await httpRequest.GetAsync("http://apianime.ricter.info/add?key=" + IsolatedStorageSettings.ApplicationSettings["UserKey"] + "&id=" + SelectedItem.ID + "&hash=" + new Random().Next());
                 if (result.Contains("ERROR_"))
                 {
                     Debug.WriteLine(result);
@@ -153,6 +150,19 @@ namespace NewAnimeChecker
                         throw new Exception("抱歉，您选择的项目可能不会有剧集更新，无法添加");
                     }
                     throw new Exception("发生了错误，但我不知道是什么");
+                }
+                if (IsolatedStorageSettings.ApplicationSettings.Contains("MustRefresh"))
+                {
+                    if (!((bool)IsolatedStorageSettings.ApplicationSettings["MustRefresh"]))
+                    {
+                        IsolatedStorageSettings.ApplicationSettings["MustRefresh"] = true;
+                        IsolatedStorageSettings.ApplicationSettings.Save();
+                    }
+                }
+                else
+                {
+                    IsolatedStorageSettings.ApplicationSettings.Add("MustRefresh", true);
+                    IsolatedStorageSettings.ApplicationSettings.Save();
                 }
                 MessageBox.Show("", "添加成功", MessageBoxButton.OK);
             }

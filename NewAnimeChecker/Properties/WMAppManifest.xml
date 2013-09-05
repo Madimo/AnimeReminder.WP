@@ -4,7 +4,7 @@
   <Languages xmlns="">
     <Language code="zh-CN" />
   </Languages>
-  <App xmlns="" ProductID="{9fe63418-add4-4f07-b28d-9880142f52fe}" Title="新番提醒" RuntimeType="Silverlight" Version="1.1.0.520" Genre="apps.normal" Author="Madimo" Description="新番提醒" Publisher="Madimo" PublisherID="{b6b20578-e32d-49eb-ab13-28a437285205}">
+  <App xmlns="" ProductID="{9fe63418-add4-4f07-b28d-9880142f52fe}" Title="新番提醒" RuntimeType="Silverlight" Version="1.1.1.520" Genre="apps.normal" Author="Madimo" Description="新番提醒" Publisher="Madimo" PublisherID="{b6b20578-e32d-49eb-ab13-28a437285205}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />

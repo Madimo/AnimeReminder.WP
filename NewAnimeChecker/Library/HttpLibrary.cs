@@ -52,16 +52,11 @@ namespace HttpLibrary
                 Stream streamResult = response.GetResponseStream();
                 StreamReader sr = new StreamReader(streamResult, Encoding.UTF8);
                 string returnValue = sr.ReadToEnd();
-                streamResult.Close();
-                streamResult.Dispose();
-                httpWebRequest.Abort();
-                response.Close();
-                response.Dispose();
                 return returnValue;
             }
             catch
             {
-                throw new Exception("网络错误");
+                throw new Exception("网络错误，请检查网络连接或重试");
             }
         }
     }

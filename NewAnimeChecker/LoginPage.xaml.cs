@@ -223,7 +223,7 @@ namespace NewAnimeChecker
                 if (PasswordBox.Password == "")
                     throw new Exception("请输入密码");
                 HttpEngine httpRequest = new HttpEngine();
-                string UserKey = await httpRequest.GetAsync("http://apianime.ricter.info/login?u=" + UserNameBox.Text + "&p=" + PasswordBox.Password);
+                string UserKey = await httpRequest.GetAsync("http://apianime.ricter.info/login?u=" + UserNameBox.Text + "&p=" + PasswordBox.Password + "&hash=" + new Random().Next());
                 if (UserKey.Contains("ERROR_"))
                 {
                     if (UserKey == "ERROR_INVALID_PSW")
@@ -281,7 +281,7 @@ namespace NewAnimeChecker
                     throw new Exception("两次输入的密码不一致");
 
                 HttpEngine httpRequest = new HttpEngine();
-                string UserKey = await httpRequest.GetAsync("http://apianime.ricter.info/reg?u=" + RegUserNameBox.Text + "&p=" + RegPasswordBox.Password);
+                string UserKey = await httpRequest.GetAsync("http://apianime.ricter.info/reg?u=" + RegUserNameBox.Text + "&p=" + RegPasswordBox.Password + "&hash=" + new Random().Next());
                 if (UserKey.Contains("ERROR_"))
                 {
                     if (UserKey == "ERROR_EXIST_REG")

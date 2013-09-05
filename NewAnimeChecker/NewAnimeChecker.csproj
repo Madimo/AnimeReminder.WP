@@ -101,7 +101,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Library\DataContextPropagationGrid.cs" />
     <Compile Include="Library\HttpLibrary.cs" />
     <Compile Include="Library\LocalizedStrings.cs" />
     <Compile Include="LoginPage.xaml.cs">

@@ -57,6 +57,7 @@ namespace NewAnimeChecker
                     }
                     break;
                 case "RefreshUpdatedSchedule":
+                case "AddToSubscription":
                     IsRefreshScheBusy = false;
                     if (Pivot.SelectedIndex == 1 && ApplicationBar != null)
                     {
@@ -104,6 +105,7 @@ namespace NewAnimeChecker
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            Debug.WriteLine(e.NavigationMode.ToString());
             if (settings.Contains("UserKey"))
             {
                Pivot.Title = (string)settings["UserName"];
@@ -112,7 +114,6 @@ namespace NewAnimeChecker
                    if ((bool)settings["MustRefresh"])
                    {
                        RefreshSubscription();
-                       RefreshUpdatedSchedule();
                        settings["MustRefresh"] = false;
                    }
                }
@@ -281,11 +282,7 @@ namespace NewAnimeChecker
                 }
                 int index = App.ViewModel.SubscriptionItems.IndexOf(vi); 
                 App.ViewModel.SubscriptionItems.Remove(vi);
-                ((MenuItem)sender).ClearValue(FrameworkElement.DataContextProperty);
-/*                if (App.ViewModel.EpiItems.Count - 1 < index)
-                    ((MenuItem)sender).DataContext = null;
-                else
-                    ((MenuItem)sender).DataContext = App.ViewModel.EpiItems[index];*/
+                ((MenuItem)sender).UpdateLayout();
             }
             catch (Exception exception)
             {
@@ -487,6 +484,44 @@ namespace NewAnimeChecker
         private void Background_Loaded(object sender, RoutedEventArgs e)
         {
             BackgroundImage.Source = (BitmapImage)App.Current.Resources["BackgroundImage"];
+        }
+        #endregion
+
+        #region 添加到我的订阅
+        private async void AddToSubscription_Click(object sender, RoutedEventArgs e)
+        {
+            SetBusy("AddToSubscription");
+            ViewModels.ScheduleModel sm = (ViewModels.ScheduleModel)((MenuItem)sender).DataContext;
+            try
+            {
+                HttpEngine httpRequest = new HttpEngine();
+                string result = await httpRequest.GetAsync("http://apianime.ricter.info/add?key=" + settings["UserKey"] + "&id=" + sm.ID + "&hash=" + new Random().Next());
+                if (result.Contains("ERROR_"))
+                {
+                    if (result == "ERROR_INVALID_KEY")
+                    {
+                        MessageBox.Show("", "您的帐号已在别的客户端登陆，请重新登陆", MessageBoxButton.OK);
+                        settings.Remove("UserKey");
+                        NavigationService.Navigate(new Uri("/Login.xaml", UriKind.Relative));
+                        return;
+                    }
+                    if (result == "ERROR_INVALID_ANIME")
+                    {
+                        throw new Exception("抱歉，您选择的项目可能不会有剧集更新，无法添加");
+                    }
+                    throw new Exception("发生了错误，但我不知道是什么");
+                }
+                MessageBox.Show("", "添加成功", MessageBoxButton.OK);
+                RefreshSubscription();
+            }
+            catch (Exception excepiton)
+            {
+                MessageBox.Show("", excepiton.Message, MessageBoxButton.OK);
+            }
+            finally
+            {
+                SetIdle("AddToSubscription");
+            }
         }
         #endregion
     }
