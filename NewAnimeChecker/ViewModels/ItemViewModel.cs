@@ -13,6 +13,23 @@ namespace NewAnimeChecker.ViewModels
     #region SubscriptionModel
     public class SubscriptionModel : INotifyPropertyChanged
     {
+        private int _Number;
+        public int Number
+        {
+            get
+            {
+                return _Number;
+            }
+            set
+            {
+                if (value != _Number)
+                {
+                    _Number = value;
+                    NotifyPropertyChanged("Number");
+                }
+            }
+        }
+
         private string _ID;
         public string ID
         {
@@ -96,6 +113,23 @@ namespace NewAnimeChecker.ViewModels
     #region ScheduleModel
     public class ScheduleModel : INotifyPropertyChanged
     {
+        private int _Number;
+        public int Number
+        {
+            get
+            {
+                return _Number;
+            }
+            set
+            {
+                if (value != _Number)
+                {
+                    _Number = value;
+                    NotifyPropertyChanged("Number");
+                }
+            }
+        }
+
         private string _ID;
         public string ID
         {
@@ -162,6 +196,23 @@ namespace NewAnimeChecker.ViewModels
     #region SearchResultModel
     public class SearchResultModel : INotifyPropertyChanged
     {
+        private int _Number;
+        public int Number
+        {
+            get
+            {
+                return _Number;
+            }
+            set
+            {
+                if (value != _Number)
+                {
+                    _Number = value;
+                    NotifyPropertyChanged("Number");
+                }
+            }
+        }
+
         private string _ID;
         public string ID
         {

@@ -160,12 +160,14 @@ namespace NewAnimeChecker
                 App.ViewModel.SubscriptionItems.Clear();
                 string[] list = result.Split('\n');
                 int updatedNumber = 0;
+                int number = 0;
                 string[] TileContent = new string[3] { "", "", "" };
                 for (int i = 0; i < list.Length; ++i)
                 {
                     string[] item   = list[i].Split('|');
                     if (item.Length < 5)
                         continue;
+                    number++;
                     string isUpdate = item[0];
                     string id       = item[1];
                     string name     = item[2];
@@ -194,7 +196,7 @@ namespace NewAnimeChecker
                     {
                         updated = System.Windows.Visibility.Collapsed;
                     }
-                    App.ViewModel.SubscriptionItems.Add(new ViewModels.SubscriptionModel() { ID = id, Name = name, Epi = epi, Updated = updated });
+                    App.ViewModel.SubscriptionItems.Add(new ViewModels.SubscriptionModel() { Number = number, ID = id, Name = name, Epi = epi, Updated = updated });
                 }
                 ShellTile Tile = ShellTile.ActiveTiles.FirstOrDefault();
                 if (Tile != null)
@@ -232,15 +234,17 @@ namespace NewAnimeChecker
                 string result = await httpRequest.GetAsync("http://apianime.ricter.info/get_update_schedule?hash=" + new Random().Next());
                 App.ViewModel.ScheduleItems.Clear();
                 string[] List = result.Split('\n');
+                int number = 0;
                 for (int i = 0; i < List.Length; ++i)
                 {
                     string[] item = List[i].Split('|');
                     if (item.Length < 3)
                         return;
+                    number++;
                     string time = item[0];
                     string name = item[1];
                     string id   = item[2];
-                    App.ViewModel.ScheduleItems.Add(new ViewModels.ScheduleModel() { ID = id, Name = name, Time = time });
+                    App.ViewModel.ScheduleItems.Add(new ViewModels.ScheduleModel() { Number = number, ID = id, Name = name, Time = time });
                 }
             }
             catch (Exception exception)
@@ -524,5 +528,69 @@ namespace NewAnimeChecker
             }
         }
         #endregion
+
+        #region LongListSelector 动画
+        private void StackPanel_Loaded(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine((sender as StackPanel).DataContext.GetType());
+
+            string type = (sender as StackPanel).DataContext.GetType().ToString();
+            TimeSpan beginTime;
+            double top = 0;
+            if (type.Contains("Subscription"))
+            {
+                if (Pivot.SelectedIndex != 0 || ((sender as StackPanel).DataContext as ViewModels.SubscriptionModel).Number > 10)
+                {
+                    (sender as StackPanel).Opacity = 1;
+                    return;
+                }
+                beginTime = TimeSpan.FromMilliseconds((((sender as StackPanel).DataContext as ViewModels.SubscriptionModel).Number - 1) * 60);
+                top = 0;
+            }
+            else if (type.Contains("Schedule"))
+            {
+                if (Pivot.SelectedIndex != 1 || ((sender as StackPanel).DataContext as ViewModels.ScheduleModel).Number > 10)
+                {
+                    (sender as StackPanel).Opacity = 1;
+                    return;
+                }
+                beginTime = TimeSpan.FromMilliseconds((((sender as StackPanel).DataContext as ViewModels.ScheduleModel).Number - 1) * 60);
+                top = 12;
+            }
+            else
+            {
+                return;
+            }
+            Duration duration = new Duration(TimeSpan.FromMilliseconds(200));
+
+            Storyboard storyboard = new Storyboard();
+
+            DoubleAnimation doubleAnimation = new DoubleAnimation();
+            doubleAnimation.From = 0;
+            doubleAnimation.To = 1;
+            doubleAnimation.Duration = duration;
+            doubleAnimation.BeginTime = beginTime;
+            Storyboard.SetTarget(doubleAnimation, (StackPanel)sender);
+            Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath(StackPanel.OpacityProperty));
+            storyboard.Children.Add(doubleAnimation);
+
+            ObjectAnimationUsingKeyFrames objectAnimation = new ObjectAnimationUsingKeyFrames();
+            objectAnimation.Duration = duration;
+            objectAnimation.BeginTime = beginTime;
+            double by = (sender as StackPanel).ActualWidth / 2.0 / duration.TimeSpan.Milliseconds;
+            for (double i = 1; i <= duration.TimeSpan.Milliseconds; i += duration.TimeSpan.Milliseconds / 20)
+            {
+                DiscreteObjectKeyFrame key = new DiscreteObjectKeyFrame();
+                key.KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(i));
+                key.Value = new Thickness((sender as StackPanel).ActualWidth / 2.0 - i * by, 0, 0, top);
+                objectAnimation.KeyFrames.Add(key);
+            }
+            Storyboard.SetTarget(objectAnimation, (StackPanel)sender);
+            Storyboard.SetTargetProperty(objectAnimation, new PropertyPath(StackPanel.MarginProperty));
+            storyboard.Children.Add(objectAnimation);
+
+            storyboard.Begin();
+        }
     }
+    #endregion
 }
