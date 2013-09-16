@@ -10,7 +10,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
-    Style="{StaticResource TransitionPageStyle}"
+    Style="{StaticResource SlidePageStyle}"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True"
     shell:SystemTray.Opacity="0"

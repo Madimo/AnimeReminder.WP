@@ -16,7 +16,7 @@
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True"
     shell:SystemTray.Opacity="0"
-    Style="{StaticResource TransitionPageStyle}"
+    Style="{StaticResource SlidePageStyle}"
     Loaded="SettingsPage_Loaded">
 
     <shell:SystemTray.ProgressIndicator>

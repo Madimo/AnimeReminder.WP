@@ -1,0 +1,62 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="NewAnimeChecker.DetailPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.Opacity="0"
+    Style="{StaticResource SlidePageStyle}"
+    Loaded="DetailPage_Loaded">
+
+    <!-- 顶部进度条 -->
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator x:Name="ProgressBar" IsIndeterminate="True" IsVisible="False"/>
+    </shell:SystemTray.ProgressIndicator>
+    <!--LayoutRoot 是包含所有页面内容的根网格-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel 包含应用程序的名称和页标题-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Name="Title" Text="MadimoZhang@gmail.com" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Name="AnimeTitle" Text="新番提醒" Margin="9,0,0,0" Style="{StaticResource PhoneTextTitle1Style}" FontSize="55"/>
+        </StackPanel>
+
+        <!--ContentPanel - 在此处放置其他内容-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <TextBlock Name="EpiTextBlock" Text="此订阅目前共 0 集" Margin="0,52,0,510" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="48"/>
+            <Button HorizontalAlignment="Left" Height="78" Margin="10,162,0,0" VerticalAlignment="Top" Width="78" BorderThickness="0" Click="Add_Click">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Toolkit.Content/Add.png" Stretch="None"/>
+                </Button.Background>
+            </Button>
+            <TextBox Name="EpiTextBox" HorizontalAlignment="Left" Height="78" Margin="83,162,0,0" TextWrapping="NoWrap" Text="0" VerticalAlignment="Top" Width="280" InputScope="Number" TextAlignment="Center" GotFocus="EpiTextBox_GotFocus" LostFocus="EpiTextBox_LostFocus" KeyDown="EpiTextBox_KeyDown" TextChanged="EpiTextBox_TextChanged"/>
+            <Button HorizontalAlignment="Left" Height="78" Margin="363,162,0,0" VerticalAlignment="Top" Width="78" BorderThickness="0" Click="Sub_Click">
+                <Button.Background>
+                    <ImageBrush Stretch="None" ImageSource="/Toolkit.Content/Sub.png"/>
+                </Button.Background>
+            </Button>            <Button Name="UpdateButton" Content="更新已看集数" HorizontalAlignment="Left" Margin="0,348,0,0" VerticalAlignment="Top" Width="456" Click="Update_Click"/>
+            <Button Name="MarkReadOrUnreadButton" Content="标记为未读" HorizontalAlignment="Left" Margin="0,463,0,0" VerticalAlignment="Top" Width="456" Click="MarkReadOrUnread_Click"/>
+            <Button Name="DeleteButton" Content="删除此订阅" HorizontalAlignment="Left" Margin="0,540,0,0" VerticalAlignment="Top" Width="456" Click="Delete_Click"/>
+        </Grid>
+    </Grid>
+<!--
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar Opacity="0.5" BackgroundColor="Black" ForegroundColor="White" StateChanged="ApplicationBar_StateChanged">
+            <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.MarkUnread.png" Text="标为未读" Click="MarkReadOrUnread_Click"/>
+            <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Delete.png" Text="取消订阅" Click="Delete_Click"/>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+-->
+</phone:PhoneApplicationPage>

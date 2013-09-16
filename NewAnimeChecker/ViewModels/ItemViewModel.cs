@@ -81,6 +81,40 @@ namespace NewAnimeChecker.ViewModels
             }
         }
 
+        private string _Readed;
+        public string Readed
+        {
+            get
+            {
+                return _Readed;
+            }
+            set
+            {
+                if (value != _Readed)
+                {
+                    _Readed = value;
+                    NotifyPropertyChanged("Readed");
+                }
+            }
+        }
+
+        private string _ShowEpi;
+        public string ShowEpi
+        {
+            get
+            {
+                return _ShowEpi;
+            }
+            set
+            {
+                if (value != _ShowEpi)
+                {
+                    _ShowEpi = value;
+                    NotifyPropertyChanged("ShowEpi");
+                }
+            }
+        }
+
         private System.Windows.Visibility _Updated;
         public System.Windows.Visibility Updated
         {

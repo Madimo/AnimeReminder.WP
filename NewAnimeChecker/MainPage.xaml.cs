@@ -26,6 +26,7 @@ namespace NewAnimeChecker
     {
         #region 变量定义
         IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
+        bool animed = false;
         #endregion
 
         #region 构造函数
@@ -101,11 +102,15 @@ namespace NewAnimeChecker
         #region 导航事件处理
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            if (e.Content != null && e.Content.ToString() == "NewAnimeChecker.LoginPage")
+                animed = false;
+            else
+                animed = true;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Debug.WriteLine(e.NavigationMode.ToString());
+            Pivot.UpdateLayout();
             if (settings.Contains("UserKey"))
             {
                Pivot.Title = (string)settings["UserName"];
@@ -165,7 +170,7 @@ namespace NewAnimeChecker
                 for (int i = 0; i < list.Length; ++i)
                 {
                     string[] item   = list[i].Split('|');
-                    if (item.Length < 5)
+                    if (item.Length < 6)
                         continue;
                     number++;
                     string isUpdate = item[0];
@@ -173,10 +178,14 @@ namespace NewAnimeChecker
                     string name     = item[2];
                     string epi      = item[3];
                     string isDone   = item[4];
+                    string readed   = item[5];
+                    string showEpi;
                     if (isDone == "1")
-                        epi = "已完结，共 " + item[3] + " 集";
+                        showEpi = "已完结，共 " + epi + " 集";
                     else
-                        epi = "更新到第 " + item[3] + " 集";
+                        showEpi = "更新到第 " + epi + " 集";
+                    if (readed != "0")
+                        showEpi += "，看到第 " + readed + " 集";
                     System.Windows.Visibility updated;
                     if (isUpdate == "1")
                     {
@@ -185,18 +194,18 @@ namespace NewAnimeChecker
                         if (updatedNumber == 1)
                         {
                             TileContent[0] = " ";
-                            TileContent[1] = name + " 更新到第 " + item[3] + " 集";
+                            TileContent[1] = name + " 更新到第 " + epi + " 集";
                         }
                         else if (updatedNumber == 2)
                         {
-                            TileContent[2] = name + " 更新到第 " + item[3] + " 集";
+                            TileContent[2] = name + " 更新到第 " + epi + " 集";
                         }
                     }
                     else
                     {
                         updated = System.Windows.Visibility.Collapsed;
                     }
-                    App.ViewModel.SubscriptionItems.Add(new ViewModels.SubscriptionModel() { Number = number, ID = id, Name = name, Epi = epi, Updated = updated });
+                    App.ViewModel.SubscriptionItems.Add(new ViewModels.SubscriptionModel() { Number = number, ID = id, Name = name, Epi = epi, Readed = readed, ShowEpi = showEpi, Updated = updated });
                 }
                 ShellTile Tile = ShellTile.ActiveTiles.FirstOrDefault();
                 if (Tile != null)
@@ -269,7 +278,7 @@ namespace NewAnimeChecker
                 ViewModels.SubscriptionModel vi = (ViewModels.SubscriptionModel)((MenuItem)sender).DataContext;
                 HttpEngine httpRequest = new HttpEngine();
                 string result = await httpRequest.GetAsync("http://apianime.ricter.info/del?key=" + settings["UserKey"] + "&id=" + vi.ID);
-                if (result.IndexOf("ERROR_") != -1)
+                if (result.Contains("ERROR_"))
                 {
                     if (result == "ERROR_INVALID_KEY")
                     {
@@ -396,7 +405,7 @@ namespace NewAnimeChecker
 
         private void ApplicationBar_StateChanged(object sender, ApplicationBarStateChangedEventArgs e)
         {
-            if (e.IsMenuVisible == true)
+            if (e.IsMenuVisible)
                 ApplicationBar.Opacity = 0.9;
             else
                 ApplicationBar.Opacity = 0.5;
@@ -406,6 +415,11 @@ namespace NewAnimeChecker
         {
             MarketplaceReviewTask market = new MarketplaceReviewTask();
             market.Show();
+        }
+
+        private void Grid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/DetailPage.xaml?index=" + (((sender as Grid).DataContext as ViewModels.SubscriptionModel).Number - 1).ToString(), UriKind.Relative));
         }
         #endregion
 
@@ -532,8 +546,11 @@ namespace NewAnimeChecker
         #region LongListSelector 动画
         private void StackPanel_Loaded(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine((sender as StackPanel).DataContext.GetType());
-
+            if (animed)
+            {
+                (sender as StackPanel).Opacity = 1;
+                return;
+            }
             string type = (sender as StackPanel).DataContext.GetType().ToString();
             TimeSpan beginTime;
             double top = 0;
@@ -591,6 +608,6 @@ namespace NewAnimeChecker
 
             storyboard.Begin();
         }
+        #endregion
     }
-    #endregion
 }

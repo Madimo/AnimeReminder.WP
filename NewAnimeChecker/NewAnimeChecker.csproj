@@ -101,6 +101,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DetailPage.xaml.cs">
+      <DependentUpon>DetailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Library\HttpLibrary.cs" />
     <Compile Include="Library\LocalizedStrings.cs" />
     <Compile Include="LoginPage.xaml.cs">
@@ -135,6 +138,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="DetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -163,9 +170,11 @@
     <Content Include="Assets\LockImage.png" />
     <Content Include="Assets\Tiles\IconicTileMedium.png" />
     <Content Include="Assets\Tiles\IconicTileSmall.png" />
+    <Content Include="Toolkit.Content\Add.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Refresh.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Check.png" />
+    <Content Include="Toolkit.Content\Sub.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\AppResources.resx">

@@ -14,7 +14,7 @@
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True"
     shell:SystemTray.Opacity="0"
-    Style="{StaticResource TransitionPageStyle}"
+    Style="{StaticResource SlidePageStyle}"
     local:TiltEffect.IsTiltEnabled="True"
     Loaded="AddPage_Loaded">
 

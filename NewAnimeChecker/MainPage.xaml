@@ -35,15 +35,17 @@
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="0,0,0,0" Opacity="0" Loaded="StackPanel_Loaded">
+                                <!--
                                 <toolkit:ContextMenuService.ContextMenu>
                                     <toolkit:ContextMenu IsZoomEnabled="True">
                                         <toolkit:MenuItem Header="删除"  Click="Delete_Click"/>
                                     </toolkit:ContextMenu>
                                 </toolkit:ContextMenuService.ContextMenu>
-                                <Grid Height="95">
+                                -->
+                                <Grid Height="95" Tap="Grid_Tap">
                                     <Rectangle Fill="{StaticResource PhoneForegroundBrush}" Visibility="{Binding Updated}" Height="95" Width="10" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
                                     <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" Margin="20,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                    <TextBlock Text="{Binding Epi}" TextWrapping="NoWrap" Margin="20,60,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                    <TextBlock Text="{Binding ShowEpi}" TextWrapping="NoWrap" Margin="20,60,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
                                 </Grid>
                             </StackPanel>
                         </DataTemplate>
