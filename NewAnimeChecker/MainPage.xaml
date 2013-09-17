@@ -42,7 +42,7 @@
                                     </toolkit:ContextMenu>
                                 </toolkit:ContextMenuService.ContextMenu>
                                 -->
-                                <Grid Height="95" Tap="Grid_Tap">
+                                <Grid  Height="95" Tap="Grid_Tap">
                                     <Rectangle Fill="{StaticResource PhoneForegroundBrush}" Visibility="{Binding Updated}" Height="95" Width="10" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
                                     <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" Margin="20,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
                                     <TextBlock Text="{Binding ShowEpi}" TextWrapping="NoWrap" Margin="20,60,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>

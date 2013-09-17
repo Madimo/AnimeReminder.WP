@@ -590,7 +590,7 @@ namespace NewAnimeChecker
             Storyboard.SetTarget(doubleAnimation, (StackPanel)sender);
             Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath(StackPanel.OpacityProperty));
             storyboard.Children.Add(doubleAnimation);
-
+/*
             ObjectAnimationUsingKeyFrames objectAnimation = new ObjectAnimationUsingKeyFrames();
             objectAnimation.Duration = duration;
             objectAnimation.BeginTime = beginTime;
@@ -605,7 +605,16 @@ namespace NewAnimeChecker
             Storyboard.SetTarget(objectAnimation, (StackPanel)sender);
             Storyboard.SetTargetProperty(objectAnimation, new PropertyPath(StackPanel.MarginProperty));
             storyboard.Children.Add(objectAnimation);
-
+*/
+            (sender as StackPanel).RenderTransform = new TranslateTransform();
+            DoubleAnimation transformY = new DoubleAnimation();
+            transformY.Duration = duration;
+            transformY.BeginTime = beginTime;
+            transformY.From = (sender as StackPanel).ActualWidth / 2;
+            transformY.To = 0;
+            Storyboard.SetTarget(transformY, (StackPanel)sender);
+            Storyboard.SetTargetProperty(transformY, new PropertyPath("(StackPanel.RenderTransform).(TranslateTransform.X)"));
+            storyboard.Children.Add(transformY);
             storyboard.Begin();
         }
         #endregion

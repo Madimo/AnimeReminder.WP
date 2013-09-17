@@ -226,6 +226,7 @@ namespace NewAnimeChecker
                     }
                     throw new Exception("发生了错误，但我不知道是什么");
                 }
+                MessageBox.Show("", "更新成功", MessageBoxButton.OK);
             }
             catch (Exception exception)
             {
