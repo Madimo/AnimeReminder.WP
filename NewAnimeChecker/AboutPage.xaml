@@ -23,19 +23,15 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!--TitlePanel 包含应用程序的名称和页标题-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="新番提醒" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="关于" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-        </StackPanel>
-
         <!--ContentPanel - 在此处放置其他内容-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <TextBlock HorizontalAlignment="Left" Height="82" Margin="29,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="417" FontSize="24">
+        <phone:Pivot Name="Pivot" Title="新番提醒">
+            <phone:PivotItem Header="关于">
+                <Grid x:Name="ContentPanel" Margin="0,0,0,0">
+                    <TextBlock HorizontalAlignment="Left" Height="82" Margin="29,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="417" FontSize="24">
         		<Run Text="本程序 是网站 新番提醒器 的一个"/>
         		<Run Text="Windows Phone 客户端"/>
-            </TextBlock>
-            <TextBlock HorizontalAlignment="Left" Margin="49,92,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="168" Width="397" FontSize="22">
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Margin="49,92,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="168" Width="397" FontSize="22">
             	<Run Text="作者：Madimo"/>
             	<LineBreak/>
             	<Run Text="邮箱："/>
@@ -43,11 +39,11 @@
             	<Run/>
             	<LineBreak/>
             	<Run Text="亲，如果您喜欢本程序，请给五星好评~"/>
-            </TextBlock>
-            <HyperlinkButton Content="MadimoZhang@gmail.com" TargetName="_blank" Margin="103,121,0,0" VerticalAlignment="Top" Width="330" FontSize="22" NavigateUri="mailto:MadimoZhang@gmail.com" HorizontalAlignment="Left" HorizontalContentAlignment="Left"/>
+                    </TextBlock>
+                    <HyperlinkButton Content="MadimoZhang@gmail.com" TargetName="_blank" Margin="103,121,0,0" VerticalAlignment="Top" Width="330" FontSize="22" NavigateUri="mailto:MadimoZhang@gmail.com" HorizontalAlignment="Left" HorizontalContentAlignment="Left"/>
 
-            <TextBlock HorizontalAlignment="Left" Height="75" Margin="29,270,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="417" FontSize="24" Text="新番提醒器 是一个免费的提供第三方新番提醒服务的网站"/>
-            <TextBlock HorizontalAlignment="Left" Height="247" Margin="49,350,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="397" FontSize="22">
+                    <TextBlock HorizontalAlignment="Left" Height="75" Margin="29,270,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="417" FontSize="24" Text="新番提醒器 是一个免费的提供第三方新番提醒服务的网站"/>
+                    <TextBlock HorizontalAlignment="Left" Height="247" Margin="49,350,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="397" FontSize="22">
             	<Run Text="作者：Ricter"/>
             	<LineBreak/>
             	<Run Text="邮箱："/>
@@ -59,14 +55,15 @@
             	<Run Text="主页："/>
             	<LineBreak/>
             	<Run Text="帮助："/>
-            </TextBlock>
-            <HyperlinkButton Content="Canyuexiaolang@gmail.com" TargetName="_blank" Margin="103,378,0,0" VerticalAlignment="Top" Width="330" FontSize="22" NavigateUri="mailto:Canyuexiaolang@gmail.com" HorizontalAlignment="Left" HorizontalContentAlignment="Left"/>
-            <HyperlinkButton Content="http://anime.ricter.info/" TargetName="_blank" Margin="103,465,0,0" VerticalAlignment="Top" Width="330" FontSize="22" NavigateUri="http://anime.ricter.info/" HorizontalAlignment="Left" HorizontalContentAlignment="Left"/>
-            <HyperlinkButton Content="http://anime.ricter.info/help" TargetName="_blank" HorizontalAlignment="Left" Margin="103,495,0,0" VerticalAlignment="Top" Width="330" RenderTransformOrigin="-3.031,1.48" HorizontalContentAlignment="Left" NavigateUri="http://anime.ricter.info/help"/>
-            <TextBlock HorizontalAlignment="Left" Height="39" Margin="10,10,0,0" TextWrapping="Wrap" Text="#" VerticalAlignment="Top" Width="31" FontSize="24"/>
-            <TextBlock HorizontalAlignment="Left" Height="39" Margin="10,270,0,0" TextWrapping="Wrap" Text="#" VerticalAlignment="Top" Width="31" FontSize="24"/>
-
-        </Grid>
+                    </TextBlock>
+                    <HyperlinkButton Content="Canyuexiaolang@gmail.com" TargetName="_blank" Margin="103,378,0,0" VerticalAlignment="Top" Width="330" FontSize="22" NavigateUri="mailto:Canyuexiaolang@gmail.com" HorizontalAlignment="Left" HorizontalContentAlignment="Left"/>
+                    <HyperlinkButton Content="http://anime.ricter.info/" TargetName="_blank" Margin="103,465,0,0" VerticalAlignment="Top" Width="330" FontSize="22" NavigateUri="http://anime.ricter.info/" HorizontalAlignment="Left" HorizontalContentAlignment="Left"/>
+                    <HyperlinkButton Content="http://anime.ricter.info/help" TargetName="_blank" HorizontalAlignment="Left" Margin="103,495,0,0" VerticalAlignment="Top" Width="330" RenderTransformOrigin="-3.031,1.48" HorizontalContentAlignment="Left" NavigateUri="http://anime.ricter.info/help"/>
+                    <TextBlock HorizontalAlignment="Left" Height="39" Margin="10,10,0,0" TextWrapping="Wrap" Text="#" VerticalAlignment="Top" Width="31" FontSize="24"/>
+                    <TextBlock HorizontalAlignment="Left" Height="39" Margin="10,270,0,0" TextWrapping="Wrap" Text="#" VerticalAlignment="Top" Width="31" FontSize="24"/>
+                </Grid>
+            </phone:PivotItem>
+        </phone:Pivot>
     </Grid>
 
 </phone:PhoneApplicationPage>

@@ -27,29 +27,28 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!--TitlePanel 包含应用程序的名称和页标题-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Name="Title" Text="MadimoZhang@gmail.com" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Name="AnimeTitle" Text="新番提醒" Margin="9,0,0,0" Style="{StaticResource PhoneTextTitle1Style}" FontSize="55"/>
-        </StackPanel>
-
         <!--ContentPanel - 在此处放置其他内容-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <TextBlock Name="EpiTextBlock" Text="此订阅目前共 0 集" Margin="0,52,0,510" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="48"/>
-            <Button HorizontalAlignment="Left" Height="78" Margin="10,162,0,0" VerticalAlignment="Top" Width="78" BorderThickness="0" Click="Add_Click">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Toolkit.Content/Add.png" Stretch="None"/>
-                </Button.Background>
-            </Button>
-            <TextBox Name="EpiTextBox" HorizontalAlignment="Left" Height="78" Margin="83,162,0,0" TextWrapping="NoWrap" Text="0" VerticalAlignment="Top" Width="280" InputScope="Number" TextAlignment="Center" GotFocus="EpiTextBox_GotFocus" LostFocus="EpiTextBox_LostFocus" KeyDown="EpiTextBox_KeyDown" TextChanged="EpiTextBox_TextChanged"/>
-            <Button HorizontalAlignment="Left" Height="78" Margin="363,162,0,0" VerticalAlignment="Top" Width="78" BorderThickness="0" Click="Sub_Click">
-                <Button.Background>
-                    <ImageBrush Stretch="None" ImageSource="/Toolkit.Content/Sub.png"/>
-                </Button.Background>
-            </Button>            <Button Name="UpdateButton" Content="更新已看集数" HorizontalAlignment="Left" Margin="0,348,0,0" VerticalAlignment="Top" Width="456" Click="Update_Click"/>
-            <Button Name="MarkReadOrUnreadButton" Content="标记为未读" HorizontalAlignment="Left" Margin="0,463,0,0" VerticalAlignment="Top" Width="456" Click="MarkReadOrUnread_Click"/>
-            <Button Name="DeleteButton" Content="删除此订阅" HorizontalAlignment="Left" Margin="0,540,0,0" VerticalAlignment="Top" Width="456" Click="Delete_Click"/>
-        </Grid>
+        <phone:Pivot Name="Pivot" Title="MadimoZhang@gmail.com">
+            <phone:PivotItem Name="AnimeName" Header="新番提醒">
+                <Grid x:Name="ContentPanel" Margin="0,0,0,0">
+                    <TextBlock Name="EpiTextBlock" Text="此订阅目前共 0 集" Margin="0,52,0,510" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="48"/>
+                    <Button HorizontalAlignment="Left" Height="78" Margin="10,162,0,0" VerticalAlignment="Top" Width="78" BorderThickness="0" Click="Add_Click">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/Toolkit.Content/Add.png" Stretch="None"/>
+                        </Button.Background>
+                    </Button>
+                    <TextBox Name="EpiTextBox" HorizontalAlignment="Left" Height="78" Margin="83,162,0,0" TextWrapping="NoWrap" Text="0" VerticalAlignment="Top" Width="280" InputScope="Number" TextAlignment="Center" GotFocus="EpiTextBox_GotFocus" LostFocus="EpiTextBox_LostFocus" KeyDown="EpiTextBox_KeyDown" TextChanged="EpiTextBox_TextChanged"/>
+                    <Button HorizontalAlignment="Left" Height="78" Margin="363,162,0,0" VerticalAlignment="Top" Width="78" BorderThickness="0" Click="Sub_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="None" ImageSource="/Toolkit.Content/Sub.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Name="UpdateButton" Content="更新已看集数" HorizontalAlignment="Left" Margin="0,262,0,0" VerticalAlignment="Top" Width="456" Click="Update_Click"/>
+                    <Button Name="MarkReadOrUnreadButton" Content="标记为未读" HorizontalAlignment="Left" Margin="0,399,0,0" VerticalAlignment="Top" Width="456" Click="MarkReadOrUnread_Click"/>
+                    <Button Name="DeleteButton" Content="删除此订阅" HorizontalAlignment="Left" Margin="0,471,0,0" VerticalAlignment="Top" Width="456" Click="Delete_Click"/>
+                </Grid>
+            </phone:PivotItem>
+        </phone:Pivot>
     </Grid>
 <!--
     <phone:PhoneApplicationPage.ApplicationBar>

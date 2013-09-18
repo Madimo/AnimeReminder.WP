@@ -38,8 +38,8 @@ namespace NewAnimeChecker
             if (NavigationContext.QueryString.TryGetValue("index", out index))
             {
                 subscriptionIndex = App.ViewModel.SubscriptionItems[int.Parse(index)];
-                AnimeTitle.Text = subscriptionIndex.Name;
-                Title.Text = (string)settings["UserName"];
+                AnimeName.Header = subscriptionIndex.Name;
+                Pivot.Title = (string)settings["UserName"];
                 if (subscriptionIndex.Updated == System.Windows.Visibility.Visible)
                     MarkReadOrUnreadButton.Content = "标记为已读";
                 else
@@ -55,7 +55,7 @@ namespace NewAnimeChecker
         {
             ImageBrush brush = new ImageBrush();
             brush.ImageSource = (BitmapImage)App.Current.Resources["BackgroundImage"];
-            LayoutRoot.Background = brush;
+            Pivot.Background = brush;
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)

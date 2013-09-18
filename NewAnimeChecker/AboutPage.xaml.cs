@@ -26,7 +26,7 @@ namespace NewAnimeChecker
         {
             ImageBrush brush = new ImageBrush();
             brush.ImageSource = (BitmapImage)App.Current.Resources["BackgroundImage"];
-            LayoutRoot.Background = brush;
+            Pivot.Background = brush;
         }
         #endregion
     }

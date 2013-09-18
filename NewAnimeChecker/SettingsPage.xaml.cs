@@ -36,10 +36,10 @@ namespace NewAnimeChecker
         #region 控件事件处理
         private void SettingsPage_Loaded(object sender, RoutedEventArgs e)
         {
-            UserName.Text = (string)settings["UserName"];
+            Pivot.Title = (string)settings["UserName"];
             ImageBrush brush = new ImageBrush();
             brush.ImageSource = (BitmapImage)App.Current.Resources["BackgroundImage"];
-            LayoutRoot.Background = brush;
+            Pivot.Background = brush;
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)

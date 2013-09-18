@@ -27,23 +27,23 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Name="UserName" Text="新番提醒" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="设置" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-        </StackPanel>
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <Button Content="注销当前帐号" Click="Logout_Click" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="436"/>
-            <toolkit:ToggleSwitch Name="EmailReminderSwitch" Content="邮件提醒功能" Checked="EmailReminderSwitch_Checked" Unchecked="EmailReminderSwitch_Unchecked" IsEnabled="False" Margin="10,64,10,423" Height="120" Loaded="EmailReminderSwitch_Loaded"/>
-            <toolkit:ToggleSwitch Name="TaskAgentSwitch" Content="推送订阅更新" Margin="10,145,10,335" Height="120" Checked="TaskAgentSwitch_Checked" Unchecked="TaskAgentSwitch_Unchecked" Loaded="TaskAgentSwitch_Loaded"/>
-            <Button Name="SetLockscreenButton" Content="设置锁屏通知" Click="SetLockscreen_Click" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top" Width="436"/>
-            <toolkit:ListPicker Name="ListPicker" Margin="22,327,22,10" Loaded="ListPicker_Loaded" SelectionChanged="ListPicker_SelectionChanged">
-                <toolkit:ListPickerItem Content="每 2 个小时检查一次" HorizontalAlignment="Left" Width="406"/>
-                <toolkit:ListPickerItem Content="每 4 个小时检查一次"/>
-                <toolkit:ListPickerItem Content="每 8 个小时检查一次"/>
-                <toolkit:ListPickerItem Content="每 12 个小时检查一次"/>
-                <toolkit:ListPickerItem Content="每 24 个小时检查一次"/>
-            </toolkit:ListPicker>
-        </Grid>
+        <phone:Pivot Name="Pivot" Title="新番提醒">
+            <phone:PivotItem Header="设置">
+                <Grid x:Name="ContentPanel" Grid.Row="1" Margin="0,0,0,0">
+                    <Button Content="注销当前帐号" Click="Logout_Click" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="436"/>
+                    <toolkit:ToggleSwitch Name="EmailReminderSwitch" Content="邮件提醒功能" Checked="EmailReminderSwitch_Checked" Unchecked="EmailReminderSwitch_Unchecked" IsEnabled="False" Margin="10,64,10,423" Height="120" Loaded="EmailReminderSwitch_Loaded"/>
+                    <toolkit:ToggleSwitch Name="TaskAgentSwitch" Content="推送订阅更新" Margin="10,125,10,335" Height="120" Checked="TaskAgentSwitch_Checked" Unchecked="TaskAgentSwitch_Unchecked" Loaded="TaskAgentSwitch_Loaded"/>
+                    <Button Name="SetLockscreenButton" Content="设置锁屏通知" Click="SetLockscreen_Click" HorizontalAlignment="Left" Margin="10,222,0,0" VerticalAlignment="Top" Width="436"/>
+                    <toolkit:ListPicker Name="ListPicker" Margin="22,297,22,10" Loaded="ListPicker_Loaded" SelectionChanged="ListPicker_SelectionChanged">
+                        <toolkit:ListPickerItem Content="每 2 个小时检查一次" HorizontalAlignment="Left" Width="406"/>
+                        <toolkit:ListPickerItem Content="每 4 个小时检查一次"/>
+                        <toolkit:ListPickerItem Content="每 8 个小时检查一次"/>
+                        <toolkit:ListPickerItem Content="每 12 个小时检查一次"/>
+                        <toolkit:ListPickerItem Content="每 24 个小时检查一次"/>
+                    </toolkit:ListPicker>
+                </Grid>
+            </phone:PivotItem>
+        </phone:Pivot>
     </Grid>
 
 </phone:PhoneApplicationPage>
