@@ -12,6 +12,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using HttpLibrary;
+using Coding4Fun.Toolkit.Controls;
 
 namespace NewAnimeChecker
 {
@@ -181,14 +182,19 @@ namespace NewAnimeChecker
                     settings.Remove("MustRefresh");
                 settings.Add("MustRefresh", true);
                 settings.Save();
+                ToastPrompt toast = new ToastPrompt();
                 if ((MarkReadOrUnreadButton.Content as string) == "标记为未读")
                 {
                     MarkReadOrUnreadButton.Content = "标记为已读";
+                    toast.Title = "成功标记为未读";
                 }
                 else
                 {
                     MarkReadOrUnreadButton.Content = "标记为未读";
+                    toast.Title = "成功标记为已读";
                 }
+                toast.FontSize = 20;
+                toast.Show();
             }
             catch (Exception exception)
             {
@@ -226,7 +232,14 @@ namespace NewAnimeChecker
                     }
                     throw new Exception("发生了错误，但我不知道是什么");
                 }
-                MessageBox.Show("", "更新成功", MessageBoxButton.OK);
+                if (settings.Contains("MustRefresh"))
+                    settings.Remove("MustRefresh");
+                settings.Add("MustRefresh", true);
+                settings.Save();
+                ToastPrompt toast = new ToastPrompt();
+                toast.Title = "更新成功";
+                toast.FontSize = 20;
+                toast.Show();
             }
             catch (Exception exception)
             {

@@ -19,6 +19,7 @@ using Microsoft.Phone.Shell;
 using NewAnimeChecker.Resources;
 using System.Diagnostics;
 using HttpLibrary;
+using Coding4Fun.Toolkit.Controls;
 
 namespace NewAnimeChecker
 {
@@ -68,7 +69,19 @@ namespace NewAnimeChecker
             }
             BusyNumber--;
             if (BusyNumber == 0)
+            {
                 ProgressBar.IsVisible = false;
+                if (!settings.Contains("FirstLaunch"))
+                {
+                    ToastPrompt toast = new ToastPrompt();
+                    toast.Title = "提示";
+                    toast.Message = "点按订阅标题来使用更多功能";
+                    toast.FontSize = 20;
+                    toast.Show();
+                    settings.Add("FirstLaunch", 0);
+                    settings.Save();
+                }
+            }
         }
 
         public void SetBusy(string name)
@@ -311,7 +324,7 @@ namespace NewAnimeChecker
         #region 标记已读
         private async void MarkRead_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("", "确定将所有更新标记为已看？", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
+            if (MessageBox.Show("", "确定将所有更新标记为已读？", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
                 return;
             SetBusy("MarkRead");
             try
@@ -335,6 +348,10 @@ namespace NewAnimeChecker
                         }
                     }
                 }
+                ToastPrompt toast = new ToastPrompt();
+                toast.Title = "成功将所有更新标记为已读";
+                toast.FontSize = 20;
+                toast.Show();
             }
             catch (Exception exception)
             {
@@ -607,14 +624,14 @@ namespace NewAnimeChecker
             storyboard.Children.Add(objectAnimation);
 */
             (sender as StackPanel).RenderTransform = new TranslateTransform();
-            DoubleAnimation transformY = new DoubleAnimation();
-            transformY.Duration = duration;
-            transformY.BeginTime = beginTime;
-            transformY.From = (sender as StackPanel).ActualWidth / 2;
-            transformY.To = 0;
-            Storyboard.SetTarget(transformY, (StackPanel)sender);
-            Storyboard.SetTargetProperty(transformY, new PropertyPath("(StackPanel.RenderTransform).(TranslateTransform.X)"));
-            storyboard.Children.Add(transformY);
+            DoubleAnimation transformX = new DoubleAnimation();
+            transformX.Duration = duration;
+            transformX.BeginTime = beginTime;
+            transformX.From = (sender as StackPanel).ActualWidth / 2;
+            transformX.To = 0;
+            Storyboard.SetTarget(transformX, (StackPanel)sender);
+            Storyboard.SetTargetProperty(transformX, new PropertyPath("(StackPanel.RenderTransform).(TranslateTransform.X)"));
+            storyboard.Children.Add(transformX);
             storyboard.Begin();
         }
         #endregion

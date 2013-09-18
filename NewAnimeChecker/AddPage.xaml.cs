@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using HttpLibrary;
+using Coding4Fun.Toolkit.Controls;
 
 namespace NewAnimeChecker
 {
@@ -164,7 +165,10 @@ namespace NewAnimeChecker
                     IsolatedStorageSettings.ApplicationSettings.Add("MustRefresh", true);
                     IsolatedStorageSettings.ApplicationSettings.Save();
                 }
-                MessageBox.Show("", "添加成功", MessageBoxButton.OK);
+                ToastPrompt toast = new ToastPrompt();
+                toast.Title = "添加成功";
+                toast.FontSize = 20;
+                toast.Show();
             }
             catch (Exception exception)
             {
