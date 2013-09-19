@@ -40,9 +40,7 @@ namespace NewAnimeChecker
         #region 控件事件处理
         private void LoginPage_Loaded(object sender, RoutedEventArgs e)
         {
-            ImageBrush brush = new ImageBrush();
-            brush.ImageSource = (BitmapImage)App.Current.Resources["BackgroundImage"];
-            LayoutRoot.Background = brush;
+            Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
             var settings = IsolatedStorageSettings.ApplicationSettings;
             if (settings.Contains("UserName"))
             {

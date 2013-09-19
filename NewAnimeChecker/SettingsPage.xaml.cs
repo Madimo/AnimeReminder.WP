@@ -37,9 +37,7 @@ namespace NewAnimeChecker
         private void SettingsPage_Loaded(object sender, RoutedEventArgs e)
         {
             Pivot.Title = (string)settings["UserName"];
-            ImageBrush brush = new ImageBrush();
-            brush.ImageSource = (BitmapImage)App.Current.Resources["BackgroundImage"];
-            Pivot.Background = brush;
+            Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)

@@ -438,21 +438,31 @@ namespace NewAnimeChecker
         {
             NavigationService.Navigate(new Uri("/DetailPage.xaml?index=" + (((sender as Grid).DataContext as ViewModels.SubscriptionModel).Number - 1).ToString(), UriKind.Relative));
         }
+
+        private void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
+        }
         #endregion
 
         #region 背景图片
-        private void SetBackground(ImageSource image)
+        private void SetBackground(ImageBrush brush)
         {
-            BackgroundTransform.Opacity = 0;
-            BackgroundTransform.Source = image;
+            BackgroundTransform.Opacity = 0.7;
+            BackgroundImage.Source = (Pivot.Background as ImageBrush).ImageSource;
+            BackgroundTransform.Source = brush.ImageSource;
+            BackgroundImage.Opacity = 1;
+            BackgroundImage.Visibility = System.Windows.Visibility.Visible;
+            BackgroundTransform.Visibility = System.Windows.Visibility.Visible;
+            Pivot.Background = new SolidColorBrush(Colors.Transparent);
 
             DoubleAnimation animation = new DoubleAnimation();
-            animation.From = 0;
-            animation.To = 1;
+            animation.From = 1;
+            animation.To = 0;
             animation.Duration = new Duration(TimeSpan.FromMilliseconds(1500));
             animation.BeginTime = TimeSpan.FromMilliseconds(1000);
 
-            Storyboard.SetTarget(animation, BackgroundTransform);
+            Storyboard.SetTarget(animation, BackgroundImage);
             Storyboard.SetTargetProperty(animation, new PropertyPath(Image.OpacityProperty));
 
             Storyboard storyboard = new Storyboard();
@@ -463,8 +473,9 @@ namespace NewAnimeChecker
 
         private void AnimationCompleted(object sender, EventArgs e)
         {
-            BackgroundImage.Source = BackgroundTransform.Source;
-            BackgroundTransform.Opacity = 0;
+            Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
+            BackgroundImage.Visibility = System.Windows.Visibility.Collapsed;
+            BackgroundTransform.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         private void ChangeBackground_Click(object sender, EventArgs e)
@@ -483,9 +494,12 @@ namespace NewAnimeChecker
             {
                 BitmapImage bitmap = new BitmapImage();
                 bitmap.SetSource(e.ChosenPhoto);
-                App.Current.Resources.Remove("BackgroundImage");
-                App.Current.Resources.Add("BackgroundImage", bitmap);
-                SetBackground(bitmap);
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = bitmap;
+                brush.Opacity = 0.7;
+                App.Current.Resources.Remove("BackgroundBrush");
+                App.Current.Resources.Add("BackgroundBrush", brush);
+                SetBackground(brush);
                 using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
                 {
                     using (IsolatedStorageFileStream fileStream = isf.OpenFile("Background", FileMode.Create))
@@ -507,18 +521,12 @@ namespace NewAnimeChecker
             {
                 if (isf.FileExists("Background"))
                 {
-                    BitmapImage bitmap = (BitmapImage)App.Current.Resources["DefaultBackgroundImage"];
-                    App.Current.Resources.Remove("BackgroundImage");
-                    App.Current.Resources.Add("BackgroundImage", bitmap);
+                    App.Current.Resources.Remove("BackgroundBrush");
+                    App.Current.Resources.Add("BackgroundBrush", App.Current.Resources["DefaultBackgroundBrush"]);
                     isf.DeleteFile("Background");
-                    SetBackground(bitmap);
+                    SetBackground((ImageBrush)App.Current.Resources["DefaultBackgroundBrush"]);
                 }
             }
-        }
-
-        private void Background_Loaded(object sender, RoutedEventArgs e)
-        {
-            BackgroundImage.Source = (BitmapImage)App.Current.Resources["BackgroundImage"];
         }
         #endregion
 
@@ -570,7 +578,6 @@ namespace NewAnimeChecker
             }
             string type = (sender as StackPanel).DataContext.GetType().ToString();
             TimeSpan beginTime;
-            double top = 0;
             if (type.Contains("Subscription"))
             {
                 if (Pivot.SelectedIndex != 0 || ((sender as StackPanel).DataContext as ViewModels.SubscriptionModel).Number > 10)
@@ -579,7 +586,6 @@ namespace NewAnimeChecker
                     return;
                 }
                 beginTime = TimeSpan.FromMilliseconds((((sender as StackPanel).DataContext as ViewModels.SubscriptionModel).Number - 1) * 60);
-                top = 0;
             }
             else if (type.Contains("Schedule"))
             {
@@ -589,7 +595,6 @@ namespace NewAnimeChecker
                     return;
                 }
                 beginTime = TimeSpan.FromMilliseconds((((sender as StackPanel).DataContext as ViewModels.ScheduleModel).Number - 1) * 60);
-                top = 12;
             }
             else
             {

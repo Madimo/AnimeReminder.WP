@@ -23,7 +23,7 @@
         <shell:ProgressIndicator x:Name="ProgressBar" IsIndeterminate="True"/>
     </shell:SystemTray.ProgressIndicator>
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <phone:Pivot Title="新番提醒">
+        <phone:Pivot Name="Pivot" Title="新番提醒">
             <phone:PivotItem Header="登陆">
                 <Grid Margin="0,0,0,0">
                     <TextBox Name="UserNameBox" HorizontalAlignment="Left" Height="70" Margin="10,10,0,0" TextWrapping="Wrap" Foreground="Gray" Text="邮箱" VerticalAlignment="Top" Width="436" InputScope="EmailUserName" GotFocus="LoginTextBox_GotFocus" LostFocus="LoginTextBox_LostFocus" KeyDown="UserNameBox_KeyDown"/>

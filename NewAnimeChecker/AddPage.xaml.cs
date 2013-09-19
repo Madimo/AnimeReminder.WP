@@ -39,9 +39,7 @@ namespace NewAnimeChecker
         private void AddPage_Loaded(object sender, RoutedEventArgs e)
         {
             Pivot.Title = IsolatedStorageSettings.ApplicationSettings["UserName"];
-            ImageBrush brush = new ImageBrush();
-            brush.ImageSource = (BitmapImage)App.Current.Resources["BackgroundImage"];
-            Pivot.Background = brush;
+            Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
             SearchBox.Focus();
         }
 

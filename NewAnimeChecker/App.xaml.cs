@@ -4,6 +4,7 @@ using System.IO.IsolatedStorage;
 using System.Resources;
 using System.Windows;
 using System.Windows.Markup;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
@@ -87,7 +88,10 @@ namespace NewAnimeChecker
             using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
             {
                 BitmapImage defaultBackground = new BitmapImage(new Uri("/Assets/Background.jpg", UriKind.Relative));
-                App.Current.Resources.Add("DefaultBackgroundImage", defaultBackground);
+                ImageBrush defaultBrush = new ImageBrush();
+                defaultBrush.ImageSource = defaultBackground;
+                defaultBrush.Opacity = 0.7;
+                App.Current.Resources.Add("DefaultBackgroundBrush", defaultBrush);
                 BitmapImage background = null;
                 if (isf.FileExists("Background"))
                 {
@@ -101,7 +105,10 @@ namespace NewAnimeChecker
                 {
                     background = defaultBackground;
                 }
-                App.Current.Resources.Add("BackgroundImage", background);
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = background;
+                brush.Opacity = 0.7;
+                App.Current.Resources.Add("BackgroundBrush", brush);
             }
         }
 

@@ -14,15 +14,16 @@
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True"
     shell:SystemTray.Opacity="0"
-    Style="{StaticResource TransitionPageStyle}">
+    Style="{StaticResource TransitionPageStyle}"
+    Loaded="MainPage_Loaded">
     <!-- 顶部进度条 -->
     <shell:SystemTray.ProgressIndicator>
         <shell:ProgressIndicator x:Name="ProgressBar" IsIndeterminate="True"/>
     </shell:SystemTray.ProgressIndicator>
     <!-- Pivot控件 -->
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <Image Name="BackgroundImage" Canvas.ZIndex="-2" Margin="0,0,0,0" Loaded="Background_Loaded"/>
-        <Image Name="BackgroundTransform" Canvas.ZIndex="-1" Margin="0,0,0,0" Opacity="0"/>
+        <Image Name="BackgroundImage" Canvas.ZIndex="-1" Margin="0,0,0,0" Visibility="Collapsed"/>
+        <Image Name="BackgroundTransform" Canvas.ZIndex="-2" Margin="0,0,0,0" Visibility="Collapsed"/>
         <phone:Pivot Name="Pivot" Canvas.ZIndex="0" Title="新番提醒" SelectionChanged="Pivot_SelectionChanged">
             <!-- 第一页 -->
             <phone:PivotItem Header="我的订阅" Margin="12,28,12,0">
@@ -67,7 +68,7 @@
                     </phone:LongListSelector.ListHeaderTemplate>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="0,0,0,12" Opacity="0" Loaded="StackPanel_Loaded">
+                            <StackPanel Margin="0,0,0,8" Opacity="0" Loaded="StackPanel_Loaded">
                                 <toolkit:ContextMenuService.ContextMenu>
                                     <toolkit:ContextMenu IsZoomEnabled="True">
                                         <toolkit:MenuItem Header="添加到我的订阅" Click="AddToSubscription_Click"/>

@@ -24,9 +24,7 @@ namespace NewAnimeChecker
         #region 控件事件处理
         private void AboutPage_Loaded(object sender, RoutedEventArgs e)
         {
-            ImageBrush brush = new ImageBrush();
-            brush.ImageSource = (BitmapImage)App.Current.Resources["BackgroundImage"];
-            Pivot.Background = brush;
+            Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
         }
         #endregion
     }
