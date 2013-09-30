@@ -38,14 +38,14 @@ namespace NewAnimeChecker
             if (NavigationContext.QueryString.TryGetValue("index", out index))
             {
                 subscriptionIndex = App.ViewModel.SubscriptionItems[int.Parse(index)];
-                AnimeName.Header = subscriptionIndex.Name;
+                AnimeName.Header = subscriptionIndex.name;
                 Pivot.Title = (string)settings["UserName"];
-                if (subscriptionIndex.Updated == System.Windows.Visibility.Visible)
+                if (subscriptionIndex.updated == System.Windows.Visibility.Visible)
                     MarkReadOrUnreadButton.Content = "标记为已读";
                 else
                     MarkReadOrUnreadButton.Content = "标记为未读";
-                EpiTextBox.Text = subscriptionIndex.Readed;
-                EpiTextBlock.Text = "此订阅目前共 " + subscriptionIndex.Epi + " 集";
+                EpiTextBox.Text = subscriptionIndex.read;
+                EpiTextBlock.Text = "此订阅目前共 " + subscriptionIndex.epi + " 集";
             }
         }
         #endregion
@@ -58,7 +58,7 @@ namespace NewAnimeChecker
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            if (int.Parse(EpiTextBox.Text) < int.Parse(subscriptionIndex.Epi))
+            if (int.Parse(EpiTextBox.Text) < int.Parse(subscriptionIndex.epi))
                 EpiTextBox.Text = (int.Parse(EpiTextBox.Text) + 1).ToString();
         }
 
@@ -76,9 +76,9 @@ namespace NewAnimeChecker
         private void EpiTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (EpiTextBox.Text == "")
-                EpiTextBox.Text = subscriptionIndex.Readed;
-            else if (int.Parse(EpiTextBox.Text) > int.Parse(subscriptionIndex.Epi))
-                EpiTextBox.Text = subscriptionIndex.Epi;
+                EpiTextBox.Text = subscriptionIndex.read;
+            else if (int.Parse(EpiTextBox.Text) > int.Parse(subscriptionIndex.epi))
+                EpiTextBox.Text = subscriptionIndex.epi;
             else if (int.Parse(EpiTextBox.Text) < 0)
                 EpiTextBox.Text = "0";
             else
@@ -105,14 +105,17 @@ namespace NewAnimeChecker
         {
             if (MessageBox.Show("", "确定删除此订阅？", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
                 return;
+            ProgressBar.Text = "删除中...";
             ProgressBar.IsVisible = true;
             UpdateButton.IsEnabled = false;
             MarkReadOrUnreadButton.IsEnabled = false;
             DeleteButton.IsEnabled = false;
+            AnimeAPI api = new AnimeAPI();
             try
             {
+/*
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://apianime.ricter.info/del?key=" + settings["UserKey"] + "&id=" + subscriptionIndex.ID);
+                string result = await httpRequest.GetAsync("http://apianime.ricter.info/del?key=" + settings["UserKey"] + "&id=" + subscriptionIndex.aid);
                 if (result.Contains("ERROR_"))
                 {
                     if (result == "ERROR_INVALID_KEY")
@@ -128,12 +131,20 @@ namespace NewAnimeChecker
                     }
                     throw new Exception("发生了错误，但我不知道是什么");
                 }
+ */
+                await api.DelAnime(subscriptionIndex.aid);
                 App.ViewModel.SubscriptionItems.Remove(subscriptionIndex);
                 NavigationService.GoBack();
             }
             catch (Exception exception)
             {
-                MessageBox.Show("", exception.Message, MessageBoxButton.OK);
+                MessageBox.Show(exception.Message, "错误", MessageBoxButton.OK);
+                if (api.lastError == AnimeAPI.ERROR.ERROR_INVALID_KEY)
+                {
+                    settings.Remove("UserKey");
+                    settings.Save();
+                    NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
+                }
             }
             finally
             {
@@ -141,6 +152,7 @@ namespace NewAnimeChecker
                 MarkReadOrUnreadButton.IsEnabled = true;
                 DeleteButton.IsEnabled = true;
                 ProgressBar.IsVisible = false;
+                ProgressBar.Text = "";
             }
         }
         #endregion
@@ -148,22 +160,33 @@ namespace NewAnimeChecker
         #region 标为已读/未读
         private async void MarkReadOrUnread_Click(object sender, RoutedEventArgs e)
         {
+            ProgressBar.Text = "执行中...";
             ProgressBar.IsVisible = true;
             UpdateButton.IsEnabled = false;
             MarkReadOrUnreadButton.IsEnabled = false;
             DeleteButton.IsEnabled = false;
+            AnimeAPI api = new AnimeAPI();
             try
             {
+/*
                 HttpEngine httpRequest = new HttpEngine();
                 string requestUrl = "";
+*/
                 if ((MarkReadOrUnreadButton.Content as string) == "标记为未读")
                 {
-                    requestUrl = "http://apianime.ricter.info/add_highlight?key=" + settings["UserKey"] + "&id=" + subscriptionIndex.ID + "&hash=" + new Random().Next();
+                    await api.AddHighlight(subscriptionIndex.aid, "2");
+/*
+                    requestUrl = "http://apianime.ricter.info/add_highlight?key=" + settings["UserKey"] + "&id=" + subscriptionIndex.aid + "&hash=" + new Random().Next();
+*/
                 }
                 else
                 {
-                    requestUrl = "http://apianime.ricter.info/del_highlight?key=" + settings["UserKey"] + "&id=" + subscriptionIndex.ID + "&hash=" + new Random().Next();
+                    await api.DelHighlight(subscriptionIndex.aid);
+/*
+                    requestUrl = "http://apianime.ricter.info/del_highlight?key=" + settings["UserKey"] + "&id=" + subscriptionIndex.aid + "&hash=" + new Random().Next();
+*/
                 }
+/*
                 string result = await httpRequest.GetAsync(requestUrl);
                 if (result.Contains("ERROR_"))
                 {
@@ -176,6 +199,7 @@ namespace NewAnimeChecker
                     }
                     throw new Exception("发生了错误，但我不知道是什么");
                 }
+ */
                 if (settings.Contains("MustRefresh"))
                     settings.Remove("MustRefresh");
                 settings.Add("MustRefresh", true);
@@ -196,7 +220,13 @@ namespace NewAnimeChecker
             }
             catch (Exception exception)
             {
-                MessageBox.Show("", exception.Message, MessageBoxButton.OK);
+                MessageBox.Show(exception.Message, "错误", MessageBoxButton.OK);
+                if (api.lastError == AnimeAPI.ERROR.ERROR_INVALID_KEY)
+                {
+                    settings.Remove("UserKey");
+                    settings.Save();
+                    NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
+                }
             }
             finally
             {
@@ -204,6 +234,7 @@ namespace NewAnimeChecker
                 MarkReadOrUnreadButton.IsEnabled = true;
                 DeleteButton.IsEnabled = true;
                 ProgressBar.IsVisible = false;
+                ProgressBar.Text = "";
             }
         }
         #endregion
@@ -211,14 +242,17 @@ namespace NewAnimeChecker
         #region 更新已看集数
         private async void Update_Click(object sender, RoutedEventArgs e)
         {
+            ProgressBar.Text = "更新中...";
             ProgressBar.IsVisible = true;
             UpdateButton.IsEnabled = false;
             MarkReadOrUnreadButton.IsEnabled = false;
             DeleteButton.IsEnabled = false;
+            AnimeAPI api = new AnimeAPI();
             try
             {
+/*
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://apianime.ricter.info/epiedit?key=" + settings["UserKey"] + "&aid=" + subscriptionIndex.ID + "&epi=" + EpiTextBox.Text + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://apianime.ricter.info/epiedit?key=" + settings["UserKey"] + "&aid=" + subscriptionIndex.aid + "&epi=" + EpiTextBox.Text + "&hash=" + new Random().Next());
                 if (result.Contains("ERROR_"))
                 {
                     if (result == "ERROR_INVALID_KEY")
@@ -230,6 +264,8 @@ namespace NewAnimeChecker
                     }
                     throw new Exception("发生了错误，但我不知道是什么");
                 }
+*/
+                await api.SetReadEpi(subscriptionIndex.aid, EpiTextBox.Text);
                 if (settings.Contains("MustRefresh"))
                     settings.Remove("MustRefresh");
                 settings.Add("MustRefresh", true);
@@ -241,7 +277,13 @@ namespace NewAnimeChecker
             }
             catch (Exception exception)
             {
-                MessageBox.Show("", exception.Message, MessageBoxButton.OK);
+                MessageBox.Show(exception.Message, "错误", MessageBoxButton.OK);
+                if (api.lastError == AnimeAPI.ERROR.ERROR_INVALID_KEY)
+                {
+                    settings.Remove("UserKey");
+                    settings.Save();
+                    NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
+                }
             }
             finally
             {
@@ -249,6 +291,7 @@ namespace NewAnimeChecker
                 UpdateButton.IsEnabled = true;
                 MarkReadOrUnreadButton.IsEnabled = true;
                 DeleteButton.IsEnabled = true;
+                ProgressBar.Text = "";
             }
         }
         #endregion

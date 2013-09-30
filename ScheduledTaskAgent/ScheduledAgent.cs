@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.IsolatedStorage;
@@ -32,6 +33,13 @@ namespace ScheduledTaskAgent
                 // 出现未处理的异常；强行进入调试器
                 Debugger.Break();
             }
+        }
+
+        public class Anime
+        {
+            public string name;
+            public string epi;
+            public string highlight;
         }
 
         /// <summary>
@@ -75,6 +83,8 @@ namespace ScheduledTaskAgent
                     if (Debugger.IsAttached || TimeOffset.TotalHours >= (double)TimeSet)
                     {
                         HttpEngine httpRequest = new HttpEngine();
+                        string result = await httpRequest.GetAsync("http://api2.ricter.info/get_subscription_list?key=" + IsolatedStorageSettings.ApplicationSettings["UserKey"] + "&hash=" + new Random().Next());
+/*
                         string result = await httpRequest.GetAsync("http://apianime.ricter.info/get_subscription_list?key=" + IsolatedStorageSettings.ApplicationSettings["UserKey"] + "&hash=" + new Random().Next());
                         if (result.Contains("ERROR_"))
                         {
@@ -97,7 +107,7 @@ namespace ScheduledTaskAgent
                                 updatedNumber++;
                                 if (updatedNumber == 1)
                                 {
-                                    TileContent[0] = " ";
+                                    TileContent[0] = "订阅更新";
                                     TileContent[1] = name + " 更新到第 " + epi + " 集";
                                     ShowName = name;
                                 }
@@ -107,6 +117,57 @@ namespace ScheduledTaskAgent
                                 }
                             }
                         }
+*/
+                        List<Anime> subscriptionList = new List<Anime>();
+                        int pushNumber = 0;
+                        int updatedNumber = 0;
+                        string[] list = result.Split('\n');
+                        for (int i = 0; i < list.Length; ++i)
+                        {
+                            string[] item = list[i].Split('|');
+                            if (item.Length < 6)
+                                continue;
+                            Anime anime     = new Anime();
+                            anime.name      = item[1];
+                            anime.epi       = item[3];
+                            anime.highlight = item[5];
+                            subscriptionList.Add(anime);
+
+                            if (anime.highlight == "2")
+                                pushNumber++;
+                            if (anime.highlight != "0")
+                                updatedNumber++;
+                        }
+
+                        subscriptionList.Sort((Anime x, Anime y) =>
+                        {
+                            if (x.highlight != "0" && y.highlight == "0")
+                                return -1;
+                            if (x.highlight == "0" && y.highlight != "0")
+                                return 0;
+                            if (x.highlight != "0" && y.highlight != "0")
+                            {
+                                if (x.highlight == "1" && y.highlight == "2")
+                                    return -1;
+                                if (x.highlight == "2" && y.highlight == "1")
+                                    return 0;
+                            }
+                            return -1;
+                        });
+
+                        string[] TileContent = new string[3];
+                        string showName = "";
+                        if (subscriptionList.Count >= 1 && subscriptionList[0].highlight != "0")
+                        {
+                            TileContent[0] = "订阅更新";
+                            TileContent[1] = subscriptionList[1].name + " 更新到第 " + subscriptionList[1].epi + " 集";
+                            showName = subscriptionList[1].name;
+                        }
+                        if (subscriptionList.Count >= 2 && subscriptionList[1].highlight != "0")
+                        {
+                            TileContent[2] = subscriptionList[2].name + " 更新到第 " + subscriptionList[2].epi + " 集";
+                        }
+
                         ShellTile Tile = ShellTile.ActiveTiles.FirstOrDefault();
                         if (Tile != null)
                         {
@@ -121,10 +182,10 @@ namespace ScheduledTaskAgent
                             };
                             Tile.Update(TileData);
                         }
-                        if (updatedNumber > 0)
+                        if (pushNumber > 0)
                         {
                             ShellToast toast = new ShellToast();
-                            toast.Title = ShowName + " 等 " + updatedNumber.ToString() + " 个订阅更新，点击查看";
+                            toast.Title = showName + " 等 " + pushNumber.ToString() + " 个订阅更新，点击查看";
                             toast.Content = "";
                             toast.Show();
                         }

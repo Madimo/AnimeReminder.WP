@@ -8,7 +8,9 @@
 
     <!--应用程序资源-->
     <Application.Resources>
+        
         <local:LocalizedStrings xmlns:local="clr-namespace:NewAnimeChecker" x:Key="LocalizedStrings"/>
+        
         <Style x:Key="TransitionPageStyle" TargetType="phone:PhoneApplicationPage">
             <Setter Property="toolkit:TransitionService.NavigationInTransition">
                 <Setter.Value>
@@ -62,8 +64,34 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="SettingsPageStyle" TargetType="phone:PhoneApplicationPage">
+            <Setter Property="toolkit:TransitionService.NavigationInTransition">
+                <Setter.Value>
+                    <toolkit:NavigationInTransition>
+                        <toolkit:NavigationInTransition.Backward>
+                            <toolkit:SlideTransition Mode="SlideUpFadeIn"/>
+                        </toolkit:NavigationInTransition.Backward>
+                        <toolkit:NavigationInTransition.Forward>
+                            <toolkit:SlideTransition Mode="SlideUpFadeIn"/>
+                        </toolkit:NavigationInTransition.Forward>
+                    </toolkit:NavigationInTransition>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="toolkit:TransitionService.NavigationOutTransition">
+                <Setter.Value>
+                    <toolkit:NavigationOutTransition>
+                        <toolkit:NavigationOutTransition.Backward>
+                            <toolkit:SlideTransition Mode="SlideDownFadeOut"/>
+                        </toolkit:NavigationOutTransition.Backward>
+                    </toolkit:NavigationOutTransition>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Application.Resources>
 
+    
     <Application.ApplicationLifetimeObjects>
         <!--处理应用程序的生存期事件所需的对象-->
         <shell:PhoneApplicationService

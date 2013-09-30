@@ -39,77 +39,164 @@ namespace NewAnimeChecker
         #endregion
 
         #region 状态设置
-        int BusyNumber = 0;
-        bool IsRefreshSubBusy = false;
-        bool IsRefreshScheBusy = false;
-        bool IsMarkReadBusy = false;
-
-        public void SetIdle(string name)
+        int busyNumber_;
+        int busyNumber
         {
-            switch (name)
+            set
             {
-                case "DeleteItem":
-                case "MarkRead":
-                case "RefreshSubscription":
-                    IsRefreshSubBusy = false;
-                    if (Pivot.SelectedIndex == 0 && ApplicationBar != null)
-                    {
-                        ((ApplicationBarIconButton)ApplicationBar.Buttons[1]).IsEnabled = true;
-                        ((ApplicationBarIconButton)ApplicationBar.Buttons[2]).IsEnabled = true;
-                    }
-                    break;
-                case "RefreshUpdatedSchedule":
-                case "AddToSubscription":
-                    IsRefreshScheBusy = false;
-                    if (Pivot.SelectedIndex == 1 && ApplicationBar != null)
-                    {
-                        ((ApplicationBarIconButton)ApplicationBar.Buttons[0]).IsEnabled = true;
-                    }
-                    break;
-            }
-            BusyNumber--;
-            if (BusyNumber == 0)
-            {
-                ProgressBar.IsVisible = false;
-                if (!settings.Contains("FirstLaunch"))
+                busyNumber_ = value;
+                if (value == 0)
                 {
-                    ToastPrompt toast = new ToastPrompt();
-                    toast.Title = "提示";
-                    toast.Message = "点按订阅标题来使用更多功能";
-                    toast.FontSize = 20;
-                    toast.Show();
-                    settings.Add("FirstLaunch", 0);
-                    settings.Save();
+                    ProgressBar.IsVisible = false;
+                    ProgressBar.Text = "";
+                    if (!settings.Contains("FirstLaunch"))
+                    {
+                        ToastPrompt toast = new ToastPrompt();
+                        toast.Title = "提示";
+                        toast.Message = "点按订阅标题来使用更多功能";
+                        toast.FontSize = 20;
+                        toast.Show();
+                        settings.Add("FirstLaunch", 0);
+                        settings.Save();
+                    }
                 }
+                else
+                {
+                    ProgressBar.IsVisible = true;
+                }
+            }
+
+            get
+            {
+                return busyNumber_;
             }
         }
 
-        public void SetBusy(string name)
+        bool IsRefreshSubBusy_;
+        bool IsRefreshSubBusy
         {
-            if (BusyNumber == 0)
-                ProgressBar.IsVisible = true;
-            switch (name)
+            set
             {
-                case "DeleteItem":
-                case "MarkRead":
-                case "RefreshSubscription":
-                    IsRefreshSubBusy = true;
+                IsRefreshSubBusy_ = value;
+                if (value)
+                {
+                    busyNumber++;
+                    ProgressBar.Text = "正在刷新...";
                     if (Pivot.SelectedIndex == 0 && ApplicationBar != null)
                     {
                         ((ApplicationBarIconButton)ApplicationBar.Buttons[1]).IsEnabled = false;
                         ((ApplicationBarIconButton)ApplicationBar.Buttons[2]).IsEnabled = false;
                     }
-                    break;
-                case "RefreshUpdatedSchedule":
-                    IsRefreshScheBusy = true;
+                }
+                else
+                {
+                    busyNumber--;
+                    if (Pivot.SelectedIndex == 0 && ApplicationBar != null)
+                    {
+                        ((ApplicationBarIconButton)ApplicationBar.Buttons[1]).IsEnabled = true;
+                        ((ApplicationBarIconButton)ApplicationBar.Buttons[2]).IsEnabled = true;
+                    }
+                }
+            }
+
+            get
+            {
+                return IsRefreshSubBusy_;
+            }
+        }
+
+        bool IsRefreshScheBusy_;
+        bool IsRefreshScheBusy
+        {
+            set
+            {
+                IsRefreshScheBusy_ = value;
+                if (value)
+                {
+                    busyNumber++;
+                    ProgressBar.Text = "正在刷新...";
                     if (Pivot.SelectedIndex == 1 && ApplicationBar != null)
                     {
                         ((ApplicationBarIconButton)ApplicationBar.Buttons[0]).IsEnabled = false;
                     }
-                    break;
+                } 
+                else
+                {
+                    busyNumber--;
+                    if (Pivot.SelectedIndex == 1 && ApplicationBar != null)
+                    {
+                        ((ApplicationBarIconButton)ApplicationBar.Buttons[0]).IsEnabled = true;
+                    }
+                }
             }
-            BusyNumber++;
+
+            get
+            {
+                return IsRefreshScheBusy_;
+            }
         }
+
+        bool IsMarkReadBusy_;
+        bool IsMarkReadBusy
+        {
+            set
+            {
+                IsMarkReadBusy_ = value;
+                if (value)
+                {
+                    busyNumber++;
+                    ProgressBar.Text = "正在执行...";
+                    if (Pivot.SelectedIndex == 0 && ApplicationBar != null)
+                    {
+                        ((ApplicationBarIconButton)ApplicationBar.Buttons[1]).IsEnabled = false;
+                        ((ApplicationBarIconButton)ApplicationBar.Buttons[2]).IsEnabled = false;
+                    }
+                }
+                else
+                {
+                    busyNumber--;
+                    ((ApplicationBarIconButton)ApplicationBar.Buttons[1]).IsEnabled = true;
+                    ((ApplicationBarIconButton)ApplicationBar.Buttons[2]).IsEnabled = true;
+                }
+            }
+
+            get
+            {
+                return IsMarkReadBusy_;
+            }
+        }
+
+        bool IsAddToSubBusy_;
+        bool IsAddToSubBusy
+        {
+            set
+            {
+                IsAddToSubBusy_ = value;
+                if (value)
+                {
+                    busyNumber++;
+                    ProgressBar.Text = "正在执行...";
+                    if (Pivot.SelectedIndex == 1 && ApplicationBar != null)
+                    {
+                        ((ApplicationBarIconButton)ApplicationBar.Buttons[0]).IsEnabled = false;
+                    }
+                }
+                else
+                {
+                    busyNumber--;
+                    if (Pivot.SelectedIndex == 1 && ApplicationBar != null)
+                    {
+                        ((ApplicationBarIconButton)ApplicationBar.Buttons[0]).IsEnabled = true;
+                    }
+                }
+            }
+
+            get
+            {
+                return IsAddToSubBusy_;
+            }
+        }
+
         #endregion
 
         #region 导航事件处理
@@ -159,11 +246,67 @@ namespace NewAnimeChecker
         #region 刷新 我的订阅
         public async void RefreshSubscription()
         {
-            SetBusy("RefreshSubscription");
+            IsRefreshSubBusy = true;
+            AnimeAPI api = new AnimeAPI();
             try
             {
+                await api.GetSubscriptionList();
+                App.ViewModel.SubscriptionItems.Clear();
+                string[] TileContent = new string[3] { "", "", "" };
+                foreach (AnimeAPI.Anime item in api.subscriptionList)
+                {
+                    string text;
+                    if (item.status == "1")
+                        text = "已完结，共 " + item.epi + " 集";
+                    else
+                        text = "更新到第 " + item.epi + " 集";
+                    if (item.read != "0")
+                        text += "，看到第 " + item.read + " 集";
+                    System.Windows.Visibility updated;
+                    if (item.highlight != "0")
+                        updated = System.Windows.Visibility.Visible;
+                    else
+                        updated = System.Windows.Visibility.Collapsed;
+                    App.ViewModel.SubscriptionItems.Add(new ViewModels.SubscriptionModel() 
+                    {
+                        num     = item.num, 
+                        aid     = item.aid, 
+                        name    = item.name, 
+                        status  = item.status, 
+                        epi     = item.epi,
+                        read    = item.read, 
+                        highlight = item.highlight,
+                        text    = text,
+                        updated = updated
+                    });
+                }
+
+                if (App.ViewModel.SubscriptionItems.Count >= 1 && App.ViewModel.SubscriptionItems[0].highlight != "0")
+                {
+                    TileContent[0] = "订阅更新";
+                    TileContent[1] = App.ViewModel.SubscriptionItems[0].name + " 更新到第 " + App.ViewModel.SubscriptionItems[0].epi + " 集";
+                }
+                if (App.ViewModel.SubscriptionItems.Count >= 2 && App.ViewModel.SubscriptionItems[1].highlight != "0")
+                {
+                    TileContent[2] = App.ViewModel.SubscriptionItems[1].name + " 更新到第 " + App.ViewModel.SubscriptionItems[1].epi + " 集";
+                }
+                ShellTile Tile = ShellTile.ActiveTiles.FirstOrDefault();
+                if (Tile != null)
+                {
+                    var TileData = new IconicTileData()
+                    {
+                        Title = "新番提醒",
+                        Count = api.updateNumber,
+                        BackgroundColor = System.Windows.Media.Colors.Transparent,
+                        WideContent1 = TileContent[0],
+                        WideContent2 = TileContent[1],
+                        WideContent3 = TileContent[2]
+                    };
+                    Tile.Update(TileData);
+                }
+/*
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://apianime.ricter.info/get_subscription_list?key=" + settings["UserKey"] + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api2.ricter.info/get_subscription_list?key=" + settings["UserKey"] + "&hash=" + new Random().Next());
                 if (result.IndexOf("ERROR_") != -1)
                 {
                     if (result == "ERROR_INVALID_KEY")
@@ -193,14 +336,14 @@ namespace NewAnimeChecker
                     string isDone   = item[4];
                     string readed   = item[5];
                     string showEpi;
-                    if (isDone == "1")
+                    if (isDone == "0")
                         showEpi = "已完结，共 " + epi + " 集";
                     else
                         showEpi = "更新到第 " + epi + " 集";
                     if (readed != "0")
                         showEpi += "，看到第 " + readed + " 集";
                     System.Windows.Visibility updated;
-                    if (isUpdate == "1")
+                    if (isUpdate != "0")
                     {
                         updated = System.Windows.Visibility.Visible;
                         updatedNumber++;
@@ -234,14 +377,21 @@ namespace NewAnimeChecker
                     };
                     Tile.Update(TileData);
                 }
+ */
             }
             catch (Exception exception)
             {
-                MessageBox.Show("", exception.Message, MessageBoxButton.OK);
+                MessageBox.Show(exception.Message, "错误", MessageBoxButton.OK);
+                if (api.lastError == AnimeAPI.ERROR.ERROR_INVALID_KEY)
+                {
+                    settings.Remove("UserKey");
+                    settings.Save();
+                    NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
+                }
             }
             finally
             {
-                SetIdle("RefreshSubscription");
+                IsRefreshSubBusy = false;
             }
         }
         #endregion
@@ -249,48 +399,81 @@ namespace NewAnimeChecker
         #region 刷新 最近更新
         public async void RefreshUpdatedSchedule()
         {
-            SetBusy("RefreshUpdatedSchedule");
+            IsRefreshScheBusy = true;
+            AnimeAPI api = new AnimeAPI();
             try
             {
+                await api.GetUpdateSchedule();
+                App.ViewModel.ScheduleItems.Clear();
+                foreach (AnimeAPI.Anime item in api.scheduleList)
+                {
+                    string text;
+                    if (item.date == "0")
+                        text = "今天 " + item.time;
+                    else
+                        text = "明天 " + item.time;
+                    App.ViewModel.ScheduleItems.Add(new ViewModels.ScheduleModel()
+                    {
+                        num  = item.num,
+                        aid  = item.aid,
+                        name = item.name,
+                        time = text
+                    });
+                }
+
+/*
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://apianime.ricter.info/get_update_schedule?hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api2.ricter.info/get_update_schedule?hash=" + new Random().Next());
                 App.ViewModel.ScheduleItems.Clear();
                 string[] List = result.Split('\n');
                 int number = 0;
                 for (int i = 0; i < List.Length; ++i)
                 {
                     string[] item = List[i].Split('|');
-                    if (item.Length < 3)
+                    if (item.Length < 4)
                         return;
                     number++;
-                    string time = item[0];
-                    string name = item[1];
-                    string id   = item[2];
+                    string whichDay = item[0]; 
+                    string id       = item[1];
+                    string name     = item[2];
+                    string time     = item[3];
+                    if (whichDay == "0")
+                        time = "今天 " + time;
+                    else if (whichDay == "1")
+                        time = "明天 " + time;
                     App.ViewModel.ScheduleItems.Add(new ViewModels.ScheduleModel() { Number = number, ID = id, Name = name, Time = time });
                 }
+ */
             }
             catch (Exception exception)
             {
-                MessageBox.Show("", exception.Message, MessageBoxButton.OK);
+                MessageBox.Show(exception.Message, "错误", MessageBoxButton.OK);
+                if (api.lastError == AnimeAPI.ERROR.ERROR_INVALID_KEY)
+                {
+                    settings.Remove("UserKey");
+                    settings.Save();
+                    NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
+                }
             }
             finally
             {
-                SetIdle("RefreshUpdatedSchedule");
+                IsRefreshScheBusy = false;
             }
         }
         #endregion
 
         #region 删除项目
+/*
         private async void Delete_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine(((ViewModels.SubscriptionModel)((MenuItem)sender).DataContext).Name);
+            Debug.WriteLine(((ViewModels.SubscriptionModel)((MenuItem)sender).DataContext).name);
             Debug.WriteLine(App.ViewModel.SubscriptionItems.Count);
             SetBusy("DeleteItem");
             try
             {
                 ViewModels.SubscriptionModel vi = (ViewModels.SubscriptionModel)((MenuItem)sender).DataContext;
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://apianime.ricter.info/del?key=" + settings["UserKey"] + "&id=" + vi.ID);
+                string result = await httpRequest.GetAsync("http://api2.ricter.info/del_anime?key=" + settings["UserKey"] + "&aid=" + vi.aid);
                 if (result.Contains("ERROR_"))
                 {
                     if (result == "ERROR_INVALID_KEY")
@@ -319,6 +502,7 @@ namespace NewAnimeChecker
                 SetIdle("DeleteItem");
             }
         }
+ */
         #endregion
 
         #region 标记已读
@@ -326,15 +510,24 @@ namespace NewAnimeChecker
         {
             if (MessageBox.Show("", "确定将所有更新标记为已读？", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
                 return;
-            SetBusy("MarkRead");
+            IsMarkReadBusy = true;
+            AnimeAPI api = new AnimeAPI();
             try
             {
+                foreach (ViewModels.SubscriptionModel item in App.ViewModel.SubscriptionItems)
+                {
+                    if (item.updated == System.Windows.Visibility.Visible)
+                    {
+                        await api.DelHighlight(item.aid);
+                    }
+                }
+/*
                 foreach (ViewModels.SubscriptionModel Items in App.ViewModel.SubscriptionItems)
                 {
-                    if (Items.Updated == System.Windows.Visibility.Visible)
+                    if (Items.updated == System.Windows.Visibility.Visible)
                     {
                         HttpEngine httpRequest = new HttpEngine();
-                        string result = await httpRequest.GetAsync("http://apianime.ricter.info/del_highlight?key=" + settings["UserKey"] + "&id=" + Items.ID + "&hash=" + new Random().Next());
+                        string result = await httpRequest.GetAsync("http://apianime.ricter.info/del_highlight?key=" + settings["UserKey"] + "&id=" + Items.aid + "&hash=" + new Random().Next());
                         if (result.Contains("ERROR_"))
                         {
                             if (result == "ERROR_INVALID_KEY")
@@ -348,6 +541,7 @@ namespace NewAnimeChecker
                         }
                     }
                 }
+ */
                 ToastPrompt toast = new ToastPrompt();
                 toast.Title = "成功将所有更新标记为已读";
                 toast.FontSize = 20;
@@ -355,11 +549,17 @@ namespace NewAnimeChecker
             }
             catch (Exception exception)
             {
-                MessageBox.Show("", exception.Message, MessageBoxButton.OK);
+                MessageBox.Show(exception.Message, "错误", MessageBoxButton.OK);
+                if (api.lastError == AnimeAPI.ERROR.ERROR_INVALID_KEY)
+                {
+                    settings.Remove("UserKey");
+                    settings.Save();
+                    NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
+                }
             }
             finally
             {
-                SetIdle("MarkRead");
+                IsMarkReadBusy = false;
                 RefreshSubscription();
             }
         }
@@ -382,11 +582,6 @@ namespace NewAnimeChecker
         private void Settings_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
-        }
-
-        private void About_Click(object sender, EventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/AboutPage.xaml", UriKind.Relative));
         }
 
         private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -428,15 +623,9 @@ namespace NewAnimeChecker
                 ApplicationBar.Opacity = 0.5;
         }
 
-        private void GoMarket_Click(object sender, EventArgs e)
-        {
-            MarketplaceReviewTask market = new MarketplaceReviewTask();
-            market.Show();
-        }
-
         private void Grid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/DetailPage.xaml?index=" + (((sender as Grid).DataContext as ViewModels.SubscriptionModel).Number - 1).ToString(), UriKind.Relative));
+            NavigationService.Navigate(new Uri("/DetailPage.xaml?index=" + (((sender as Grid).DataContext as ViewModels.SubscriptionModel).num - 1).ToString(), UriKind.Relative));
         }
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -533,12 +722,15 @@ namespace NewAnimeChecker
         #region 添加到我的订阅
         private async void AddToSubscription_Click(object sender, RoutedEventArgs e)
         {
-            SetBusy("AddToSubscription");
+            IsAddToSubBusy = true;
             ViewModels.ScheduleModel sm = (ViewModels.ScheduleModel)((MenuItem)sender).DataContext;
+            AnimeAPI api = new AnimeAPI();
             try
             {
+                await api.AddAnime(sm.aid);
+/*
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://apianime.ricter.info/add?key=" + settings["UserKey"] + "&id=" + sm.ID + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://apianime.ricter.info/add?key=" + settings["UserKey"] + "&id=" + sm.aid + "&hash=" + new Random().Next());
                 if (result.Contains("ERROR_"))
                 {
                     if (result == "ERROR_INVALID_KEY")
@@ -554,16 +746,26 @@ namespace NewAnimeChecker
                     }
                     throw new Exception("发生了错误，但我不知道是什么");
                 }
-                MessageBox.Show("", "添加成功", MessageBoxButton.OK);
+ */
+                ToastPrompt toast = new ToastPrompt();
+                toast.Title = "成功将 " + sm.name + " 添加到 我的订阅";
+                toast.FontSize = 20;
+                toast.Show();
                 RefreshSubscription();
             }
             catch (Exception excepiton)
             {
-                MessageBox.Show("", excepiton.Message, MessageBoxButton.OK);
+                MessageBox.Show(excepiton.Message, "错误", MessageBoxButton.OK);
+                if (api.lastError == AnimeAPI.ERROR.ERROR_INVALID_KEY)
+                {
+                    settings.Remove("UserKey");
+                    settings.Save();
+                    NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
+                }
             }
             finally
             {
-                SetIdle("AddToSubscription");
+                IsAddToSubBusy = false;
             }
         }
         #endregion
@@ -580,21 +782,21 @@ namespace NewAnimeChecker
             TimeSpan beginTime;
             if (type.Contains("Subscription"))
             {
-                if (Pivot.SelectedIndex != 0 || ((sender as StackPanel).DataContext as ViewModels.SubscriptionModel).Number > 10)
+                if (Pivot.SelectedIndex != 0 || ((sender as StackPanel).DataContext as ViewModels.SubscriptionModel).num > 10)
                 {
                     (sender as StackPanel).Opacity = 1;
                     return;
                 }
-                beginTime = TimeSpan.FromMilliseconds((((sender as StackPanel).DataContext as ViewModels.SubscriptionModel).Number - 1) * 60);
+                beginTime = TimeSpan.FromMilliseconds((((sender as StackPanel).DataContext as ViewModels.SubscriptionModel).num - 1) * 60);
             }
             else if (type.Contains("Schedule"))
             {
-                if (Pivot.SelectedIndex != 1 || ((sender as StackPanel).DataContext as ViewModels.ScheduleModel).Number > 10)
+                if (Pivot.SelectedIndex != 1 || ((sender as StackPanel).DataContext as ViewModels.ScheduleModel).num > 10)
                 {
                     (sender as StackPanel).Opacity = 1;
                     return;
                 }
-                beginTime = TimeSpan.FromMilliseconds((((sender as StackPanel).DataContext as ViewModels.ScheduleModel).Number - 1) * 60);
+                beginTime = TimeSpan.FromMilliseconds((((sender as StackPanel).DataContext as ViewModels.ScheduleModel).num - 1) * 60);
             }
             else
             {

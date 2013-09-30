@@ -24,7 +24,7 @@
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Image Name="BackgroundImage" Canvas.ZIndex="-1" Margin="0,0,0,0" Visibility="Collapsed"/>
         <Image Name="BackgroundTransform" Canvas.ZIndex="-2" Margin="0,0,0,0" Visibility="Collapsed"/>
-        <phone:Pivot Name="Pivot" Canvas.ZIndex="0" Title="新番提醒" SelectionChanged="Pivot_SelectionChanged">
+        <phone:Pivot Name="Pivot" Canvas.ZIndex="0" Margin="0,0,0,0" Title="新番提醒" SelectionChanged="Pivot_SelectionChanged">
             <!-- 第一页 -->
             <phone:PivotItem Header="我的订阅" Margin="12,28,12,0">
                 <phone:LongListSelector Name="LongListSelector" ItemsSource="{Binding SubscriptionItems}" Margin="-13,0,0,0">
@@ -44,9 +44,9 @@
                                 </toolkit:ContextMenuService.ContextMenu>
                                 -->
                                 <Grid  Height="95" Tap="Grid_Tap">
-                                    <Rectangle Fill="{StaticResource PhoneForegroundBrush}" Visibility="{Binding Updated}" Height="95" Width="10" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-                                    <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" Margin="20,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                    <TextBlock Text="{Binding ShowEpi}" TextWrapping="NoWrap" Margin="20,60,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                    <Rectangle Fill="{StaticResource PhoneForegroundBrush}" Visibility="{Binding updated}" Height="95" Width="10" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                                    <TextBlock Text="{Binding name}" TextWrapping="NoWrap" Margin="20,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                    <TextBlock Text="{Binding text}" TextWrapping="NoWrap" Margin="20,60,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
                                 </Grid>
                             </StackPanel>
                         </DataTemplate>
@@ -74,8 +74,8 @@
                                         <toolkit:MenuItem Header="添加到我的订阅" Click="AddToSubscription_Click"/>
                                     </toolkit:ContextMenu>
                                 </toolkit:ContextMenuService.ContextMenu>
-                                <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                <TextBlock Text="{Binding Time}" TextWrapping="NoWrap" Margin="10,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                <TextBlock Text="{Binding name}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                <TextBlock Text="{Binding time}" TextWrapping="NoWrap" Margin="10,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
                             </StackPanel>
                         </DataTemplate>
                     </phone:LongListSelector.ItemTemplate>
@@ -97,9 +97,7 @@
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="更换背景" Click="ChangeBackground_Click"/>
                 <shell:ApplicationBarMenuItem Text="恢复默认背景" Click="RestoreBackground_Click"/>
-                <shell:ApplicationBarMenuItem Text="设置" Click="Settings_Click"/>
-                <shell:ApplicationBarMenuItem Text="给个好评" Click="GoMarket_Click"/>
-                <shell:ApplicationBarMenuItem Text="关于" Click="About_Click"/>
+                <shell:ApplicationBarMenuItem Text="设置 + 帮助" Click="Settings_Click"/>
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     <!-- ApplicationBar 第二页 -->
@@ -108,9 +106,7 @@
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="更换背景" Click="ChangeBackground_Click"/>
                 <shell:ApplicationBarMenuItem Text="恢复默认背景" Click="RestoreBackground_Click"/>
-                <shell:ApplicationBarMenuItem Text="设置" Click="Settings_Click"/>
-                <shell:ApplicationBarMenuItem Text="给个好评" Click="GoMarket_Click"/>
-                <shell:ApplicationBarMenuItem Text="关于" Click="About_Click"/>
+                <shell:ApplicationBarMenuItem Text="设置 + 帮助" Click="Settings_Click"/>
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.Resources>

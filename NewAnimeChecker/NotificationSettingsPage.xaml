@@ -1,0 +1,49 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="NewAnimeChecker.NotificationSettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:local="clr-namespace:NewAnimeChecker"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    local:TiltEffect.IsTiltEnabled="True"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.Opacity="0"
+    Style="{StaticResource SlidePageStyle}"
+    Loaded="NotificationSettingsPage_Loaded">
+
+    <shell:SystemTray.ProgressIndicator>
+        <shell:ProgressIndicator x:Name="ProgressBar" IsIndeterminate="True"/>
+    </shell:SystemTray.ProgressIndicator>
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <phone:Pivot Name="Pivot" Title="新番提醒">
+            <phone:PivotItem Header="设置">
+                <Grid x:Name="ContentPanel" Grid.Row="1" Margin="0,0,0,0">
+                    <toolkit:ToggleSwitch Name="EmailReminderSwitch" Content="邮件提醒功能" Checked="EmailReminderSwitch_Checked" Unchecked="EmailReminderSwitch_Unchecked" IsEnabled="False" Margin="10,-21,10,508" Height="120" Loaded="EmailReminderSwitch_Loaded"/>
+                    <TextBlock Text="订阅有更新时通过邮箱向您发送提醒" Margin="22,61,-22,528" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    <toolkit:ToggleSwitch Name="TaskAgentSwitch" Content="推送订阅更新" Margin="10,109,10,387" Height="120" Checked="TaskAgentSwitch_Checked" Unchecked="TaskAgentSwitch_Unchecked" Loaded="TaskAgentSwitch_Loaded"/>
+                    <Button Name="SetLockscreenButton" Content="设置锁屏通知" Click="SetLockscreen_Click" HorizontalAlignment="Left" Margin="10,220,0,0" VerticalAlignment="Top" Width="436"/>
+                    <toolkit:ListPicker Name="ListPicker" Margin="22,297,22,10" Loaded="ListPicker_Loaded" SelectionChanged="ListPicker_SelectionChanged">
+                        <toolkit:ListPickerItem Content="每 2 个小时检查一次" HorizontalAlignment="Left" Width="406"/>
+                        <toolkit:ListPickerItem Content="每 4 个小时检查一次"/>
+                        <toolkit:ListPickerItem Content="每 8 个小时检查一次"/>
+                        <toolkit:ListPickerItem Content="每 12 个小时检查一次"/>
+                        <toolkit:ListPickerItem Content="每 24 个小时检查一次"/>
+                    </toolkit:ListPicker>
+                </Grid>
+            </phone:PivotItem>
+        </phone:Pivot>
+    </Grid>
+
+</phone:PhoneApplicationPage>

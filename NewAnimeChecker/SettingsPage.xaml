@@ -6,44 +6,46 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    xmlns:local="clr-namespace:NewAnimeChecker"
+    mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait" Orientation="Portrait"
-    local:TiltEffect.IsTiltEnabled="True"
-    mc:Ignorable="d"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True"
     shell:SystemTray.Opacity="0"
     Style="{StaticResource SlidePageStyle}"
     Loaded="SettingsPage_Loaded">
 
-    <shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator x:Name="ProgressBar" IsIndeterminate="True"/>
-    </shell:SystemTray.ProgressIndicator>
+    <!--LayoutRoot 是包含所有页面内容的根网格-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <phone:Pivot Name="Pivot" Title="新番提醒">
-            <phone:PivotItem Header="设置">
-                <Grid x:Name="ContentPanel" Grid.Row="1" Margin="0,0,0,0">
-                    <Button Content="注销当前帐号" Click="Logout_Click" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="436"/>
-                    <toolkit:ToggleSwitch Name="EmailReminderSwitch" Content="邮件提醒功能" Checked="EmailReminderSwitch_Checked" Unchecked="EmailReminderSwitch_Unchecked" IsEnabled="False" Margin="10,64,10,423" Height="120" Loaded="EmailReminderSwitch_Loaded"/>
-                    <toolkit:ToggleSwitch Name="TaskAgentSwitch" Content="推送订阅更新" Margin="10,125,10,335" Height="120" Checked="TaskAgentSwitch_Checked" Unchecked="TaskAgentSwitch_Unchecked" Loaded="TaskAgentSwitch_Loaded"/>
-                    <Button Name="SetLockscreenButton" Content="设置锁屏通知" Click="SetLockscreen_Click" HorizontalAlignment="Left" Margin="10,222,0,0" VerticalAlignment="Top" Width="436"/>
-                    <toolkit:ListPicker Name="ListPicker" Margin="22,297,22,10" Loaded="ListPicker_Loaded" SelectionChanged="ListPicker_SelectionChanged">
-                        <toolkit:ListPickerItem Content="每 2 个小时检查一次" HorizontalAlignment="Left" Width="406"/>
-                        <toolkit:ListPickerItem Content="每 4 个小时检查一次"/>
-                        <toolkit:ListPickerItem Content="每 8 个小时检查一次"/>
-                        <toolkit:ListPickerItem Content="每 12 个小时检查一次"/>
-                        <toolkit:ListPickerItem Content="每 24 个小时检查一次"/>
-                    </toolkit:ListPicker>
-                </Grid>
+        <!--枢轴控件-->
+        <phone:Pivot Name="Pivot"  Title="新番提醒">
+            <!--枢轴项一-->
+            <phone:PivotItem Header="设置 + 帮助">
+                <StackPanel>
+                    <StackPanel Tap="Account_Tap">
+                        <TextBlock Text="帐号管理" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                        <TextBlock Text="注销、修改密码" Margin="10,0,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    </StackPanel>
+                    <StackPanel Tap="Notification_Tap">
+                        <TextBlock Text="推送 + 提醒" Margin="10,10,12,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                        <TextBlock Text="邮件提醒、推送更新" Margin="10,0,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    </StackPanel>
+                    <StackPanel Tap="GoMarket_Tap">
+                        <TextBlock Text="给个好评" Margin="10,10,12,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                        <TextBlock Text="感谢您的支持" Margin="10,0,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    </StackPanel>
+                    <StackPanel Tap="Donate_Tap">
+                        <TextBlock Text="捐助" Margin="10,10,12,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                        <TextBlock Text="帮助我们做的更好" Margin="10,0,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    </StackPanel>
+                    <StackPanel Tap="About_Tap">
+                        <TextBlock Text="关于" Margin="10,10,12,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                        <TextBlock Text="新番提醒" Margin="10,0,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    </StackPanel>
+                </StackPanel>
             </phone:PivotItem>
         </phone:Pivot>
     </Grid>
-
+    
 </phone:PhoneApplicationPage>

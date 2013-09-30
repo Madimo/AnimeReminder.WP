@@ -29,6 +29,30 @@ namespace NewAnimeChecker
         #endregion
 
         #region 导航事件处理
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            while (NavigationService.RemoveBackEntry() != null)
+            {
+                ;
+            }
+
+            ShellTile Tile = ShellTile.ActiveTiles.FirstOrDefault();
+            if (Tile != null)
+            {
+                var TileData = new IconicTileData()
+                {
+                    Title = "新番提醒",
+                    Count = 0,
+                    BackgroundColor = System.Windows.Media.Colors.Transparent,
+                    WideContent1 = "",
+                    WideContent2 = "",
+                    WideContent3 = ""
+                };
+                Tile.Update(TileData);
+            }
+        }
 
         protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
         {
@@ -210,6 +234,7 @@ namespace NewAnimeChecker
         #region 登陆
         private async void Login()
         {
+            ProgressBar.Text = "登陆中...";
             ProgressBar.IsVisible = true;
             UserNameBox.IsEnabled = false;
             PasswordBox.IsEnabled = false;
@@ -220,6 +245,9 @@ namespace NewAnimeChecker
                     throw new Exception("请输入邮箱");
                 if (PasswordBox.Password == "")
                     throw new Exception("请输入密码");
+                AnimeAPI api = new AnimeAPI();
+                await api.Login(UserNameBox.Text, PasswordBox.Password);
+/*
                 HttpEngine httpRequest = new HttpEngine();
                 string UserKey = await httpRequest.GetAsync("http://apianime.ricter.info/login?u=" + UserNameBox.Text + "&p=" + PasswordBox.Password + "&hash=" + new Random().Next());
                 if (UserKey.Contains("ERROR_"))
@@ -228,18 +256,19 @@ namespace NewAnimeChecker
                         throw new Exception("邮箱或密码错误");
                     throw new Exception("发生了错误，但我不知道是什么");
                 }
+ */
                 IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
-                settings.Add("UserKey", UserKey);
+                settings.Add("UserKey", api.key);
                 settings.Add("UserName", UserNameBox.Text);
                 if (settings.Contains("MustRefresh"))
                     settings.Remove("MustRefresh");
                 settings.Add("MustRefresh", true);
                 settings.Save();
-                NavigationService.GoBack();
+                NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
             }
             catch (Exception exception)
             {
-                MessageBox.Show("", exception.Message, MessageBoxButton.OK);
+                MessageBox.Show(exception.Message, "错误", MessageBoxButton.OK);
             }
             finally
             {
@@ -247,6 +276,7 @@ namespace NewAnimeChecker
                 PasswordBox.IsEnabled = true;
                 LoginButton.IsEnabled = true;
                 ProgressBar.IsVisible = false;
+                ProgressBar.Text = "";
             }
         }
         #endregion
@@ -254,6 +284,7 @@ namespace NewAnimeChecker
         #region 注册
         private async void Register()
         {
+            ProgressBar.Text = "注册中...";
             ProgressBar.IsVisible = true;
             RegUserNameBox.IsEnabled = false;
             RegPasswordBox.IsEnabled = false;
@@ -278,6 +309,9 @@ namespace NewAnimeChecker
                 if (RegPasswordBox.Password != RegRepasswordBox.Password)
                     throw new Exception("两次输入的密码不一致");
 
+                AnimeAPI api = new AnimeAPI();
+                await api.Register(RegUserNameBox.Text, RegPasswordBox.Password);
+/*
                 HttpEngine httpRequest = new HttpEngine();
                 string UserKey = await httpRequest.GetAsync("http://apianime.ricter.info/reg?u=" + RegUserNameBox.Text + "&p=" + RegPasswordBox.Password + "&hash=" + new Random().Next());
                 if (UserKey.Contains("ERROR_"))
@@ -286,8 +320,9 @@ namespace NewAnimeChecker
                         throw new Exception("您填写的邮箱已经被注册");
                     throw new Exception("发生了错误，但我不知道是什么");
                 }
+ */
                 IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
-                settings.Add("UserKey", UserKey);
+                settings.Add("UserKey", api.key);
                 settings.Add("UserName", RegUserNameBox.Text);
                 if (settings.Contains("MustRefresh"))
                     settings.Remove("MustRefresh");
@@ -295,11 +330,11 @@ namespace NewAnimeChecker
                 settings.Save();
                 ProgressBar.IsVisible = false;
                 MessageBox.Show("", "注册成功", MessageBoxButton.OK);
-                NavigationService.GoBack();
+                NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
             }
             catch (Exception exception)
             {
-                MessageBox.Show("", exception.Message, MessageBoxButton.OK);
+                MessageBox.Show(exception.Message, "错误", MessageBoxButton.OK);
             }
             finally
             {
@@ -309,6 +344,7 @@ namespace NewAnimeChecker
                 CheckBox.IsEnabled = true;
                 RegButton.IsEnabled = true;
                 ProgressBar.IsVisible = false;
+                ProgressBar.Text = "";
             }
         }
         #endregion

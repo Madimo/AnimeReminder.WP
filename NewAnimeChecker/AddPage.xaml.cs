@@ -71,6 +71,7 @@ namespace NewAnimeChecker
         #region 搜索
         public async void Search()
         {
+            ProgressBar.Text = "搜索中...";
             ProgressBar.IsVisible = true;
             SearchBox.IsEnabled = false;
             LongListSelector.IsEnabled = false;
@@ -110,13 +111,14 @@ namespace NewAnimeChecker
             }
             catch (Exception exception)
             {
-                MessageBox.Show("", exception.Message, MessageBoxButton.OK);
+                MessageBox.Show(exception.Message, "错误", MessageBoxButton.OK);
             }
             finally
             {
                 SearchBox.IsEnabled = true;
                 LongListSelector.IsEnabled = true;
                 ProgressBar.IsVisible = false;
+                ProgressBar.Text = "";
             }
         }
         #endregion
@@ -127,16 +129,18 @@ namespace NewAnimeChecker
             var SelectedItem = (sender as TextBlock).DataContext as ViewModels.SearchResultModel;
             if (MessageBox.Show(SelectedItem.Name, "是否添加？", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
                 return;
+            ProgressBar.Text = "添加中...";
             ProgressBar.IsVisible = true;
             SearchBox.IsEnabled = false;
             LongListSelector.IsEnabled = false;
+            AnimeAPI api = new AnimeAPI();
             try
             {
+/*
                 HttpEngine httpRequest = new HttpEngine();
                 string result = await httpRequest.GetAsync("http://apianime.ricter.info/add?key=" + IsolatedStorageSettings.ApplicationSettings["UserKey"] + "&id=" + SelectedItem.ID + "&hash=" + new Random().Next());
                 if (result.Contains("ERROR_"))
                 {
-                    Debug.WriteLine(result);
                     if (result == "ERROR_INVALID_KEY")
                     {
                         MessageBox.Show("", "您的帐号已在别的客户端登陆，请重新登陆", MessageBoxButton.OK);
@@ -150,6 +154,7 @@ namespace NewAnimeChecker
                     }
                     throw new Exception("发生了错误，但我不知道是什么");
                 }
+
                 if (IsolatedStorageSettings.ApplicationSettings.Contains("MustRefresh"))
                 {
                     if (!((bool)IsolatedStorageSettings.ApplicationSettings["MustRefresh"]))
@@ -163,6 +168,12 @@ namespace NewAnimeChecker
                     IsolatedStorageSettings.ApplicationSettings.Add("MustRefresh", true);
                     IsolatedStorageSettings.ApplicationSettings.Save();
                 }
+*/
+                await api.AddAnime(SelectedItem.ID);
+                if (IsolatedStorageSettings.ApplicationSettings.Contains("MustRefresh"))
+                    IsolatedStorageSettings.ApplicationSettings.Remove("MustRefresh");
+                IsolatedStorageSettings.ApplicationSettings.Add("MustRefresh", true);
+                IsolatedStorageSettings.ApplicationSettings.Save();
                 ToastPrompt toast = new ToastPrompt();
                 toast.Title = "添加成功";
                 toast.FontSize = 20;
@@ -170,7 +181,13 @@ namespace NewAnimeChecker
             }
             catch (Exception exception)
             {
-                MessageBox.Show("", exception.Message, MessageBoxButton.OK);
+                MessageBox.Show(exception.Message, "错误", MessageBoxButton.OK);
+                if (api.lastError == AnimeAPI.ERROR.ERROR_INVALID_KEY)
+                {
+                    IsolatedStorageSettings.ApplicationSettings.Remove("UserKey");
+                    IsolatedStorageSettings.ApplicationSettings.Save();
+                    NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
+                }
             }
             finally
             {
@@ -178,6 +195,7 @@ namespace NewAnimeChecker
                 SearchBox.IsEnabled = true;
                 LongListSelector.IsEnabled = true;
                 ProgressBar.IsVisible = false;
+                ProgressBar.Text = "";
             }
         }
         #endregion

@@ -13,121 +13,155 @@ namespace NewAnimeChecker.ViewModels
     #region SubscriptionModel
     public class SubscriptionModel : INotifyPropertyChanged
     {
-        private int _Number;
-        public int Number
+        private int _num;
+        public int num
         {
             get
             {
-                return _Number;
+                return _num;
             }
             set
             {
-                if (value != _Number)
+                if (value != _num)
                 {
-                    _Number = value;
-                    NotifyPropertyChanged("Number");
+                    _num = value;
+                    NotifyPropertyChanged("num");
                 }
             }
         }
 
-        private string _ID;
-        public string ID
+        private string _aid;
+        public string aid
         {
             get
             {
-                return _ID;
+                return _aid;
             }
             set
             {
-                if (value != _ID)
+                if (value != _aid)
                 {
-                    _ID = value;
-                    NotifyPropertyChanged("ID");
+                    _aid = value;
+                    NotifyPropertyChanged("aid");
                 }
             }
         }
 
-        private string _Name;
-        public string Name
+        private string _name;
+        public string name
         {
             get
             {
-                return _Name;
+                return _name;
             }
             set
             {
-                if (value != _Name)
+                if (value != name)
                 {
-                    _Name = value;
-                    NotifyPropertyChanged("Name");
+                    _name = value;
+                    NotifyPropertyChanged("name");
                 }
             }
         }
 
-        private string _Epi;
-        public string Epi
+        private string _status;
+        public string status
         {
             get
             {
-                return _Epi;
+                return _status;
             }
             set
             {
-                if (value != _Epi)
+                if (value != status)
                 {
-                    _Epi = value;
-                    NotifyPropertyChanged("Epi");
+                    _status = value;
+                    NotifyPropertyChanged("status");
                 }
             }
         }
 
-        private string _Readed;
-        public string Readed
+        private string _epi;
+        public string epi
         {
             get
             {
-                return _Readed;
+                return _epi;
             }
             set
             {
-                if (value != _Readed)
+                if (value != _epi)
                 {
-                    _Readed = value;
-                    NotifyPropertyChanged("Readed");
+                    _epi = value;
+                    NotifyPropertyChanged("epi");
                 }
             }
         }
 
-        private string _ShowEpi;
-        public string ShowEpi
+        private string _read;
+        public string read
         {
             get
             {
-                return _ShowEpi;
+                return _read;
             }
             set
             {
-                if (value != _ShowEpi)
+                if (value != _read)
                 {
-                    _ShowEpi = value;
-                    NotifyPropertyChanged("ShowEpi");
+                    _read = value;
+                    NotifyPropertyChanged("read");
                 }
             }
         }
 
-        private System.Windows.Visibility _Updated;
-        public System.Windows.Visibility Updated
+        private string _highlight;
+        public string highlight
         {
             get
             {
-                return _Updated;
+                return _highlight;
             }
             set
             {
-                if (value != _Updated)
+                if (value != _highlight)
                 {
-                    _Updated = value;
-                    NotifyPropertyChanged("Updated");
+                    _highlight = value;
+                    NotifyPropertyChanged("highlight");
+                }
+            }
+        }
+
+        private string _text;
+        public string text
+        {
+            get
+            {
+                return _text;
+            }
+            set
+            {
+                if (value != _text)
+                {
+                    _text = value;
+                    NotifyPropertyChanged("text");
+                }
+            }
+        }
+
+        private System.Windows.Visibility _updated;
+        public System.Windows.Visibility updated
+        {
+            get
+            {
+                return _updated;
+            }
+            set
+            {
+                if (value != _updated)
+                {
+                    _updated = value;
+                    NotifyPropertyChanged("updated");
                 }
             }
         }
@@ -147,70 +181,70 @@ namespace NewAnimeChecker.ViewModels
     #region ScheduleModel
     public class ScheduleModel : INotifyPropertyChanged
     {
-        private int _Number;
-        public int Number
+        private int _num;
+        public int num
         {
             get
             {
-                return _Number;
+                return _num;
             }
             set
             {
-                if (value != _Number)
+                if (value != _num)
                 {
-                    _Number = value;
-                    NotifyPropertyChanged("Number");
+                    _num = value;
+                    NotifyPropertyChanged("num");
                 }
             }
         }
 
-        private string _ID;
-        public string ID
+        private string _aid;
+        public string aid
         {
             get
             {
-                return _ID;
+                return _aid;
             }
             set
             {
-                if (value != _ID)
+                if (value != _aid)
                 {
-                    _ID = value;
-                    NotifyPropertyChanged("ID");
+                    _aid = value;
+                    NotifyPropertyChanged("aid");
                 }
             }
         }
 
-        private string _Name;
-        public string Name
+        private string _name;
+        public string name
         {
             get
             {
-                return _Name;
+                return _name;
             }
             set
             {
-                if (value != _Name)
+                if (value != _name)
                 {
-                    _Name = value;
-                    NotifyPropertyChanged("Name");
+                    _name = value;
+                    NotifyPropertyChanged("name");
                 }
             }
         }
 
-        private string _Time;
-        public string Time
+        private string _time;
+        public string time
         {
             get
             {
-                return _Time;
+                return _time;
             }
             set
             {
-                if (value != _Time)
+                if (value != _time)
                 {
-                    _Time = value;
-                    NotifyPropertyChanged("Time");
+                    _time = value;
+                    NotifyPropertyChanged("time");
                 }
             }
         }
