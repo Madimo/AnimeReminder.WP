@@ -134,6 +134,10 @@ namespace NewAnimeChecker
  */
                 await api.DelAnime(subscriptionIndex.aid);
                 App.ViewModel.SubscriptionItems.Remove(subscriptionIndex);
+                if (settings.Contains("MustRefresh"))
+                    settings.Remove("MustRefresh");
+                settings.Add("MustRefresh", true);
+                settings.Save();
                 NavigationService.GoBack();
             }
             catch (Exception exception)

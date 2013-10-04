@@ -220,12 +220,16 @@ namespace NewAnimeChecker
                    {
                        RefreshSubscription();
                        settings["MustRefresh"] = false;
+                       settings.Save();
                    }
                }
                else
                {
                    if (!settings.Contains("MustRefresh"))
+                   {
                        settings.Add("MustRefresh", false);
+                       settings.Save();
+                   }
                    RefreshSubscription();
                    RefreshUpdatedSchedule();
                }
