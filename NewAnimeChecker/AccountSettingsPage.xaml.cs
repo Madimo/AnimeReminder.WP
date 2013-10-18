@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
@@ -58,7 +59,7 @@ namespace NewAnimeChecker
         {
             if (NewPasswordBox.Password == "")
             {
-                FakeNewRepasswordBox.Visibility = System.Windows.Visibility.Visible;
+                FakeNewPasswordBox.Visibility = System.Windows.Visibility.Visible;
                 NewPasswordBox.Visibility = System.Windows.Visibility.Collapsed;
             }
         }
@@ -66,7 +67,7 @@ namespace NewAnimeChecker
         private void FakeNewRepasswordBox_GotFocus(object sender, RoutedEventArgs e)
         {
             NewPasswordBox.Visibility = System.Windows.Visibility.Visible;
-            FakeNewRepasswordBox.Visibility = System.Windows.Visibility.Collapsed;
+            FakeNewPasswordBox.Visibility = System.Windows.Visibility.Collapsed;
             NewPasswordBox.Focus();
         }
 
@@ -88,7 +89,65 @@ namespace NewAnimeChecker
         #endregion
 
         #region 修改密码
-        private async void ChangePsw_Click(object sender, RoutedEventArgs e)
+        private void ChangePsw_Click(object sender, RoutedEventArgs e)
+        {
+            if ((ChangePsw.Content as string) == "修改密码")
+            {
+                FakeOldPasswordBox.Visibility = System.Windows.Visibility.Visible;
+                FakeNewPasswordBox.Visibility = System.Windows.Visibility.Visible;
+                FakeRepasswordBox.Visibility  = System.Windows.Visibility.Visible;
+
+                Storyboard storyboard = new Storyboard();
+
+                Duration duration = new Duration(TimeSpan.FromMilliseconds(200));
+
+                ChangePsw.RenderTransform = new TranslateTransform();
+                To.RenderTransform = new TranslateTransform();
+
+                DoubleAnimation transformY = new DoubleAnimation();
+                transformY.Duration = duration;
+                transformY.From = ChangePsw.Margin.Bottom;
+                transformY.To = To.Margin.Top - ChangePsw.Margin.Top;
+                
+                Storyboard.SetTarget(transformY, ChangePsw);
+                Storyboard.SetTargetProperty(transformY, new PropertyPath("(Button.RenderTransform).(TranslateTransform.Y)"));
+                storyboard.Children.Add(transformY);
+
+                DoubleAnimation doubleAnimationOne = new DoubleAnimation();
+                doubleAnimationOne.From = 0;
+                doubleAnimationOne.To = 1;
+                doubleAnimationOne.Duration = duration;
+                Storyboard.SetTarget(doubleAnimationOne, FakeOldPasswordBox);
+                Storyboard.SetTargetProperty(doubleAnimationOne, new PropertyPath(TextBox.OpacityProperty));
+                storyboard.Children.Add(doubleAnimationOne);
+
+                DoubleAnimation doubleAnimationTwo = new DoubleAnimation();
+                doubleAnimationTwo.From = 0;
+                doubleAnimationTwo.To = 1;
+                doubleAnimationTwo.Duration = duration;
+                Storyboard.SetTarget(doubleAnimationTwo, FakeNewPasswordBox);
+                Storyboard.SetTargetProperty(doubleAnimationTwo, new PropertyPath(TextBox.OpacityProperty));
+                storyboard.Children.Add(doubleAnimationTwo);
+
+                DoubleAnimation doubleAnimationThree = new DoubleAnimation();
+                doubleAnimationThree.From = 0;
+                doubleAnimationThree.To = 1;
+                doubleAnimationThree.Duration = duration;
+                Storyboard.SetTarget(doubleAnimationThree, FakeRepasswordBox);
+                Storyboard.SetTargetProperty(doubleAnimationThree, new PropertyPath(TextBox.OpacityProperty));
+                storyboard.Children.Add(doubleAnimationThree);
+
+                storyboard.Begin();
+
+                ChangePsw.Content = "修改";
+            }
+            else
+            {
+                ChangePassword();
+            }
+        }
+
+        private async void ChangePassword()
         {
             ProgressBar.IsVisible = true;
             Logout.IsEnabled = false;

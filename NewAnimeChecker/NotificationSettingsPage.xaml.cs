@@ -36,7 +36,6 @@ namespace NewAnimeChecker
         #region 控件事件处理
         private void NotificationSettingsPage_Loaded(object sender, RoutedEventArgs e)
         {
-            Pivot.Title = (string)settings["UserName"];
             Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
         }
 

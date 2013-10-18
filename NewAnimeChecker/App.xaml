@@ -70,7 +70,7 @@
                 <Setter.Value>
                     <toolkit:NavigationInTransition>
                         <toolkit:NavigationInTransition.Backward>
-                            <toolkit:SlideTransition Mode="SlideUpFadeIn"/>
+                            <toolkit:TurnstileTransition Mode="BackwardIn"/>
                         </toolkit:NavigationInTransition.Backward>
                         <toolkit:NavigationInTransition.Forward>
                             <toolkit:SlideTransition Mode="SlideUpFadeIn"/>
@@ -84,6 +84,9 @@
                         <toolkit:NavigationOutTransition.Backward>
                             <toolkit:SlideTransition Mode="SlideDownFadeOut"/>
                         </toolkit:NavigationOutTransition.Backward>
+                        <toolkit:NavigationOutTransition.Forward>
+                            <toolkit:TurnstileTransition Mode="ForwardOut"/>
+                        </toolkit:NavigationOutTransition.Forward>
                     </toolkit:NavigationOutTransition>
                 </Setter.Value>
             </Setter>

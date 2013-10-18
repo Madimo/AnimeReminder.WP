@@ -1,25 +1,25 @@
-﻿using System;
+﻿using Coding4Fun.Toolkit.Controls;
+using HttpLibrary;
+using Microsoft.Phone.Controls;
+using Microsoft.Phone.Info;
+using Microsoft.Phone.Shell;
+using Microsoft.Phone.Tasks;
+using NewAnimeChecker.Resources;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
-using System.IO;
-using System.IO.IsolatedStorage;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Info;
-using Microsoft.Phone.Tasks;
-using Microsoft.Phone.Shell;
-using NewAnimeChecker.Resources;
-using System.Diagnostics;
-using HttpLibrary;
-using Coding4Fun.Toolkit.Controls;
 
 namespace NewAnimeChecker
 {
@@ -175,7 +175,7 @@ namespace NewAnimeChecker
                 if (value)
                 {
                     busyNumber++;
-                    ProgressBar.Text = "正在执行...";
+                    ProgressBar.Text = "正在添加...";
                     if (Pivot.SelectedIndex == 1 && ApplicationBar != null)
                     {
                         ((ApplicationBarIconButton)ApplicationBar.Buttons[0]).IsEnabled = false;
@@ -265,7 +265,7 @@ namespace NewAnimeChecker
                     else
                         text = "更新到第 " + item.epi + " 集";
                     if (item.read != "0")
-                        text += "，看到第 " + item.read + " 集";
+                        text += "，已看 " + item.read + " 集";
                     System.Windows.Visibility updated;
                     if (item.highlight != "0")
                         updated = System.Windows.Visibility.Visible;
@@ -308,6 +308,7 @@ namespace NewAnimeChecker
                     };
                     Tile.Update(TileData);
                 }
+
 /*
                 HttpEngine httpRequest = new HttpEngine();
                 string result = await httpRequest.GetAsync("http://api2.ricter.info/get_subscription_list?key=" + settings["UserKey"] + "&hash=" + new Random().Next());
@@ -843,6 +844,7 @@ namespace NewAnimeChecker
             Storyboard.SetTarget(transformX, (StackPanel)sender);
             Storyboard.SetTargetProperty(transformX, new PropertyPath("(StackPanel.RenderTransform).(TranslateTransform.X)"));
             storyboard.Children.Add(transformX);
+
             storyboard.Begin();
         }
         #endregion

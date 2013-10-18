@@ -30,13 +30,14 @@
                     <Button Name="Logout" Content="注销当前帐号" Click="Logout_Click" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="436"/>
 
                     <PasswordBox x:Name="OldPasswordBox" Height="70" Margin="10,116,10,0" Width="436" Visibility="Collapsed" VerticalAlignment="Top" LostFocus="OldPasswordBox_LostFocus"/>
-                    <TextBox x:Name="FakeOldPasswordBox" Height="70" Margin="10,116,10,0" Foreground="Gray" Text="原密码" VerticalAlignment="Top" Width="436" GotFocus="FakeOldPasswordBox_GotFocus"/>
+                    <TextBox x:Name="FakeOldPasswordBox" Height="70" Margin="10,116,10,0" Foreground="Gray" Visibility="Collapsed" Opacity="0" Text="原密码" VerticalAlignment="Top" Width="436" GotFocus="FakeOldPasswordBox_GotFocus"/>
                     <PasswordBox x:Name="NewPasswordBox" Height="70" Margin="10,191,10,0" Width="436" Visibility="Collapsed" VerticalAlignment="Top" LostFocus="NewPasswordBox_LostFocus"/>
-                    <TextBox x:Name="FakeNewRepasswordBox" Height="70" Margin="10,191,10,0" Foreground="Gray" Text="新密码" VerticalAlignment="Top" Width="436" GotFocus="FakeNewRepasswordBox_GotFocus"/>
+                    <TextBox x:Name="FakeNewPasswordBox" Height="70" Margin="10,191,10,0" Foreground="Gray" Visibility="Collapsed" Opacity="0" Text="新密码" VerticalAlignment="Top" Width="436" GotFocus="FakeNewRepasswordBox_GotFocus"/>
                     <PasswordBox x:Name="RepasswordBox" Height="70" Margin="10,266,10,0" Width="436" Visibility="Collapsed" VerticalAlignment="Top" LostFocus="RepasswordBox_LostFocus"/>
-                    <TextBox x:Name="FakeRepasswordBox" Height="70" Margin="10,266,10,0" Foreground="Gray" Text="新密码确认" VerticalAlignment="Top" Width="436" GotFocus="FakeRepasswordBox_GotFocus"/>
+                    <TextBox x:Name="FakeRepasswordBox" Height="70" Margin="10,266,10,0" Foreground="Gray" Visibility="Collapsed" Opacity="0" Text="新密码确认" VerticalAlignment="Top" Width="436" GotFocus="FakeRepasswordBox_GotFocus"/>
 
-                    <Button Name="ChangePsw" Content="修改密码" Click="ChangePsw_Click" HorizontalAlignment="Left" Margin="10,341,0,0" VerticalAlignment="Top" Width="436"/>
+                    <Button Name="ChangePsw" Content="修改密码" Click="ChangePsw_Click" HorizontalAlignment="Left" Margin="10,87,0,0" VerticalAlignment="Top" Width="436"/>
+                    <Button Name="To" Content="To" HorizontalAlignment="Left" Margin="10,341,0,0" Visibility="Collapsed" VerticalAlignment="Top" Width="436"/>
                 </Grid>
             </phone:PivotItem>
         </phone:Pivot>

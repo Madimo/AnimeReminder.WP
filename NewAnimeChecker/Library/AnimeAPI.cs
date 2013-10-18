@@ -76,7 +76,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/get_subscription_list?key=" + key + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api2.ricter.info/get_subscription_list?key=" + key + "&sb=Ricter&hash=" + new Random().Next());
                 ErrorProcessor(result);
 
                 subscriptionList.Clear();
@@ -99,7 +99,7 @@ namespace NewAnimeChecker
                     if (anime.highlight != "0")
                         updateNumber++;
                 }
-
+/*
                 subscriptionList.Sort((Anime x, Anime y) => 
                 {
                     if (x.highlight != "0" && y.highlight == "0")
@@ -115,7 +115,7 @@ namespace NewAnimeChecker
                     }
                     return -1;
                 });
-
+*/
                 for (int i = 0; i < subscriptionList.Count; ++i)
                     subscriptionList[i].num = i + 1;
 

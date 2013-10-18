@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections;
+﻿using HttpMethod;
+using Microsoft.Phone.Scheduler;
+using Microsoft.Phone.Shell;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Windows;
-using Microsoft.Phone.Shell;
-using Microsoft.Phone.Scheduler;
-using HttpMethod;
 
 namespace ScheduledTaskAgent
 {
@@ -133,7 +132,7 @@ namespace ScheduledTaskAgent
                             anime.highlight = item[5];
                             subscriptionList.Add(anime);
 
-                            if (anime.highlight == "2")
+                            if (anime.highlight == "1")
                                 pushNumber++;
                             if (anime.highlight != "0")
                                 updatedNumber++;
@@ -155,17 +154,28 @@ namespace ScheduledTaskAgent
                             return -1;
                         });
 
+                        if (Debugger.IsAttached)
+                        {
+                            for (int i = 0; i < subscriptionList.Count; ++i)
+                            {
+                                Debug.WriteLine(subscriptionList[i].name);
+                                Debug.WriteLine(subscriptionList[i].epi);
+                                Debug.WriteLine(subscriptionList[i].highlight);
+                                Debug.WriteLine("----------------------------");
+                            }
+                        }
+
                         string[] TileContent = new string[3];
                         string showName = "";
                         if (subscriptionList.Count >= 1 && subscriptionList[0].highlight != "0")
                         {
                             TileContent[0] = "订阅更新";
-                            TileContent[1] = subscriptionList[1].name + " 更新到第 " + subscriptionList[1].epi + " 集";
-                            showName = subscriptionList[1].name;
+                            TileContent[1] = subscriptionList[0].name + " 更新到第 " + subscriptionList[0].epi + " 集";
+                            showName = subscriptionList[0].name;
                         }
                         if (subscriptionList.Count >= 2 && subscriptionList[1].highlight != "0")
                         {
-                            TileContent[2] = subscriptionList[2].name + " 更新到第 " + subscriptionList[2].epi + " 集";
+                            TileContent[2] = subscriptionList[1].name + " 更新到第 " + subscriptionList[1].epi + " 集";
                         }
 
                         ShellTile Tile = ShellTile.ActiveTiles.FirstOrDefault();

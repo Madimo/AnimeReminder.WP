@@ -70,7 +70,7 @@
                         <DataTemplate>
                             <StackPanel Margin="0,0,0,8" Opacity="0" Loaded="StackPanel_Loaded">
                                 <toolkit:ContextMenuService.ContextMenu>
-                                    <toolkit:ContextMenu IsZoomEnabled="True">
+                                    <toolkit:ContextMenu Name="ContextMenu" IsZoomEnabled="True">
                                         <toolkit:MenuItem Header="添加到我的订阅" Click="AddToSubscription_Click"/>
                                     </toolkit:ContextMenu>
                                 </toolkit:ContextMenuService.ContextMenu>
@@ -91,9 +91,9 @@
     <!-- ApplicationBar 第一页 -->
     <phone:PhoneApplicationPage.Resources>
         <shell:ApplicationBar x:Key="AppBar0" BackgroundColor="Black" ForegroundColor="White" Opacity="0.5" StateChanged="ApplicationBar_StateChanged">
-            <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Add.png" Text="添加" Click="Add_Click"/>
+            <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Add.png" Text="添加订阅" Click="Add_Click"/>
             <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Refresh.png" Text="刷新" Click="Refresh_Click"/>
-            <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Check.png" Text="已读" Click="MarkRead_Click"/>
+            <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Check.png" Text="标为已读" Click="MarkRead_Click"/>
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="更换背景" Click="ChangeBackground_Click"/>
                 <shell:ApplicationBarMenuItem Text="恢复默认背景" Click="RestoreBackground_Click"/>

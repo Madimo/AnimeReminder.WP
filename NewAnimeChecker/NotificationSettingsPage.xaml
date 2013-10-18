@@ -28,11 +28,12 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <phone:Pivot Name="Pivot" Title="新番提醒">
-            <phone:PivotItem Header="设置">
+            <phone:PivotItem Header="推送 + 提醒">
                 <Grid x:Name="ContentPanel" Grid.Row="1" Margin="0,0,0,0">
                     <toolkit:ToggleSwitch Name="EmailReminderSwitch" Content="邮件提醒功能" Checked="EmailReminderSwitch_Checked" Unchecked="EmailReminderSwitch_Unchecked" IsEnabled="False" Margin="10,-21,10,508" Height="120" Loaded="EmailReminderSwitch_Loaded"/>
-                    <TextBlock Text="订阅有更新时通过邮箱向您发送提醒" Margin="22,61,-22,528" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    <TextBlock Text="订阅有更新时通过邮件向您发送提醒" Margin="22,61,-22,528" Style="{StaticResource PhoneTextSubtleStyle}"/>
                     <toolkit:ToggleSwitch Name="TaskAgentSwitch" Content="推送订阅更新" Margin="10,109,10,387" Height="120" Checked="TaskAgentSwitch_Checked" Unchecked="TaskAgentSwitch_Unchecked" Loaded="TaskAgentSwitch_Loaded"/>
+                    <TextBlock Text="后台定时检查更新并通过推送通知您" Margin="22,188,-22,401" Style="{StaticResource PhoneTextSubtleStyle}"/>
                     <Button Name="SetLockscreenButton" Content="设置锁屏通知" Click="SetLockscreen_Click" HorizontalAlignment="Left" Margin="10,220,0,0" VerticalAlignment="Top" Width="436"/>
                     <toolkit:ListPicker Name="ListPicker" Margin="22,297,22,10" Loaded="ListPicker_Loaded" SelectionChanged="ListPicker_SelectionChanged">
                         <toolkit:ListPickerItem Content="每 2 个小时检查一次" HorizontalAlignment="Left" Width="406"/>

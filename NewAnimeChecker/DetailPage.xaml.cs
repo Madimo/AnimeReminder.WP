@@ -47,6 +47,11 @@ namespace NewAnimeChecker
                 EpiTextBox.Text = subscriptionIndex.read;
                 EpiTextBlock.Text = "此订阅目前共 " + subscriptionIndex.epi + " 集";
             }
+            else
+            {
+                MessageBox.Show("订阅信息读取失败，请重试", "错误", MessageBoxButton.OK);
+                NavigationService.GoBack();
+            }
         }
         #endregion
 

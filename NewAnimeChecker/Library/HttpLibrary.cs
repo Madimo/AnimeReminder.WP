@@ -19,7 +19,7 @@ namespace HttpLibrary
 {
     public class HttpEngine
     {
-        protected virtual async Task<Stream> PostAsync(string RequestUrl, string Context)
+        public virtual async Task<Stream> PostAsync(string RequestUrl, string Context)
         {
             try
             {
@@ -48,6 +48,7 @@ namespace HttpLibrary
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(new Uri(RequestUrl, UriKind.Absolute));
                 httpWebRequest.Method = "GET";
+                httpWebRequest.UserAgent = "NewAnimeChecker.Mobile.WindowsPhone.Ver1~2";
                 WebResponse response = await httpWebRequest.GetResponseAsync();
                 Stream streamResult = response.GetResponseStream();
                 StreamReader sr = new StreamReader(streamResult, Encoding.UTF8);

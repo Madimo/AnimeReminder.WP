@@ -23,7 +23,7 @@
     </shell:SystemTray.ProgressIndicator>
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <phone:Pivot Name="Pivot" Title="新番提醒">
-            <phone:PivotItem Header="添加">
+            <phone:PivotItem Header="添加订阅">
                 <Grid>
                     <TextBox Name="SearchBox" Height="72" TextWrapping="Wrap" Text="搜索" VerticalAlignment="Top" Margin="0,-34,0,0" Foreground="Gray" LostFocus="SearchBox_LostFocus" GotFocus="SearchBox_GotFocus" HorizontalAlignment="Right" KeyDown="SearchBox_KeyDown" Width="456" InputScope="Search" />
                     <phone:LongListSelector Name="LongListSelector" Margin="0,43,0,0" Height="550" VerticalAlignment="Top">

@@ -10,6 +10,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
+using Microsoft.Phone.Info;
 
 namespace NewAnimeChecker
 {
@@ -49,6 +50,19 @@ namespace NewAnimeChecker
         private void About_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             NavigationService.Navigate(new Uri("/AboutPage.xaml", UriKind.Relative));
+        }
+
+        private void Feedback_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            EmailComposeTask emailComposeTask = new EmailComposeTask();
+
+            emailComposeTask.Subject = "新番提醒WindowsPhone 反馈";
+            emailComposeTask.To = "MadimoZhang@gmail.com";
+            emailComposeTask.Body = "请在下面写下您的意见或bug反馈：\n\n\n\n\n\n下面是我们需要的信息，不涉及您的隐私\nApplicationVersion: 1.2\nCurrentMemoryUsage: " + DeviceStatus.ApplicationCurrentMemoryUsage
+                + "\nMemoryUsageLimit: " + DeviceStatus.ApplicationMemoryUsageLimit + "\nPeakMemoryUsage: " + DeviceStatus.ApplicationPeakMemoryUsage + "\nFirmwareVersion: "
+                + DeviceStatus.DeviceFirmwareVersion + "\nHardwareVersion: " + DeviceStatus.DeviceHardwareVersion + "\nManufacturer: " + DeviceStatus.DeviceManufacturer + "\nDeviceName: "
+                + DeviceStatus.DeviceName + "\nTotalMemory: " + DeviceStatus.DeviceTotalMemory;
+            emailComposeTask.Show();
         }
     }
 }
