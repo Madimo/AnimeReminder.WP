@@ -26,7 +26,7 @@
         <Image Name="BackgroundTransform" Canvas.ZIndex="-2" Margin="0,0,0,0" Visibility="Collapsed"/>
         <phone:Pivot Name="Pivot" Canvas.ZIndex="0" Margin="0,0,0,0" Title="新番提醒" SelectionChanged="Pivot_SelectionChanged">
             <!-- 第一页 -->
-            <phone:PivotItem Header="我的订阅" Margin="12,28,12,0">
+            <phone:PivotItem Header="我的订阅" Margin="0,20,0,0">
                 <phone:LongListSelector Name="LongListSelector" ItemsSource="{Binding SubscriptionItems}" Margin="-13,0,0,0">
                     <phone:LongListSelector.ListHeader>
                         <StackPanel>
@@ -35,13 +35,20 @@
                     </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="0,0,0,0" Opacity="0" Loaded="StackPanel_Loaded">
-                                <Grid  Height="95" Tap="Grid_Tap">
-                                    <Rectangle Fill="{StaticResource PhoneForegroundBrush}" Visibility="{Binding updated}" Height="95" Width="10" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-                                    <TextBlock Text="{Binding name}" TextWrapping="NoWrap" Margin="20,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                    <TextBlock Text="{Binding text}" TextWrapping="NoWrap" Margin="20,60,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                            <Grid Margin="0,0,0,20">
+                                <Grid Margin="0,0,250,0">
+                                    <Rectangle Width="171" Height="108" Fill="White"/>
+                                    <Image Width="161" Height="98" Source="/Assets/Background.jpg" Stretch="Fill"/>
                                 </Grid>
-                            </StackPanel>
+                                <StackPanel Margin="190,0,0,0" Opacity="0" Loaded="StackPanel_Loaded">
+                                    <Grid Tap="Grid_Tap">
+                                        <Rectangle Fill="{StaticResource PhoneForegroundBrush}" Visibility="{Binding updated}" Height="95" Width="10" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                                        <TextBlock Text="{Binding name}" TextWrapping="NoWrap" Margin="20,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="30"/>
+                                        <TextBlock Text="{Binding text}" TextWrapping="NoWrap" Margin="23,43,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                        <TextBlock Text="{Binding readText}" TextWrapping="NoWrap" Margin="23,73,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
                         </DataTemplate>
                     </phone:LongListSelector.ItemTemplate>
                     <phone:LongListSelector.ListFooterTemplate>
@@ -52,7 +59,7 @@
                 </phone:LongListSelector>
             </phone:PivotItem>
             <!-- 第二页 -->
-            <phone:PivotItem Header="最近更新" Margin="12,28,12,0">
+            <phone:PivotItem Header="最近更新" Margin="12,20,12,0">
                 <phone:LongListSelector ItemsSource="{Binding ScheduleItems}">
                     <phone:LongListSelector.ListHeader>
                         <StackPanel>
@@ -74,7 +81,7 @@
                     </phone:LongListSelector.ItemTemplate>
                     <phone:LongListSelector.ListFooterTemplate>
                         <DataTemplate>
-                            <StackPanel Height="60"></StackPanel>
+                            <StackPanel Height="70"></StackPanel>
                         </DataTemplate>
                     </phone:LongListSelector.ListFooterTemplate>
                 </phone:LongListSelector>

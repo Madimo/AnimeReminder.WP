@@ -115,6 +115,23 @@ namespace NewAnimeChecker.ViewModels
             }
         }
 
+        private string _readText;
+        public string readText
+        {
+            get
+            {
+                return _readText;
+            }
+            set
+            {
+                if (value != _readText)
+                {
+                    _readText = value;
+                    NotifyPropertyChanged("readText");
+                }
+            }
+        }
+
         private string _highlight;
         public string highlight
         {

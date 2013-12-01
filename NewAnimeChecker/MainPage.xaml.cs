@@ -267,12 +267,13 @@ namespace NewAnimeChecker
                 foreach (AnimeAPI.Anime item in api.subscriptionList)
                 {
                     string text;
+                    string readText = "";
                     if (item.status == "1")
                         text = "已完结，共 " + item.epi + " 集";
                     else
                         text = "更新到第 " + item.epi + " 集";
                     if (item.read != "0")
-                        text += "，已看 " + item.read + " 集";
+                        readText = "已看 " + item.read + " 集";
                     System.Windows.Visibility updated;
                     if (item.highlight != "0")
                         updated = System.Windows.Visibility.Visible;
@@ -286,6 +287,7 @@ namespace NewAnimeChecker
                         status  = item.status, 
                         epi     = item.epi,
                         read    = item.read, 
+                        readText= readText,
                         highlight = item.highlight,
                         text    = text,
                         updated = updated
@@ -655,7 +657,7 @@ namespace NewAnimeChecker
         #region 背景图片
         private void SetBackground(ImageBrush brush)
         {
-            BackgroundTransform.Opacity = 0.7;
+            BackgroundTransform.Opacity = 0.4;
             BackgroundImage.Source = (Pivot.Background as ImageBrush).ImageSource;
             BackgroundTransform.Source = brush.ImageSource;
             BackgroundImage.Opacity = 1;
@@ -703,7 +705,7 @@ namespace NewAnimeChecker
                 bitmap.SetSource(e.ChosenPhoto);
                 ImageBrush brush = new ImageBrush();
                 brush.ImageSource = bitmap;
-                brush.Opacity = 0.7;
+                brush.Opacity = 0.4;
                 App.Current.Resources.Remove("BackgroundBrush");
                 App.Current.Resources.Add("BackgroundBrush", brush);
                 SetBackground(brush);
