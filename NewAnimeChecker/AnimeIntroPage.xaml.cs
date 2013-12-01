@@ -82,10 +82,33 @@ namespace NewAnimeChecker
                     {
                         try
                         {
-                            HttpLibrary.HttpEngine httpRequest = new HttpLibrary.HttpEngine();
-                            Stream stream = await httpRequest.GetAsyncForData("http://images.movie.xunlei.com/gallery" + api.animeDetail.poster);
                             BitmapImage image = new BitmapImage();
-                            image.SetSource(stream);
+                            string filePath = "/Cache/" + api.animeDetail.id + "_intro.jpg";
+                            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+                            {
+                                if (isf.FileExists(filePath))
+                                {
+                                    using (IsolatedStorageFileStream iss = isf.OpenFile(filePath, FileMode.Open))
+                                    {
+                                        image.SetSource(iss);
+                                    }
+                                }
+                                else
+                                {
+                                    HttpLibrary.HttpEngine httpRequest = new HttpLibrary.HttpEngine();
+                                    Stream stream = await httpRequest.GetAsyncForData("http://images.movie.xunlei.com/gallery" + api.animeDetail.poster);
+                                    image.SetSource(stream);
+                                    if (!isf.DirectoryExists("/Cache"))
+                                    {
+                                        isf.CreateDirectory("/Cache");
+                                    }
+                                    using (IsolatedStorageFileStream iss = isf.OpenFile(filePath, FileMode.Create))
+                                    {
+                                        WriteableBitmap bitmap = new WriteableBitmap(image);
+                                        bitmap.SaveJpeg(iss, bitmap.PixelWidth, bitmap.PixelHeight, 0, 100);
+                                    }
+                                }
+                            }
 
                             Background.Source = ((ImageBrush)App.Current.Resources["BackgroundBrush"]).ImageSource;
                             Background.Opacity = 0.7;
