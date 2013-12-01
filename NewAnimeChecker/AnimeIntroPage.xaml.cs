@@ -111,28 +111,28 @@ namespace NewAnimeChecker
                             }
 
                             Background.Source = ((ImageBrush)App.Current.Resources["BackgroundBrush"]).ImageSource;
-                            Background.Opacity = 0.7;
+                            Background.Opacity = 0.4;
                             Background.Visibility = System.Windows.Visibility.Visible;
                             Pivot.Background = new SolidColorBrush(Colors.Transparent);
                             Transform.Source = image;
-                            Transform.Opacity = 0.7;
+                            Transform.Opacity = 0.4;
                             Transform.Visibility = System.Windows.Visibility.Visible;
 
                             DoubleAnimation animation = new DoubleAnimation();
-                            animation.From = 0.7;
+                            animation.From = 0.4;
                             animation.To = 0;
                             animation.Duration = new Duration(TimeSpan.FromMilliseconds(1500));
                             animation.BeginTime = TimeSpan.FromMilliseconds(500);
                             animation.Completed += AnimationCompleted;
+
+                            Storyboard.SetTarget(animation, Background);
+                            Storyboard.SetTargetProperty(animation, new PropertyPath(Image.OpacityProperty));
 
                             DoubleAnimation animationTwo = new DoubleAnimation();
                             animationTwo.From = 1;
                             animationTwo.To = 0;
                             animationTwo.Duration = new Duration(TimeSpan.FromMilliseconds(1500));
                             animationTwo.BeginTime = TimeSpan.FromMilliseconds(500);
-
-                            Storyboard.SetTarget(animation, Background);
-                            Storyboard.SetTargetProperty(animation, new PropertyPath(Image.OpacityProperty));
 
                             Storyboard.SetTarget(animationTwo, Rect);
                             Storyboard.SetTargetProperty(animationTwo, new PropertyPath(Image.OpacityProperty));
@@ -164,7 +164,7 @@ namespace NewAnimeChecker
         {
             ImageBrush brush      = new ImageBrush();
             brush.ImageSource     = Transform.Source;
-            brush.Opacity         = 0.7;
+            brush.Opacity         = 0.4;
             Pivot.Background      = brush;
             Transform.Visibility  = System.Windows.Visibility.Collapsed;
             Background.Visibility = System.Windows.Visibility.Collapsed;
