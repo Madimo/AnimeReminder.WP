@@ -839,30 +839,33 @@ namespace NewAnimeChecker
                 var image = sender as Image;
                 var item = image.DataContext as ViewModels.SubscriptionModel;
 
-                IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
-                string filePath = "/Cache/" + item.aid + "_" + item.epi + ".jpg";
                 BitmapImage bitmap = new BitmapImage();
-                if (isf.FileExists(filePath))
+                using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    using (IsolatedStorageFileStream stream = isf.OpenFile(filePath, FileMode.Open))
+                    string filePath = "/Cache/" + item.aid + "_" + item.epi + ".jpg";
+                    if (isf.FileExists(filePath))
                     {
-                        bitmap.SetSource(stream);
+                        using (IsolatedStorageFileStream stream = isf.OpenFile(filePath, FileMode.Open))
+                        {
+                            bitmap.SetSource(stream);
+                        }
                     }
-                }
-                else
-                {
+                    else
+                    {
 
-                    HttpEngine httpRequest = new HttpEngine();
-                    Stream stream = await httpRequest.GetAsyncForData("http://images.movie.xunlei.com/submovie_img/" + item.aid[0] + item.aid[1] + "/" + item.aid + "/" + item.epi + "_1_115x70.jpg");
-                    bitmap.SetSource(stream);
-                    if (!isf.DirectoryExists("/Cache"))
-                    {
-                        isf.CreateDirectory("/Cache");
-                    }
-                    using (IsolatedStorageFileStream writeStream = isf.OpenFile(filePath, FileMode.Create))
-                    {
-                        WriteableBitmap wb = new WriteableBitmap(bitmap);
-                        wb.SaveJpeg(writeStream, wb.PixelWidth, wb.PixelHeight, 0, 100);
+                        HttpEngine httpRequest = new HttpEngine();
+                        Stream stream = await httpRequest.GetAsyncForData("http://images.movie.xunlei.com/submovie_img/" + item.aid[0] + item.aid[1] + "/" + item.aid + "/" + item.epi + "_1_115x70.jpg");
+                        bitmap.SetSource(stream);
+                        if (!isf.DirectoryExists("/Cache"))
+                        {
+                            isf.CreateDirectory("/Cache");
+                        }
+                        using (IsolatedStorageFileStream writeStream = isf.OpenFile(filePath, FileMode.Create))
+                        {
+                            WriteableBitmap wb = new WriteableBitmap(bitmap);
+                            wb.SaveJpeg(writeStream, wb.PixelWidth, wb.PixelHeight, 0, 100);
+                            writeStream.Close();
+                        }
                     }
                 }
 
@@ -896,30 +899,33 @@ namespace NewAnimeChecker
                 var image = sender as Image;
                 var item = image.DataContext as ViewModels.ScheduleModel;
 
-                IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
-                string filePath = "/Cache/" + item.aid + "_1.jpg";
                 BitmapImage bitmap = new BitmapImage();
-                if (isf.FileExists(filePath))
+                using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    using (IsolatedStorageFileStream stream = isf.OpenFile(filePath, FileMode.Open))
+                    string filePath = "/Cache/" + item.aid + "_1.jpg";
+                    if (isf.FileExists(filePath))
                     {
-                        bitmap.SetSource(stream);
+                        using (IsolatedStorageFileStream stream = isf.OpenFile(filePath, FileMode.Open))
+                        {
+                            bitmap.SetSource(stream);
+                        }
                     }
-                }
-                else
-                {
+                    else
+                    {
 
-                    HttpEngine httpRequest = new HttpEngine();
-                    Stream stream = await httpRequest.GetAsyncForData("http://images.movie.xunlei.com/submovie_img/" + item.aid[0] + item.aid[1] + "/" + item.aid + "/1_1_115x70.jpg");
-                    bitmap.SetSource(stream);
-                    if (!isf.DirectoryExists("/Cache"))
-                    {
-                        isf.CreateDirectory("/Cache");
-                    }
-                    using (IsolatedStorageFileStream writeStream = isf.OpenFile(filePath, FileMode.Create))
-                    {
-                        WriteableBitmap wb = new WriteableBitmap(bitmap);
-                        wb.SaveJpeg(writeStream, wb.PixelWidth, wb.PixelHeight, 0, 100);
+                        HttpEngine httpRequest = new HttpEngine();
+                        Stream stream = await httpRequest.GetAsyncForData("http://images.movie.xunlei.com/submovie_img/" + item.aid[0] + item.aid[1] + "/" + item.aid + "/1_1_115x70.jpg");
+                        bitmap.SetSource(stream);
+                        if (!isf.DirectoryExists("/Cache"))
+                        {
+                            isf.CreateDirectory("/Cache");
+                        }
+                        using (IsolatedStorageFileStream writeStream = isf.OpenFile(filePath, FileMode.Create))
+                        {
+                            WriteableBitmap wb = new WriteableBitmap(bitmap);
+                            wb.SaveJpeg(writeStream, wb.PixelWidth, wb.PixelHeight, 0, 100);
+                            writeStream.Close();
+                        }
                     }
                 }
 

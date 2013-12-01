@@ -106,6 +106,7 @@ namespace NewAnimeChecker
                                     {
                                         WriteableBitmap bitmap = new WriteableBitmap(image);
                                         bitmap.SaveJpeg(iss, bitmap.PixelWidth, bitmap.PixelHeight, 0, 100);
+                                        iss.Close();
                                     }
                                 }
                             }
