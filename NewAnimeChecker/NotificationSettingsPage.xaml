@@ -23,10 +23,6 @@
         <shell:ProgressIndicator x:Name="ProgressBar" IsIndeterminate="True"/>
     </shell:SystemTray.ProgressIndicator>
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
         <phone:Pivot Name="Pivot" Title="新番提醒">
             <phone:PivotItem Header="推送 + 提醒">
                 <Grid x:Name="ContentPanel" Grid.Row="1" Margin="0,0,0,0">

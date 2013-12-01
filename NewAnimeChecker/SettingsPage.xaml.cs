@@ -64,5 +64,10 @@ namespace NewAnimeChecker
                 + DeviceStatus.DeviceName + "\nTotalMemory: " + DeviceStatus.DeviceTotalMemory;
             emailComposeTask.Show();
         }
+
+        private void General_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/GeneralSettingsPage.xaml", UriKind.Relative));
+        }
     }
 }

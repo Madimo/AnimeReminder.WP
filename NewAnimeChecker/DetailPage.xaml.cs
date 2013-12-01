@@ -38,7 +38,6 @@ namespace NewAnimeChecker
             if (NavigationContext.QueryString.TryGetValue("index", out index))
             {
                 subscriptionIndex = App.ViewModel.SubscriptionItems[int.Parse(index)];
-                AnimeName.Header = subscriptionIndex.name;
                 Pivot.Title = (string)settings["UserName"];
                 if (subscriptionIndex.updated == System.Windows.Visibility.Visible)
                     MarkReadOrUnreadButton.Content = "标记为已读";

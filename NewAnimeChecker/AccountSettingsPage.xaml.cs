@@ -108,7 +108,6 @@ namespace NewAnimeChecker
                 transformY.Duration = duration;
                 transformY.From = ChangePsw.Margin.Bottom;
                 transformY.To = To.Margin.Top - ChangePsw.Margin.Top;
-                
                 Storyboard.SetTarget(transformY, ChangePsw);
                 Storyboard.SetTargetProperty(transformY, new PropertyPath("(Button.RenderTransform).(TranslateTransform.Y)"));
                 storyboard.Children.Add(transformY);

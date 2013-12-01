@@ -24,31 +24,35 @@
             <phone:PivotItem Header="设置 + 帮助">
                 <ScrollViewer Margin="0,0,0,0">
                     <StackPanel>
-                        <StackPanel Tap="Account_Tap">
+                        <StackPanel Tap="General_Tap" Margin="0,0,0,15">
+                            <TextBlock Text="常规" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                            <TextBlock Text="常规功能设置" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        </StackPanel>
+                        <StackPanel Tap="Account_Tap" Margin="0,0,0,15">
                             <TextBlock Text="帐号管理" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                            <TextBlock Text="注销账号、修改密码" Margin="10,0,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                            <TextBlock Text="注销账号、修改密码" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         </StackPanel>
-                        <StackPanel Tap="Notification_Tap">
-                            <TextBlock Text="推送 + 提醒" Margin="10,10,12,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                            <TextBlock Text="邮件提醒、推送更新" Margin="10,0,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <StackPanel Tap="Notification_Tap" Margin="0,0,0,15">
+                            <TextBlock Text="推送 + 提醒" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                            <TextBlock Text="邮件提醒、推送更新" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         </StackPanel>
-                        <StackPanel Tap="GoMarket_Tap">
-                            <TextBlock Text="给个好评" Margin="10,10,12,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                        <StackPanel Tap="GoMarket_Tap" Margin="0,0,0,15">
+                            <TextBlock Text="给个好评" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
                             <TextBlock Text="感谢您的支持" Margin="10,0,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         </StackPanel>
-                        <StackPanel Tap="Feedback_Tap">
-                            <TextBlock Text="反馈" Margin="10,10,12,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                        <StackPanel Tap="Feedback_Tap" Margin="0,0,0,15">
+                            <TextBlock Text="反馈" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
                             <TextBlock Text="我们需要您的建议" Margin="10,0,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         </StackPanel>
                         <!--
-                        <StackPanel Tap="Donate_Tap">
-                            <TextBlock Text="捐助" Margin="10,10,12,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                            <TextBlock Text="帮助我们做的更好" Margin="10,0,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <StackPanel Tap="Donate_Tap" Margin="0,0,0,15">
+                            <TextBlock Text="捐助" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                            <TextBlock Text="帮助我们做的更好" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         </StackPanel>
                         -->
-                        <StackPanel Tap="About_Tap">
-                            <TextBlock Text="关于" Margin="10,10,12,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                            <TextBlock Text="新番提醒" Margin="10,0,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <StackPanel Tap="About_Tap" Margin="0,0,0,15">
+                            <TextBlock Text="关于" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                            <TextBlock Text="新番提醒" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>

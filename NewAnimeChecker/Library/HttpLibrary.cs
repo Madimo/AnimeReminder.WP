@@ -48,12 +48,28 @@ namespace HttpLibrary
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(new Uri(RequestUrl, UriKind.Absolute));
                 httpWebRequest.Method = "GET";
-                httpWebRequest.UserAgent = "NewAnimeChecker.Mobile.WindowsPhone.Ver1~2";
+                httpWebRequest.UserAgent = "NewAnimeChecker.Mobile.WindowsPhone.Ver1~3";
                 WebResponse response = await httpWebRequest.GetResponseAsync();
                 Stream streamResult = response.GetResponseStream();
                 StreamReader sr = new StreamReader(streamResult, Encoding.UTF8);
                 string returnValue = sr.ReadToEnd();
                 return returnValue;
+            }
+            catch
+            {
+                throw new Exception("网络错误，请检查网络连接或重试");
+            }
+        }
+
+        public virtual async Task<Stream> GetAsyncForData(string RequestUrl)
+        {
+            try
+            {
+                HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(new Uri(RequestUrl, UriKind.Absolute));
+                httpWebRequest.Method = "GET";
+                WebResponse response = await httpWebRequest.GetResponseAsync();
+                Stream streamResult = response.GetResponseStream();
+                return streamResult;
             }
             catch
             {

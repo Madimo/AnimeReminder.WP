@@ -28,21 +28,14 @@
             <!-- 第一页 -->
             <phone:PivotItem Header="我的订阅" Margin="12,28,12,0">
                 <phone:LongListSelector Name="LongListSelector" ItemsSource="{Binding SubscriptionItems}" Margin="-13,0,0,0">
-                    <phone:LongListSelector.ListHeaderTemplate>
-                        <DataTemplate>
-                            <StackPanel></StackPanel>
-                        </DataTemplate>
-                    </phone:LongListSelector.ListHeaderTemplate>
+                    <phone:LongListSelector.ListHeader>
+                        <StackPanel>
+                            <!-- nothing -->
+                        </StackPanel>
+                    </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="0,0,0,0" Opacity="0" Loaded="StackPanel_Loaded">
-                                <!--
-                                <toolkit:ContextMenuService.ContextMenu>
-                                    <toolkit:ContextMenu IsZoomEnabled="True">
-                                        <toolkit:MenuItem Header="删除"  Click="Delete_Click"/>
-                                    </toolkit:ContextMenu>
-                                </toolkit:ContextMenuService.ContextMenu>
-                                -->
                                 <Grid  Height="95" Tap="Grid_Tap">
                                     <Rectangle Fill="{StaticResource PhoneForegroundBrush}" Visibility="{Binding updated}" Height="95" Width="10" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
                                     <TextBlock Text="{Binding name}" TextWrapping="NoWrap" Margin="20,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
@@ -61,14 +54,14 @@
             <!-- 第二页 -->
             <phone:PivotItem Header="最近更新" Margin="12,28,12,0">
                 <phone:LongListSelector ItemsSource="{Binding ScheduleItems}">
-                    <phone:LongListSelector.ListHeaderTemplate>
-                        <DataTemplate>
-                            <StackPanel></StackPanel>
-                        </DataTemplate>
-                    </phone:LongListSelector.ListHeaderTemplate>
+                    <phone:LongListSelector.ListHeader>
+                        <StackPanel>
+                            <!-- nothing -->
+                        </StackPanel>
+                    </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="0,0,0,8" Opacity="0" Loaded="StackPanel_Loaded">
+                            <StackPanel Margin="0,0,0,8" Opacity="0" Loaded="StackPanel_Loaded" Tap="StackPanel_Tap">
                                 <toolkit:ContextMenuService.ContextMenu>
                                     <toolkit:ContextMenu Name="ContextMenu" IsZoomEnabled="True">
                                         <toolkit:MenuItem Header="添加到我的订阅" Click="AddToSubscription_Click"/>

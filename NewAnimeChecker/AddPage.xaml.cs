@@ -28,19 +28,13 @@ namespace NewAnimeChecker
         }
         #endregion
 
-        #region 导航事件处理
-        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
-        #endregion
-
         #region 控件事件处理
         private void AddPage_Loaded(object sender, RoutedEventArgs e)
         {
             Pivot.Title = IsolatedStorageSettings.ApplicationSettings["UserName"];
             Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
-            SearchBox.Focus();
+            if (SearchBox.Text == "")
+                SearchBox.Focus();
         }
 
         private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
@@ -65,6 +59,12 @@ namespace NewAnimeChecker
         {
             if (e.Key == System.Windows.Input.Key.Enter)
                 Search();
+        }
+
+        private void TextBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            var SelectedItem = (sender as TextBlock).DataContext as ViewModels.SearchResultModel;
+            NavigationService.Navigate(new Uri("/AnimeIntroPage.xaml?aid=" + SelectedItem.ID + "&title=" + SelectedItem.Name, UriKind.Relative));
         }
         #endregion
 
@@ -115,83 +115,6 @@ namespace NewAnimeChecker
             }
             finally
             {
-                SearchBox.IsEnabled = true;
-                LongListSelector.IsEnabled = true;
-                ProgressBar.IsVisible = false;
-                ProgressBar.Text = "";
-            }
-        }
-        #endregion
-
-        #region 添加
-        private async void TextBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            var SelectedItem = (sender as TextBlock).DataContext as ViewModels.SearchResultModel;
-            if (MessageBox.Show(SelectedItem.Name, "是否添加？", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
-                return;
-            ProgressBar.Text = "添加中...";
-            ProgressBar.IsVisible = true;
-            SearchBox.IsEnabled = false;
-            LongListSelector.IsEnabled = false;
-            AnimeAPI api = new AnimeAPI();
-            try
-            {
-/*
-                HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://apianime.ricter.info/add?key=" + IsolatedStorageSettings.ApplicationSettings["UserKey"] + "&id=" + SelectedItem.ID + "&hash=" + new Random().Next());
-                if (result.Contains("ERROR_"))
-                {
-                    if (result == "ERROR_INVALID_KEY")
-                    {
-                        MessageBox.Show("", "您的帐号已在别的客户端登陆，请重新登陆", MessageBoxButton.OK);
-                        IsolatedStorageSettings.ApplicationSettings.Remove("UserKey");
-                        NavigationService.Navigate(new Uri("/Login.xaml", UriKind.Relative));
-                        return;
-                    }
-                    if (result == "ERROR_INVALID_ANIME")
-                    {
-                        throw new Exception("抱歉，您选择的项目可能不会有剧集更新，无法添加");
-                    }
-                    throw new Exception("发生了错误，但我不知道是什么");
-                }
-
-                if (IsolatedStorageSettings.ApplicationSettings.Contains("MustRefresh"))
-                {
-                    if (!((bool)IsolatedStorageSettings.ApplicationSettings["MustRefresh"]))
-                    {
-                        IsolatedStorageSettings.ApplicationSettings["MustRefresh"] = true;
-                        IsolatedStorageSettings.ApplicationSettings.Save();
-                    }
-                }
-                else
-                {
-                    IsolatedStorageSettings.ApplicationSettings.Add("MustRefresh", true);
-                    IsolatedStorageSettings.ApplicationSettings.Save();
-                }
-*/
-                await api.AddAnime(SelectedItem.ID);
-                if (IsolatedStorageSettings.ApplicationSettings.Contains("MustRefresh"))
-                    IsolatedStorageSettings.ApplicationSettings.Remove("MustRefresh");
-                IsolatedStorageSettings.ApplicationSettings.Add("MustRefresh", true);
-                IsolatedStorageSettings.ApplicationSettings.Save();
-                ToastPrompt toast = new ToastPrompt();
-                toast.Title = "添加成功";
-                toast.FontSize = 20;
-                toast.Show();
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message, "错误", MessageBoxButton.OK);
-                if (api.lastError == AnimeAPI.ERROR.ERROR_INVALID_KEY)
-                {
-                    IsolatedStorageSettings.ApplicationSettings.Remove("UserKey");
-                    IsolatedStorageSettings.ApplicationSettings.Save();
-                    NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
-                }
-            }
-            finally
-            {
-                LongListSelector.SelectedItem = null;
                 SearchBox.IsEnabled = true;
                 LongListSelector.IsEnabled = true;
                 ProgressBar.IsVisible = false;

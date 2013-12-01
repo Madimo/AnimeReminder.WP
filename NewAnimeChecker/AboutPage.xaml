@@ -18,10 +18,6 @@
 
     <!--LayoutRoot 是包含所有页面内容的根网格-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
         <!--ContentPanel - 在此处放置其他内容-->
         <phone:Pivot Name="Pivot" Title="新番提醒">

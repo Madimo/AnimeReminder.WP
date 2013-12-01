@@ -49,14 +49,21 @@ namespace NewAnimeChecker
                 {
                     ProgressBar.IsVisible = false;
                     ProgressBar.Text = "";
-                    if (!settings.Contains("FirstLaunch"))
+                    if (!settings.Contains("FirstLaunch") || (int)settings["FirstLaunch"] != 1)
                     {
                         ToastPrompt toast = new ToastPrompt();
                         toast.Title = "提示";
                         toast.Message = "点按订阅标题来使用更多功能";
                         toast.FontSize = 20;
                         toast.Show();
-                        settings.Add("FirstLaunch", 0);
+                        if (!settings.Contains("FirstLaunch"))
+                        {
+                            settings.Add("FirstLaunch", 1);
+                        }
+                        else
+                        {
+                            settings["FirstLaunch"] = 1;
+                        }
                         settings.Save();
                     }
                 }
@@ -637,6 +644,12 @@ namespace NewAnimeChecker
         {
             Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
         }
+
+        private void StackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            ViewModels.ScheduleModel item = ((sender as StackPanel).DataContext as ViewModels.ScheduleModel);
+            NavigationService.Navigate(new Uri("/AnimeIntroPage.xaml?aid=" + item.aid + "&title=" + item.name, UriKind.Relative));
+        }
         #endregion
 
         #region 背景图片
@@ -733,25 +746,6 @@ namespace NewAnimeChecker
             try
             {
                 await api.AddAnime(sm.aid);
-/*
-                HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://apianime.ricter.info/add?key=" + settings["UserKey"] + "&id=" + sm.aid + "&hash=" + new Random().Next());
-                if (result.Contains("ERROR_"))
-                {
-                    if (result == "ERROR_INVALID_KEY")
-                    {
-                        MessageBox.Show("", "您的帐号已在别的客户端登陆，请重新登陆", MessageBoxButton.OK);
-                        settings.Remove("UserKey");
-                        NavigationService.Navigate(new Uri("/Login.xaml", UriKind.Relative));
-                        return;
-                    }
-                    if (result == "ERROR_INVALID_ANIME")
-                    {
-                        throw new Exception("抱歉，您选择的项目可能不会有剧集更新，无法添加");
-                    }
-                    throw new Exception("发生了错误，但我不知道是什么");
-                }
- */
                 ToastPrompt toast = new ToastPrompt();
                 toast.Title = "成功将 " + sm.name + " 添加到 我的订阅";
                 toast.FontSize = 20;
@@ -819,22 +813,7 @@ namespace NewAnimeChecker
             Storyboard.SetTarget(doubleAnimation, (StackPanel)sender);
             Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath(StackPanel.OpacityProperty));
             storyboard.Children.Add(doubleAnimation);
-/*
-            ObjectAnimationUsingKeyFrames objectAnimation = new ObjectAnimationUsingKeyFrames();
-            objectAnimation.Duration = duration;
-            objectAnimation.BeginTime = beginTime;
-            double by = (sender as StackPanel).ActualWidth / 2.0 / duration.TimeSpan.Milliseconds;
-            for (double i = 1; i <= duration.TimeSpan.Milliseconds; i += duration.TimeSpan.Milliseconds / 20)
-            {
-                DiscreteObjectKeyFrame key = new DiscreteObjectKeyFrame();
-                key.KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(i));
-                key.Value = new Thickness((sender as StackPanel).ActualWidth / 2.0 - i * by, 0, 0, top);
-                objectAnimation.KeyFrames.Add(key);
-            }
-            Storyboard.SetTarget(objectAnimation, (StackPanel)sender);
-            Storyboard.SetTargetProperty(objectAnimation, new PropertyPath(StackPanel.MarginProperty));
-            storyboard.Children.Add(objectAnimation);
-*/
+
             (sender as StackPanel).RenderTransform = new TranslateTransform();
             DoubleAnimation transformX = new DoubleAnimation();
             transformX.Duration = duration;

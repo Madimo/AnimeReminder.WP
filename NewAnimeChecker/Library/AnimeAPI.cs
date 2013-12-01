@@ -1,11 +1,14 @@
-﻿using System;
+﻿using HttpLibrary;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HttpLibrary;
 
 namespace NewAnimeChecker
 {
@@ -24,12 +27,72 @@ namespace NewAnimeChecker
             public string time;
         }
 
+        public class AnimeDetail
+        {
+            public int id;
+            public int type;
+            public int copyright;
+            public string versionInfo;
+            public int episodeCount = 0;
+            public int totalEpisodeCount = 0;
+            public string title;
+            public List<string> tags = new List<string>();
+            public string directorName;
+            public List<string> directors = new List<string>();
+            public string actorName;
+            public List<string> actors = new List<string>();
+            public string year;
+            public string poster;
+            public string intro;
+            public string area;
+            public double score;
+            public int displayType;
+            public bool downloadable;
+
+            public void Get(JObject animeDetail)
+            {
+                this.id          = (int)animeDetail["id"];
+                this.type        = (int)animeDetail["type"];
+                this.copyright   = (int)animeDetail["copyright"];
+                this.versionInfo = (string)animeDetail["versionInfo"];
+
+                if (animeDetail["episodeCount"] != null)
+                    this.episodeCount = (int)animeDetail["episodeCount"];
+                if (animeDetail["totalEpisodeCount"] != null)
+                    this.totalEpisodeCount = (int)animeDetail["totalEpisodeCount"];
+
+                this.title = (string)animeDetail["title"];
+
+                foreach (string item in (animeDetail["tags"] as JArray))
+                    tags.Add(item);
+
+                this.directorName = (string)animeDetail["directorName"];
+                foreach (string item in (animeDetail["directors"] as JArray))
+                    directors.Add(item);
+
+                this.actorName = (string)animeDetail["actorName"];
+                foreach (string item in (animeDetail["actors"] as JArray))
+                    actors.Add(item);
+
+                this.year   = (string)animeDetail["year"];
+                this.poster = (string)animeDetail["poster"];
+                this.intro  = (string)animeDetail["intro"];
+                this.area   = (string)animeDetail["area"];
+
+                this.score        = (double)animeDetail["score"];
+                this.displayType  = (int)animeDetail["displayType"];
+                this.downloadable = (bool)animeDetail["downloadable"];
+
+            }
+        }
+
         public string key;
         public bool emailReminderStatus;
         public int updateNumber;
         public List<Anime> subscriptionList = new List<Anime>();
         public List<Anime> scheduleList = new List<Anime>();
         public List<Anime> searchResultList = new List<Anime>();
+        public AnimeDetail animeDetail = new AnimeDetail();
 
         public AnimeAPI()
         {
@@ -298,6 +361,27 @@ namespace NewAnimeChecker
             {
                 HttpEngine httpRequest = new HttpEngine();
                 string result = await httpRequest.GetAsync("");
+
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> GetAnimeDetail(string aid)
+        {
+            try
+            {
+                string url = "http://data.pad.kankan.com/mobile/detail/" + aid[0] + aid[1] + "/" + aid + ".json";
+                Debug.WriteLine(url);
+                HttpEngine httpRequest = new HttpEngine();
+                string result = await httpRequest.GetAsync(url);
+                Debug.WriteLine(result);
+                JObject json = JObject.Parse(result);
+
+                animeDetail.Get(json);
 
                 return true;
             }

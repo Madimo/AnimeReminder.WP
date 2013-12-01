@@ -24,15 +24,11 @@
     </shell:SystemTray.ProgressIndicator>
     <!--LayoutRoot 是包含所有页面内容的根网格-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
         <!--ContentPanel - 在此处放置其他内容-->
         <phone:Pivot Name="Pivot" Title="MadimoZhang@gmail.com">
-            <phone:PivotItem Name="AnimeName" Header="新番提醒">
-                <Grid x:Name="ContentPanel" Margin="0,0,0,0">
+            <phone:PivotItem Header="订阅编辑">
+                <Grid Margin="0,0,0,0">
                     <TextBlock Name="EpiTextBlock" Text="此订阅目前共 0 集" Margin="0,52,0,510" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="48"/>
                     <Button HorizontalAlignment="Left" Height="78" Margin="10,162,0,0" VerticalAlignment="Top" Width="78" BorderThickness="0" Click="Add_Click">
                         <Button.Background>
@@ -47,12 +43,16 @@
                     </Button>
                     <Button Name="UpdateButton" Content="更新已看集数" HorizontalAlignment="Left" Margin="0,262,0,0" VerticalAlignment="Top" Width="456" Click="Update_Click"/>
                     <Button Name="MarkReadOrUnreadButton" Content="标记为未读" HorizontalAlignment="Left" Margin="0,334,0,0" VerticalAlignment="Top" Width="456" Click="MarkReadOrUnread_Click"/>
-<!--                   
-                    <Button Name="OpenWebsiteButton" Content="打开订阅网址" HorizontalAlignment="Left" Margin="0,406,0,0" VerticalAlignment="Top" Width="456" Click="MarkReadOrUnread_Click"/>
--->
                     <Button Name="DeleteButton" Content="删除此订阅" HorizontalAlignment="Left" Margin="0,478,0,0" VerticalAlignment="Top" Width="456" Click="Delete_Click"/>
                 </Grid>
             </phone:PivotItem>
+            <!--
+            <phone:PivotItem Header="取名字！">
+                <Grid Margin="0,0,0,0">
+                    
+                </Grid>
+            </phone:PivotItem>
+            !-->
         </phone:Pivot>
     </Grid>
 <!--
