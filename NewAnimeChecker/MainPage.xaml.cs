@@ -519,10 +519,10 @@ namespace NewAnimeChecker
  */
         #endregion
 
-        #region 标记已读
+        #region 标记未更新
         private async void MarkRead_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("", "确定将所有更新标记为已读？", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
+            if (MessageBox.Show("", "是否将所有订阅标记为未更新？", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
                 return;
             IsMarkReadBusy = true;
             AnimeAPI api = new AnimeAPI();
@@ -557,7 +557,7 @@ namespace NewAnimeChecker
                 }
  */
                 ToastPrompt toast = new ToastPrompt();
-                toast.Title = "成功将所有更新标记为已读";
+                toast.Title = "成功将所有订阅标记为未更新";
                 toast.FontSize = 20;
                 toast.Show();
             }

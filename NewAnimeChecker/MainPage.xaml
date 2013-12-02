@@ -100,7 +100,7 @@
         <shell:ApplicationBar x:Key="AppBar0" BackgroundColor="Black" ForegroundColor="White" Opacity="0.5" StateChanged="ApplicationBar_StateChanged">
             <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Add.png" Text="添加订阅" Click="Add_Click"/>
             <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Refresh.png" Text="刷新" Click="Refresh_Click"/>
-            <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Check.png" Text="标为已读" Click="MarkRead_Click"/>
+            <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Check.png" Text="标为未更新" Click="MarkRead_Click"/>
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="更换背景" Click="ChangeBackground_Click"/>
                 <shell:ApplicationBarMenuItem Text="恢复默认背景" Click="RestoreBackground_Click"/>

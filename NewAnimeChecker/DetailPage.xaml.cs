@@ -40,9 +40,9 @@ namespace NewAnimeChecker
                 subscriptionIndex = App.ViewModel.SubscriptionItems[int.Parse(index)];
                 Pivot.Title = (string)settings["UserName"];
                 if (subscriptionIndex.highlight != "0")
-                    MarkReadOrUnreadButton.Content = "标记为已读";
+                    MarkReadOrUnreadButton.Content = "标记为未更新";
                 else
-                    MarkReadOrUnreadButton.Content = "标记为未读";
+                    MarkReadOrUnreadButton.Content = "标记为更新";
                 EpiTextBox.Text = subscriptionIndex.read;
                 EpiTextBlock.Text = "此订阅目前共 " + subscriptionIndex.epi + " 集";
             }
@@ -165,7 +165,7 @@ namespace NewAnimeChecker
         }
         #endregion
 
-        #region 标为已读/未读
+        #region 标为未更新/更新
         private async void MarkReadOrUnread_Click(object sender, RoutedEventArgs e)
         {
             ProgressBar.Text = "执行中...";
@@ -180,7 +180,7 @@ namespace NewAnimeChecker
                 HttpEngine httpRequest = new HttpEngine();
                 string requestUrl = "";
 */
-                if ((MarkReadOrUnreadButton.Content as string) == "标记为未读")
+                if ((MarkReadOrUnreadButton.Content as string) == "标记为更新")
                 {
                     await api.AddHighlight(subscriptionIndex.aid, "2");
 /*
@@ -213,15 +213,15 @@ namespace NewAnimeChecker
                 settings.Add("MustRefresh", true);
                 settings.Save();
                 ToastPrompt toast = new ToastPrompt();
-                if ((MarkReadOrUnreadButton.Content as string) == "标记为未读")
+                if ((MarkReadOrUnreadButton.Content as string) == "标记为更新")
                 {
-                    MarkReadOrUnreadButton.Content = "标记为已读";
-                    toast.Title = "成功标记为未读";
+                    MarkReadOrUnreadButton.Content = "标记为未更新";
+                    toast.Title = "成功标记为更新";
                 }
                 else
                 {
-                    MarkReadOrUnreadButton.Content = "标记为未读";
-                    toast.Title = "成功标记为已读";
+                    MarkReadOrUnreadButton.Content = "标记为更新";
+                    toast.Title = "成功标记为未更新";
                 }
                 toast.FontSize = 20;
                 toast.Show();
