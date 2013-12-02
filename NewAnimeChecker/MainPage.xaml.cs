@@ -263,6 +263,7 @@ namespace NewAnimeChecker
             {
                 await api.GetSubscriptionList();
                 App.ViewModel.SubscriptionItems.Clear();
+                LongListSelector.UpdateLayout();
                 string[] TileContent = new string[3] { "", "", "" };
                 foreach (AnimeAPI.Anime item in api.subscriptionList)
                 {

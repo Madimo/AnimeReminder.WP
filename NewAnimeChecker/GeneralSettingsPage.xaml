@@ -24,7 +24,9 @@
             <!--枢轴项一-->
             <phone:PivotItem Header="常规">
                 <StackPanel>
-                    <toolkit:ToggleSwitch Name="ShowImage" Content="2G/3G 网络下显示图片" Height="120" Loaded="ShowImage_Loaded" Checked="ShowImage_Checked" Unchecked="ShowImage_Unchecked"/>
+                    <toolkit:ToggleSwitch Name="ShowImage" Content="移动网络下加载海报" Height="120" Loaded="ShowImage_Loaded" Checked="ShowImage_Checked" Unchecked="ShowImage_Unchecked"/>
+                    <Button Content="清除图片缓存"/>
+                    <TextBlock Foreground="Gray" Text="当从服务器上下载图片时，应用会自动将图片保存到手机中，当以后需要使用这些图片时直接从手机中读取图片以节省流量。可以删除这些图片缓存以节省手机的存储空间，但是当以后需要使用这些图片时，需要从服务器上重新下载。" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </StackPanel>
             </phone:PivotItem>
         </phone:Pivot>

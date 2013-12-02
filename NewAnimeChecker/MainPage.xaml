@@ -38,7 +38,7 @@
                             <Grid Margin="0,0,0,20" Tap="Grid_Tap">
                                 <Grid Margin="0,0,250,0" Tap="Grid_Tap">
                                     <Rectangle Width="171" Height="108" Fill="White"/>
-                                    <Image Width="161" Height="98" Source="/Assets/Background.jpg" Stretch="Fill" Loaded="Image_Loaded"/>
+                                    <Image Width="161" Height="98" Tag="{Binding aid}" Source="/Assets/Background.jpg" Stretch="Fill" Loaded="Image_Loaded"/>
                                 </Grid>
                                 <StackPanel Margin="190,0,0,0" Opacity="0" Loaded="StackPanel_Loaded">
                                     <Grid Tap="Grid_Tap">
