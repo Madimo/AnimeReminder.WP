@@ -166,23 +166,6 @@ namespace NewAnimeChecker.ViewModels
             }
         }
 
-        private System.Windows.Visibility _updated;
-        public System.Windows.Visibility updated
-        {
-            get
-            {
-                return _updated;
-            }
-            set
-            {
-                if (value != _updated)
-                {
-                    _updated = value;
-                    NotifyPropertyChanged("updated");
-                }
-            }
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(String propertyName)
         {

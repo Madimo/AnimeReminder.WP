@@ -267,6 +267,7 @@ namespace NewAnimeChecker
                 string[] TileContent = new string[3] { "", "", "" };
                 foreach (AnimeAPI.Anime item in api.subscriptionList)
                 {
+                    string name;
                     string text;
                     string readText = "";
                     if (item.status == "1")
@@ -275,23 +276,21 @@ namespace NewAnimeChecker
                         text = "更新到第 " + item.epi + " 集";
                     if (item.read != "0")
                         readText = "已看 " + item.read + " 集";
-                    System.Windows.Visibility updated;
                     if (item.highlight != "0")
-                        updated = System.Windows.Visibility.Visible;
+                        name    = "[更新] " + item.name;
                     else
-                        updated = System.Windows.Visibility.Collapsed;
+                        name    = item.name;
                     App.ViewModel.SubscriptionItems.Add(new ViewModels.SubscriptionModel() 
                     {
                         num     = item.num, 
                         aid     = item.aid, 
-                        name    = item.name, 
+                        name    = name, 
                         status  = item.status, 
                         epi     = item.epi,
                         read    = item.read, 
                         readText= readText,
                         highlight = item.highlight,
                         text    = text,
-                        updated = updated
                     });
                 }
 
@@ -531,7 +530,7 @@ namespace NewAnimeChecker
             {
                 foreach (ViewModels.SubscriptionModel item in App.ViewModel.SubscriptionItems)
                 {
-                    if (item.updated == System.Windows.Visibility.Visible)
+                    if (item.highlight != "0")
                     {
                         await api.DelHighlight(item.aid);
                     }

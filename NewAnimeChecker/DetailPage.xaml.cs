@@ -39,7 +39,7 @@ namespace NewAnimeChecker
             {
                 subscriptionIndex = App.ViewModel.SubscriptionItems[int.Parse(index)];
                 Pivot.Title = (string)settings["UserName"];
-                if (subscriptionIndex.updated == System.Windows.Visibility.Visible)
+                if (subscriptionIndex.highlight != "0")
                     MarkReadOrUnreadButton.Content = "标记为已读";
                 else
                     MarkReadOrUnreadButton.Content = "标记为未读";
