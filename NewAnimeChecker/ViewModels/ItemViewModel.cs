@@ -13,39 +13,12 @@ namespace NewAnimeChecker.ViewModels
     #region SubscriptionModel
     public class SubscriptionModel : INotifyPropertyChanged
     {
-        private int _num;
-        public int num
-        {
-            get
-            {
-                return _num;
-            }
-            set
-            {
-                if (value != _num)
-                {
-                    _num = value;
-                    NotifyPropertyChanged("num");
-                }
-            }
-        }
-
-        private string _aid;
-        public string aid
-        {
-            get
-            {
-                return _aid;
-            }
-            set
-            {
-                if (value != _aid)
-                {
-                    _aid = value;
-                    NotifyPropertyChanged("aid");
-                }
-            }
-        }
+        public int num;
+        public string aid;
+        public string status;
+        public string epi;
+        public string read;
+        public string highlight;
 
         private string _name;
         public string name
@@ -60,57 +33,6 @@ namespace NewAnimeChecker.ViewModels
                 {
                     _name = value;
                     NotifyPropertyChanged("name");
-                }
-            }
-        }
-
-        private string _status;
-        public string status
-        {
-            get
-            {
-                return _status;
-            }
-            set
-            {
-                if (value != status)
-                {
-                    _status = value;
-                    NotifyPropertyChanged("status");
-                }
-            }
-        }
-
-        private string _epi;
-        public string epi
-        {
-            get
-            {
-                return _epi;
-            }
-            set
-            {
-                if (value != _epi)
-                {
-                    _epi = value;
-                    NotifyPropertyChanged("epi");
-                }
-            }
-        }
-
-        private string _read;
-        public string read
-        {
-            get
-            {
-                return _read;
-            }
-            set
-            {
-                if (value != _read)
-                {
-                    _read = value;
-                    NotifyPropertyChanged("read");
                 }
             }
         }
@@ -132,22 +54,6 @@ namespace NewAnimeChecker.ViewModels
             }
         }
 
-        private string _highlight;
-        public string highlight
-        {
-            get
-            {
-                return _highlight;
-            }
-            set
-            {
-                if (value != _highlight)
-                {
-                    _highlight = value;
-                    NotifyPropertyChanged("highlight");
-                }
-            }
-        }
 
         private string _text;
         public string text
@@ -181,39 +87,8 @@ namespace NewAnimeChecker.ViewModels
     #region ScheduleModel
     public class ScheduleModel : INotifyPropertyChanged
     {
-        private int _num;
-        public int num
-        {
-            get
-            {
-                return _num;
-            }
-            set
-            {
-                if (value != _num)
-                {
-                    _num = value;
-                    NotifyPropertyChanged("num");
-                }
-            }
-        }
-
-        private string _aid;
-        public string aid
-        {
-            get
-            {
-                return _aid;
-            }
-            set
-            {
-                if (value != _aid)
-                {
-                    _aid = value;
-                    NotifyPropertyChanged("aid");
-                }
-            }
-        }
+        public int num;
+        public string aid;
 
         private string _name;
         public string name

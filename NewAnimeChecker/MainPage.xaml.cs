@@ -20,6 +20,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using System.Windows.Resources;
 
 namespace NewAnimeChecker
 {
@@ -262,7 +263,8 @@ namespace NewAnimeChecker
             try
             {
                 await api.GetSubscriptionList();
-                App.ViewModel.SubscriptionItems.Clear();
+                while (App.ViewModel.SubscriptionItems.Count > 0)
+                    App.ViewModel.SubscriptionItems.RemoveAt(0);
                 LongListSelector.UpdateLayout();
                 string[] TileContent = new string[3] { "", "", "" };
                 foreach (AnimeAPI.Anime item in api.subscriptionList)
@@ -280,17 +282,18 @@ namespace NewAnimeChecker
                         name    = "[更新] " + item.name;
                     else
                         name    = item.name;
+
                     App.ViewModel.SubscriptionItems.Add(new ViewModels.SubscriptionModel() 
                     {
-                        num     = item.num, 
-                        aid     = item.aid, 
-                        name    = name, 
-                        status  = item.status, 
-                        epi     = item.epi,
-                        read    = item.read, 
-                        readText= readText,
+                        num       = item.num, 
+                        aid       = item.aid, 
+                        name      = name, 
+                        status    = item.status, 
+                        epi       = item.epi,
+                        read      = item.read, 
+                        readText  = readText,
                         highlight = item.highlight,
-                        text    = text,
+                        text      = text,
                     });
                 }
 
@@ -343,7 +346,9 @@ namespace NewAnimeChecker
             try
             {
                 await api.GetUpdateSchedule();
-                App.ViewModel.ScheduleItems.Clear();
+                while (App.ViewModel.ScheduleItems.Count > 0)
+                    App.ViewModel.ScheduleItems.RemoveAt(0);
+                LongListSelector.UpdateLayout();
                 foreach (AnimeAPI.Anime item in api.scheduleList)
                 {
                     string text;
