@@ -67,12 +67,12 @@
                     </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="0,0,0,20" Tap="StackPanel_Tap">
+                            <Grid Margin="0,0,0,20" Tap="OpenAnimeIntro_Tap">
                                 <Grid Margin="0,0,250,0">
                                     <Rectangle Width="171" Height="108" Fill="White"/>
                                     <Image Width="161" Height="98" Source="/Assets/Background.jpg" Stretch="Fill" Loaded="Image_Loaded_1"/>
                                 </Grid>
-                                <StackPanel Margin="190,0,0,0" Opacity="0" Loaded="StackPanel_Loaded" Tap="StackPanel_Tap">
+                                <StackPanel Margin="190,0,0,0" Opacity="0" Loaded="StackPanel_Loaded">
                                     <Grid>
                                         <toolkit:ContextMenuService.ContextMenu>
                                             <toolkit:ContextMenu Name="ContextMenu" IsZoomEnabled="True">

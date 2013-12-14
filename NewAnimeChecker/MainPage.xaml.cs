@@ -481,9 +481,9 @@ namespace NewAnimeChecker
             Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
         }
 
-        private void StackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void OpenAnimeIntro_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            ViewModels.ScheduleModel item = ((sender as StackPanel).DataContext as ViewModels.ScheduleModel);
+            ViewModels.ScheduleModel item = ((sender as Grid).DataContext as ViewModels.ScheduleModel);
             NavigationService.Navigate(new Uri("/AnimeIntroPage.xaml?aid=" + item.aid + "&title=" + item.name, UriKind.Relative));
         }
         #endregion
