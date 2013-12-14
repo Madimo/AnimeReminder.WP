@@ -24,7 +24,7 @@ namespace NewAnimeChecker
         {
             Pivot.Title = IsolatedStorageSettings.ApplicationSettings["UserName"];
             Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
-            if (SearchBox.Text == "")
+            if (SearchBox.Text == "搜索")
                 SearchBox.Focus();
         }
 
