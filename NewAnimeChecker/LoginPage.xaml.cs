@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Controls;
-using System.Windows.Navigation;
-using System.IO;
-using System.IO.IsolatedStorage;
-using System.Threading;
-using System.Text;
-using System.Text.RegularExpressions;
-using Microsoft.Phone.Controls;
+﻿using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using HttpLibrary;
+using System;
+using System.IO.IsolatedStorage;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Navigation;
 
 namespace NewAnimeChecker
 {
