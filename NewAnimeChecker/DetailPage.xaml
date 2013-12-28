@@ -42,7 +42,7 @@
                         </Button.Background>
                     </Button>
                     <Button Name="UpdateButton" Content="更新已看集数" HorizontalAlignment="Left" Margin="0,262,0,0" VerticalAlignment="Top" Width="456" Click="Update_Click"/>
-                    <Button Name="MarkReadOrUnreadButton" Content="标记为未读" HorizontalAlignment="Left" Margin="0,334,0,0" VerticalAlignment="Top" Width="456" Click="MarkReadOrUnread_Click"/>
+                    <Button Name="MarkReadOrUnreadButton" Content="标记为更新" HorizontalAlignment="Left" Margin="0,334,0,0" VerticalAlignment="Top" Width="456" Click="MarkReadOrUnread_Click"/>
                     <Button Name="DeleteButton" Content="删除此订阅" HorizontalAlignment="Left" Margin="0,478,0,0" VerticalAlignment="Top" Width="456" Click="Delete_Click"/>
                 </Grid>
             </phone:PivotItem>

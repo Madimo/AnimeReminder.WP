@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Threading.Tasks;
 using System.IO;
+using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 // PM> Install-Package Microsoft.Bcl.Async
 
@@ -19,7 +10,7 @@ namespace HttpLibrary
 {
     public class HttpEngine
     {
-        public virtual async Task<Stream> PostAsync(string RequestUrl, string Context)
+        public virtual async Task<string> PostAsync(string RequestUrl, string Context)
         {
             try
             {
@@ -34,7 +25,10 @@ namespace HttpLibrary
                 }
 
                 WebResponse response = await httpWebRequest.GetResponseAsync();
-                return response.GetResponseStream();
+                Stream streamResult = response.GetResponseStream();
+                StreamReader sr = new StreamReader(streamResult, Encoding.UTF8);
+                string returnValue = sr.ReadToEnd();
+                return returnValue;
             }
             catch
             {

@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
+﻿using HttpLibrary;
+using Microsoft.Phone.Controls;
+using System;
 using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using HttpLibrary;
-using Coding4Fun.Toolkit.Controls;
 
 namespace NewAnimeChecker
 {
@@ -33,7 +24,7 @@ namespace NewAnimeChecker
         {
             Pivot.Title = IsolatedStorageSettings.ApplicationSettings["UserName"];
             Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
-            if (SearchBox.Text == "")
+            if (SearchBox.Text == "搜索")
                 SearchBox.Focus();
         }
 

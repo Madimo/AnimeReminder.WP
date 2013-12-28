@@ -1,25 +1,18 @@
 ﻿using Coding4Fun.Toolkit.Controls;
 using HttpLibrary;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Info;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
-using NewAnimeChecker.Resources;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Threading;
 
 namespace NewAnimeChecker
 {
@@ -262,33 +255,37 @@ namespace NewAnimeChecker
             try
             {
                 await api.GetSubscriptionList();
-                App.ViewModel.SubscriptionItems.Clear();
+                while (App.ViewModel.SubscriptionItems.Count > 0)
+                    App.ViewModel.SubscriptionItems.RemoveAt(0);
+                LongListSelector.UpdateLayout();
                 string[] TileContent = new string[3] { "", "", "" };
                 foreach (AnimeAPI.Anime item in api.subscriptionList)
                 {
+                    string name;
                     string text;
+                    string readText = "";
                     if (item.status == "1")
                         text = "已完结，共 " + item.epi + " 集";
                     else
                         text = "更新到第 " + item.epi + " 集";
                     if (item.read != "0")
-                        text += "，已看 " + item.read + " 集";
-                    System.Windows.Visibility updated;
+                        readText = "已看 " + item.read + " 集";
                     if (item.highlight != "0")
-                        updated = System.Windows.Visibility.Visible;
+                        name    = "[更新] " + item.name;
                     else
-                        updated = System.Windows.Visibility.Collapsed;
+                        name    = item.name;
+
                     App.ViewModel.SubscriptionItems.Add(new ViewModels.SubscriptionModel() 
                     {
-                        num     = item.num, 
-                        aid     = item.aid, 
-                        name    = item.name, 
-                        status  = item.status, 
-                        epi     = item.epi,
-                        read    = item.read, 
+                        num       = item.num, 
+                        aid       = item.aid, 
+                        name      = name, 
+                        status    = item.status, 
+                        epi       = item.epi,
+                        read      = item.read, 
+                        readText  = readText,
                         highlight = item.highlight,
-                        text    = text,
-                        updated = updated
+                        text      = text,
                     });
                 }
 
@@ -315,81 +312,6 @@ namespace NewAnimeChecker
                     };
                     Tile.Update(TileData);
                 }
-
-/*
-                HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/get_subscription_list?key=" + settings["UserKey"] + "&hash=" + new Random().Next());
-                if (result.IndexOf("ERROR_") != -1)
-                {
-                    if (result == "ERROR_INVALID_KEY")
-                    {
-                        MessageBox.Show("", "您的帐号已在别的客户端登陆，请重新登陆", MessageBoxButton.OK);
-                        settings.Remove("UserKey");
-                        NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
-                        return;
-                    }
-                    throw new Exception("发生了错误，但我不知道是什么");
-                }
-                App.ViewModel.SubscriptionItems.Clear();
-                string[] list = result.Split('\n');
-                int updatedNumber = 0;
-                int number = 0;
-                string[] TileContent = new string[3] { "", "", "" };
-                for (int i = 0; i < list.Length; ++i)
-                {
-                    string[] item   = list[i].Split('|');
-                    if (item.Length < 6)
-                        continue;
-                    number++;
-                    string isUpdate = item[0];
-                    string id       = item[1];
-                    string name     = item[2];
-                    string epi      = item[3];
-                    string isDone   = item[4];
-                    string readed   = item[5];
-                    string showEpi;
-                    if (isDone == "0")
-                        showEpi = "已完结，共 " + epi + " 集";
-                    else
-                        showEpi = "更新到第 " + epi + " 集";
-                    if (readed != "0")
-                        showEpi += "，看到第 " + readed + " 集";
-                    System.Windows.Visibility updated;
-                    if (isUpdate != "0")
-                    {
-                        updated = System.Windows.Visibility.Visible;
-                        updatedNumber++;
-                        if (updatedNumber == 1)
-                        {
-                            TileContent[0] = " ";
-                            TileContent[1] = name + " 更新到第 " + epi + " 集";
-                        }
-                        else if (updatedNumber == 2)
-                        {
-                            TileContent[2] = name + " 更新到第 " + epi + " 集";
-                        }
-                    }
-                    else
-                    {
-                        updated = System.Windows.Visibility.Collapsed;
-                    }
-                    App.ViewModel.SubscriptionItems.Add(new ViewModels.SubscriptionModel() { Number = number, ID = id, Name = name, Epi = epi, Readed = readed, ShowEpi = showEpi, Updated = updated });
-                }
-                ShellTile Tile = ShellTile.ActiveTiles.FirstOrDefault();
-                if (Tile != null)
-                {
-                    var TileData = new IconicTileData()
-                    {
-                        Title = "新番提醒",
-                        Count = updatedNumber,
-                        BackgroundColor = System.Windows.Media.Colors.Transparent,
-                        WideContent1 = TileContent[0],
-                        WideContent2 = TileContent[1],
-                        WideContent3 = TileContent[2]
-                    };
-                    Tile.Update(TileData);
-                }
- */
             }
             catch (Exception exception)
             {
@@ -416,7 +338,9 @@ namespace NewAnimeChecker
             try
             {
                 await api.GetUpdateSchedule();
-                App.ViewModel.ScheduleItems.Clear();
+                while (App.ViewModel.ScheduleItems.Count > 0)
+                    App.ViewModel.ScheduleItems.RemoveAt(0);
+                LongListSelector.UpdateLayout();
                 foreach (AnimeAPI.Anime item in api.scheduleList)
                 {
                     string text;
@@ -432,30 +356,6 @@ namespace NewAnimeChecker
                         time = text
                     });
                 }
-
-/*
-                HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/get_update_schedule?hash=" + new Random().Next());
-                App.ViewModel.ScheduleItems.Clear();
-                string[] List = result.Split('\n');
-                int number = 0;
-                for (int i = 0; i < List.Length; ++i)
-                {
-                    string[] item = List[i].Split('|');
-                    if (item.Length < 4)
-                        return;
-                    number++;
-                    string whichDay = item[0]; 
-                    string id       = item[1];
-                    string name     = item[2];
-                    string time     = item[3];
-                    if (whichDay == "0")
-                        time = "今天 " + time;
-                    else if (whichDay == "1")
-                        time = "明天 " + time;
-                    App.ViewModel.ScheduleItems.Add(new ViewModels.ScheduleModel() { Number = number, ID = id, Name = name, Time = time });
-                }
- */
             }
             catch (Exception exception)
             {
@@ -474,53 +374,10 @@ namespace NewAnimeChecker
         }
         #endregion
 
-        #region 删除项目
-/*
-        private async void Delete_Click(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine(((ViewModels.SubscriptionModel)((MenuItem)sender).DataContext).name);
-            Debug.WriteLine(App.ViewModel.SubscriptionItems.Count);
-            SetBusy("DeleteItem");
-            try
-            {
-                ViewModels.SubscriptionModel vi = (ViewModels.SubscriptionModel)((MenuItem)sender).DataContext;
-                HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/del_anime?key=" + settings["UserKey"] + "&aid=" + vi.aid);
-                if (result.Contains("ERROR_"))
-                {
-                    if (result == "ERROR_INVALID_KEY")
-                    {
-                        MessageBox.Show("", "您的帐号已在别的客户端登陆，请重新登陆", MessageBoxButton.OK);
-                        settings.Remove("UserKey");
-                        NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
-                        return;
-                    }
-                    if (result == "ERROR_INVALID_ID")
-                    {
-                        throw new Exception("您选择的内容可能已经被删除，请刷新后重试");
-                    }
-                    throw new Exception("发生了错误，但我不知道是什么");
-                }
-                int index = App.ViewModel.SubscriptionItems.IndexOf(vi); 
-                App.ViewModel.SubscriptionItems.Remove(vi);
-                ((MenuItem)sender).UpdateLayout();
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("", exception.Message, MessageBoxButton.OK);
-            }
-            finally
-            {
-                SetIdle("DeleteItem");
-            }
-        }
- */
-        #endregion
-
-        #region 标记已读
+        #region 标记未更新
         private async void MarkRead_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("", "确定将所有更新标记为已读？", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
+            if (MessageBox.Show("", "是否将所有订阅标记为未更新？", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
                 return;
             IsMarkReadBusy = true;
             AnimeAPI api = new AnimeAPI();
@@ -528,34 +385,13 @@ namespace NewAnimeChecker
             {
                 foreach (ViewModels.SubscriptionModel item in App.ViewModel.SubscriptionItems)
                 {
-                    if (item.updated == System.Windows.Visibility.Visible)
+                    if (item.highlight != "0")
                     {
-                        await api.DelHighlight(item.aid);
+                        await api.Highlight(item.aid, "del");
                     }
                 }
-/*
-                foreach (ViewModels.SubscriptionModel Items in App.ViewModel.SubscriptionItems)
-                {
-                    if (Items.updated == System.Windows.Visibility.Visible)
-                    {
-                        HttpEngine httpRequest = new HttpEngine();
-                        string result = await httpRequest.GetAsync("http://apianime.ricter.info/del_highlight?key=" + settings["UserKey"] + "&id=" + Items.aid + "&hash=" + new Random().Next());
-                        if (result.Contains("ERROR_"))
-                        {
-                            if (result == "ERROR_INVALID_KEY")
-                            {
-                                MessageBox.Show("", "您的帐号已在别的客户端登陆，请重新登陆", MessageBoxButton.OK);
-                                settings.Remove("UserKey");
-                                NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
-                                return;
-                            }
-                            throw new Exception("发生了错误，但我不知道是什么");
-                        }
-                    }
-                }
- */
                 ToastPrompt toast = new ToastPrompt();
-                toast.Title = "成功将所有更新标记为已读";
+                toast.Title = "成功将所有订阅标记为未更新";
                 toast.FontSize = 20;
                 toast.Show();
             }
@@ -645,9 +481,9 @@ namespace NewAnimeChecker
             Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
         }
 
-        private void StackPanel_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void OpenAnimeIntro_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            ViewModels.ScheduleModel item = ((sender as StackPanel).DataContext as ViewModels.ScheduleModel);
+            ViewModels.ScheduleModel item = ((sender as Grid).DataContext as ViewModels.ScheduleModel);
             NavigationService.Navigate(new Uri("/AnimeIntroPage.xaml?aid=" + item.aid + "&title=" + item.name, UriKind.Relative));
         }
         #endregion
@@ -655,7 +491,7 @@ namespace NewAnimeChecker
         #region 背景图片
         private void SetBackground(ImageBrush brush)
         {
-            BackgroundTransform.Opacity = 0.7;
+            BackgroundTransform.Opacity = 0.4;
             BackgroundImage.Source = (Pivot.Background as ImageBrush).ImageSource;
             BackgroundTransform.Source = brush.ImageSource;
             BackgroundImage.Opacity = 1;
@@ -703,7 +539,7 @@ namespace NewAnimeChecker
                 bitmap.SetSource(e.ChosenPhoto);
                 ImageBrush brush = new ImageBrush();
                 brush.ImageSource = bitmap;
-                brush.Opacity = 0.7;
+                brush.Opacity = 0.4;
                 App.Current.Resources.Remove("BackgroundBrush");
                 App.Current.Resources.Add("BackgroundBrush", brush);
                 SetBackground(brush);
@@ -825,6 +661,128 @@ namespace NewAnimeChecker
             storyboard.Children.Add(transformX);
 
             storyboard.Begin();
+        }
+        #endregion
+
+        #region 图片加载
+        // 我的订阅 图片加载
+        private async void Image_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var image = sender as Image;
+                var item = image.DataContext as ViewModels.SubscriptionModel;
+
+                BitmapImage bitmap = new BitmapImage();
+                using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    string filePath = "/Cache/" + item.aid + "_" + item.epi + ".jpg";
+                    if (isf.FileExists(filePath))
+                    {
+                        using (IsolatedStorageFileStream stream = isf.OpenFile(filePath, FileMode.Open))
+                        {
+                            bitmap.SetSource(stream);
+                        }
+                    }
+                    else
+                    {
+
+                        HttpEngine httpRequest = new HttpEngine();
+                        Stream stream = await httpRequest.GetAsyncForData("http://images.movie.xunlei.com/submovie_img/" + item.aid[0] + item.aid[1] + "/" + item.aid + "/" + item.epi + "_1_115x70.jpg");
+                        bitmap.SetSource(stream);
+                        if (!isf.DirectoryExists("/Cache"))
+                        {
+                            isf.CreateDirectory("/Cache");
+                        }
+                        using (IsolatedStorageFileStream writeStream = isf.OpenFile(filePath, FileMode.Create))
+                        {
+                            WriteableBitmap wb = new WriteableBitmap(bitmap);
+                            wb.SaveJpeg(writeStream, wb.PixelWidth, wb.PixelHeight, 0, 100);
+                            writeStream.Close();
+                        }
+                    }
+                }
+
+                image.Source = bitmap;
+
+                Storyboard storyboard = new Storyboard();
+
+                DoubleAnimation animation = new DoubleAnimation();
+                animation.From = 0;
+                animation.To = 1;
+                animation.Duration = new Duration(TimeSpan.FromMilliseconds(500));
+
+                Storyboard.SetTarget(animation, image);
+                Storyboard.SetTargetProperty(animation, new PropertyPath(Image.OpacityProperty));
+
+                storyboard.Children.Add(animation);
+                storyboard.Begin();
+
+            }
+            catch
+            {
+
+            }
+        }
+
+        // 最近更新 图片加载
+        private async void Image_Loaded_1(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var image = sender as Image;
+                var item = image.DataContext as ViewModels.ScheduleModel;
+
+                BitmapImage bitmap = new BitmapImage();
+                using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    string filePath = "/Cache/" + item.aid + "_1.jpg";
+                    if (isf.FileExists(filePath))
+                    {
+                        using (IsolatedStorageFileStream stream = isf.OpenFile(filePath, FileMode.Open))
+                        {
+                            bitmap.SetSource(stream);
+                        }
+                    }
+                    else
+                    {
+
+                        HttpEngine httpRequest = new HttpEngine();
+                        Stream stream = await httpRequest.GetAsyncForData("http://images.movie.xunlei.com/submovie_img/" + item.aid[0] + item.aid[1] + "/" + item.aid + "/1_1_115x70.jpg");
+                        bitmap.SetSource(stream);
+                        if (!isf.DirectoryExists("/Cache"))
+                        {
+                            isf.CreateDirectory("/Cache");
+                        }
+                        using (IsolatedStorageFileStream writeStream = isf.OpenFile(filePath, FileMode.Create))
+                        {
+                            WriteableBitmap wb = new WriteableBitmap(bitmap);
+                            wb.SaveJpeg(writeStream, wb.PixelWidth, wb.PixelHeight, 0, 100);
+                            writeStream.Close();
+                        }
+                    }
+                }
+
+                image.Source = bitmap;
+
+                Storyboard storyboard = new Storyboard();
+
+                DoubleAnimation animation = new DoubleAnimation();
+                animation.From = 0;
+                animation.To = 1;
+                animation.Duration = new Duration(TimeSpan.FromMilliseconds(500));
+
+                Storyboard.SetTarget(animation, image);
+                Storyboard.SetTargetProperty(animation, new PropertyPath(Image.OpacityProperty));
+
+                storyboard.Children.Add(animation);
+                storyboard.Begin();
+
+            }
+            catch
+            {
+
+            }
         }
         #endregion
     }

@@ -26,7 +26,7 @@
         <Image Name="BackgroundTransform" Canvas.ZIndex="-2" Margin="0,0,0,0" Visibility="Collapsed"/>
         <phone:Pivot Name="Pivot" Canvas.ZIndex="0" Margin="0,0,0,0" Title="新番提醒" SelectionChanged="Pivot_SelectionChanged">
             <!-- 第一页 -->
-            <phone:PivotItem Header="我的订阅" Margin="12,28,12,0">
+            <phone:PivotItem Header="我的订阅" Margin="0,20,0,0">
                 <phone:LongListSelector Name="LongListSelector" ItemsSource="{Binding SubscriptionItems}" Margin="-13,0,0,0">
                     <phone:LongListSelector.ListHeader>
                         <StackPanel>
@@ -35,13 +35,19 @@
                     </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="0,0,0,0" Opacity="0" Loaded="StackPanel_Loaded">
-                                <Grid  Height="95" Tap="Grid_Tap">
-                                    <Rectangle Fill="{StaticResource PhoneForegroundBrush}" Visibility="{Binding updated}" Height="95" Width="10" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-                                    <TextBlock Text="{Binding name}" TextWrapping="NoWrap" Margin="20,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                    <TextBlock Text="{Binding text}" TextWrapping="NoWrap" Margin="20,60,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                            <Grid Margin="0,0,0,20" Tap="Grid_Tap">
+                                <Grid Margin="0,0,250,0" Tap="Grid_Tap">
+                                    <Rectangle Width="171" Height="108" Fill="White"/>
+                                    <Image Width="161" Height="98" Stretch="Fill" Loaded="Image_Loaded"/>
                                 </Grid>
-                            </StackPanel>
+                                <StackPanel Margin="190,0,0,0" Opacity="0" Loaded="StackPanel_Loaded">
+                                    <Grid Tap="Grid_Tap">
+                                        <TextBlock Text="{Binding name}" TextWrapping="NoWrap" Margin="20,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="30"/>
+                                        <TextBlock Text="{Binding text}" TextWrapping="NoWrap" Margin="23,43,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                        <TextBlock Text="{Binding readText}" TextWrapping="NoWrap" Margin="23,73,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
                         </DataTemplate>
                     </phone:LongListSelector.ItemTemplate>
                     <phone:LongListSelector.ListFooterTemplate>
@@ -52,7 +58,7 @@
                 </phone:LongListSelector>
             </phone:PivotItem>
             <!-- 第二页 -->
-            <phone:PivotItem Header="最近更新" Margin="12,28,12,0">
+            <phone:PivotItem Header="最近更新" Margin="0,20,0,0">
                 <phone:LongListSelector ItemsSource="{Binding ScheduleItems}">
                     <phone:LongListSelector.ListHeader>
                         <StackPanel>
@@ -61,20 +67,28 @@
                     </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="0,0,0,8" Opacity="0" Loaded="StackPanel_Loaded" Tap="StackPanel_Tap">
-                                <toolkit:ContextMenuService.ContextMenu>
-                                    <toolkit:ContextMenu Name="ContextMenu" IsZoomEnabled="True">
-                                        <toolkit:MenuItem Header="添加到我的订阅" Click="AddToSubscription_Click"/>
-                                    </toolkit:ContextMenu>
-                                </toolkit:ContextMenuService.ContextMenu>
-                                <TextBlock Text="{Binding name}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                <TextBlock Text="{Binding time}" TextWrapping="NoWrap" Margin="10,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                            </StackPanel>
+                            <Grid Margin="0,0,0,20" Tap="OpenAnimeIntro_Tap">
+                                <Grid Margin="0,0,250,0">
+                                    <Rectangle Width="171" Height="108" Fill="White"/>
+                                    <Image Width="161" Height="98" Source="/Assets/Background.jpg" Stretch="Fill" Loaded="Image_Loaded_1"/>
+                                </Grid>
+                                <StackPanel Margin="190,0,0,0" Opacity="0" Loaded="StackPanel_Loaded">
+                                    <Grid>
+                                        <toolkit:ContextMenuService.ContextMenu>
+                                            <toolkit:ContextMenu Name="ContextMenu" IsZoomEnabled="True">
+                                                <toolkit:MenuItem Header="添加到我的订阅" Click="AddToSubscription_Click"/>
+                                            </toolkit:ContextMenu>
+                                        </toolkit:ContextMenuService.ContextMenu>
+                                        <TextBlock Text="{Binding name}" TextWrapping="NoWrap" Margin="20,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="30"/>
+                                        <TextBlock Text="{Binding time}" TextWrapping="NoWrap" Margin="23,43,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
                         </DataTemplate>
                     </phone:LongListSelector.ItemTemplate>
                     <phone:LongListSelector.ListFooterTemplate>
                         <DataTemplate>
-                            <StackPanel Height="60"></StackPanel>
+                            <StackPanel Height="70"></StackPanel>
                         </DataTemplate>
                     </phone:LongListSelector.ListFooterTemplate>
                 </phone:LongListSelector>
@@ -86,7 +100,7 @@
         <shell:ApplicationBar x:Key="AppBar0" BackgroundColor="Black" ForegroundColor="White" Opacity="0.5" StateChanged="ApplicationBar_StateChanged">
             <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Add.png" Text="添加订阅" Click="Add_Click"/>
             <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Refresh.png" Text="刷新" Click="Refresh_Click"/>
-            <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Check.png" Text="标为已读" Click="MarkRead_Click"/>
+            <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.Check.png" Text="标为未更新" Click="MarkRead_Click"/>
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="更换背景" Click="ChangeBackground_Click"/>
                 <shell:ApplicationBarMenuItem Text="恢复默认背景" Click="RestoreBackground_Click"/>
