@@ -10,7 +10,7 @@ namespace HttpLibrary
 {
     public class HttpEngine
     {
-        public virtual async Task<Stream> PostAsync(string RequestUrl, string Context)
+        public virtual async Task<string> PostAsync(string RequestUrl, string Context)
         {
             try
             {
@@ -25,7 +25,10 @@ namespace HttpLibrary
                 }
 
                 WebResponse response = await httpWebRequest.GetResponseAsync();
-                return response.GetResponseStream();
+                Stream streamResult = response.GetResponseStream();
+                StreamReader sr = new StreamReader(streamResult, Encoding.UTF8);
+                string returnValue = sr.ReadToEnd();
+                return returnValue;
             }
             catch
             {
