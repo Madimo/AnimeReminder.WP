@@ -387,7 +387,7 @@ namespace NewAnimeChecker
                 {
                     if (item.highlight != "0")
                     {
-                        await api.DelHighlight(item.aid);
+                        await api.Highlight(item.aid, "del");
                     }
                 }
                 ToastPrompt toast = new ToastPrompt();
