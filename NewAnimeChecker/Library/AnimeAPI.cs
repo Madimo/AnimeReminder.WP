@@ -1,10 +1,12 @@
 ﻿using HttpLibrary;
+using Newtonsoft.Json; 
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.IsolatedStorage;
 using System.Threading.Tasks;
+
 
 namespace NewAnimeChecker
 {
@@ -83,6 +85,7 @@ namespace NewAnimeChecker
         }
 
         public string key;
+
         public bool emailReminderStatus;
         public int updateNumber;
         public List<Anime> subscriptionList = new List<Anime>();
@@ -103,9 +106,9 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/login?u=" + username + "&p=" + password + "&hash=" + new Random().Next());
-                ErrorProcessor(result);
-                key = result;
+                string result = await httpRequest.PostAsync("http://api.ricter.info/login", "u=" + username + "&p=" + password + "&hash=" + new Random().Next());
+                JsonData data = ErrorProcessor(result);
+                key = data.key;
                 return true;
             }
             catch
@@ -119,9 +122,9 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/reg?u=" + username + "&p=" + password + "&hash=" + new Random().Next());
-                ErrorProcessor(result);
-                key = result;
+                string result = await httpRequest.PostAsync("http://api.ricter.info/reg", "u=" + username + "&p=" + password + "&hash=" + new Random().Next());
+                JsonData data = ErrorProcessor(result);
+                key = data.key ;
                 return true;
             }
             catch
@@ -135,32 +138,24 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/get_subscription_list?key=" + key + "&sb=Ricter&hash=" + new Random().Next());
-                ErrorProcessor(result);
-
+                string result = await httpRequest.GetAsync("http://api.ricter.info/get_user_info?key=" + key + "&hash=" + new Random().Next());
+                JsonData data = ErrorProcessor(result);
                 subscriptionList.Clear();
-                updateNumber = 0;
-                string[] list = result.Split('\n');
-                for (int i = 0; i < list.Length; ++i)
+                foreach (JsonData animeItem in data.subscription)
                 {
-                    string[] item = list[i].Split('|');
-                    if (item.Length < 6)
-                        continue;
-                    Anime anime     = new Anime();
-                    anime.aid       = item[0];
-                    anime.name      = item[1];
-                    anime.status    = item[2];
-                    anime.epi       = item[3];
-                    anime.read      = item[4];
-                    anime.highlight = item[5];
+                    Anime anime = new Anime();
+                    anime.aid = animeItem.id.ToString();
+                    anime.name = animeItem.name;
+                    anime.status = animeItem.isover.ToString();
+                    anime.epi = animeItem.episode.ToString();
+                    anime.read = animeItem.watch.ToString();
+                    anime.highlight = animeItem.isread.ToString();
                     subscriptionList.Add(anime);
-
                     if (anime.highlight != "0")
                         updateNumber++;
                 }
                 for (int i = 0; i < subscriptionList.Count; ++i)
                     subscriptionList[i].num = i + 1;
-
                 return true;
             }
             catch
@@ -174,7 +169,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/add_anime?key=" + key + "&aid=" + aid + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.ricter.info/add_anime?key=" + key + "&aid=" + aid + "&hash=" + new Random().Next());
                 ErrorProcessor(result);
                 return true;
             }
@@ -189,7 +184,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/del_anime?key=" + key + "&aid=" + aid + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.ricter.info/del_anime?key=" + key + "&aid=" + aid + "&hash=" + new Random().Next());
                 ErrorProcessor(result);
                 return true;
             }
@@ -204,14 +199,12 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/email_reminder_get?key=" + key + "&hash=" + new Random().Next());
-                ErrorProcessor(result);
-                if (result == "0")
+                string result = await httpRequest.GetAsync("http://api.ricter.info/get_user_info?key=" + key + "&hash=" + new Random().Next());
+                JsonData data = ErrorProcessor(result);
+                if (data.email == 0)
                     emailReminderStatus = false;
-                else if (result == "1")
+                else if (data.email == 1)
                     emailReminderStatus = true;
-                else
-                    ErrorProcessor("ERROR_UNKNOWN");
                 return true;
             }
             catch
@@ -230,7 +223,7 @@ namespace NewAnimeChecker
                     enable = "1";
                 else
                     enable = "0";
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/email_reminder_set?key=" + key + "&enable=" + enable + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.ricter.info/email_reminder_set?key=" + key + "&enable=" + enable + "&hash=" + new Random().Next());
                 ErrorProcessor(result);
                 emailReminderStatus = status;
                 return true;
@@ -240,28 +233,13 @@ namespace NewAnimeChecker
                 throw;
             }
         }
-        
-        public async Task<bool> AddHighlight(string aid, string status)
+
+        public async Task<bool> Highlight(string aid, string method)
         {
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/add_highlight?key=" + key + "&aid=" + aid + "&status=" + status + "&hash=" + new Random().Next());
-                ErrorProcessor(result);
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        
-        public async Task<bool> DelHighlight(string aid)
-        {
-            try
-            {
-                HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/del_highlight?key=" + key + "&aid=" + aid + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.ricter.info/highlight?key=" + key + "&aid=" + aid + "&method=" + method + "&hash=" + new Random().Next());
                 ErrorProcessor(result);
                 return true;
             }
@@ -276,7 +254,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/epiedit?key=" + key + "&aid=" + aid + "&epi=" + epi + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.ricter.info/epiedit?key=" + key + "&aid=" + aid + "&epi=" + epi + "&hash=" + new Random().Next());
                 ErrorProcessor(result);
                 return true;
             }
@@ -291,7 +269,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/changepw?key=" + key + "&oldpw=" + oldPsw + "&newpw=" + newPsw + "&hash=" + new Random().Next());
+                string result = await httpRequest.PostAsync("http://api.ricter.info/changepw", "key=" + key + "&oldpw=" + oldPsw + "&newpw=" + newPsw + "&hash=" + new Random().Next());
                 ErrorProcessor(result);
                 return true;
             }
@@ -301,25 +279,24 @@ namespace NewAnimeChecker
             }
         }
         
+        //未完
         public async Task<bool> GetUpdateSchedule()
         {
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api2.ricter.info/get_update_schedule?hash=" + new Random().Next());
-
+                string result = await httpRequest.GetAsync("http://api.ricter.info/get_update_schedule?hash=" + new Random().Next());
+                JsonData data = ErrorProcessor(result);
                 scheduleList.Clear();
-                string[] list = result.Split('\n');
-                for (int i = 0; i < list.Length; ++i)
+
+                foreach (JsonData animeItem in data.update_list)
                 {
-                    string[] item = list[i].Split('|');
-                    if (item.Length < 4)
-                        continue;
                     Anime anime = new Anime();
-                    anime.date  = item[0];
-                    anime.aid   = item[1];
-                    anime.name  = item[2];
-                    anime.time  = item[3];
+                    anime.date = animeItem.week;
+                    anime.aid = animeItem.url.Split('/')[4];
+                    anime.name  = animeItem.name;
+                    anime.time = animeItem.time;
+                    //这里加一个IF判断今天是周几，取week以及week+1的
                     scheduleList.Add(anime);
                 }
 
@@ -388,45 +365,142 @@ namespace NewAnimeChecker
             ERROR_INVALID_KEY,
             ERROR_EXIST_EMAIL,
             ERROR_EXIST_ANIME,
+            ERROR_INVALID_ANIME,
+            ERROR_INVALID_EPI,
             ERROR_SYSTEM,
-            ERROR_UNKNOWN
+            ERROR_UNKNOWN,
+            METHOD_NOT_ALLOW
         };
 
         public ERROR lastError;
 
-        private void ErrorProcessor(string result)
+        private JsonData ErrorProcessor(string result)
         {
-            if (result.Contains("ERROR_"))
-            {
-                if (result.Contains("ERROR_INVALID_PSW"))
-                {
-                    lastError = ERROR.ERROR_INVALID_PSW;
-                    throw new Exception("密码错误");
-                }
-                if (result.Contains("ERROR_INVALID_KEY"))
-                {
-                    lastError = ERROR.ERROR_INVALID_KEY;
-                    throw new Exception("您的帐号授权已过期，请重新登陆");
-                }
-                if (result.Contains("ERROR_EXIST_EMAIL"))
-                {
-                    lastError = ERROR.ERROR_EXIST_EMAIL;
-                    throw new Exception("您填写的邮箱已经被注册，请直接登陆或换个邮箱重试");
-                }
-                if (result.Contains("ERROR_EXIST_ANIME"))
-                {
-                    lastError = ERROR.ERROR_EXIST_ANIME;
-                    throw new Exception("此订阅已经在您的订阅列表中，请不要重复添加");
-                }
-                if (result.Contains("ERROR_SYSTEM"))
-                {
-                    lastError = ERROR.ERROR_SYSTEM;
-                    throw new Exception("服务器内部错误，请稍后重试");
-                }
-
+            JsonData json = JsonConvert.DeserializeObject<JsonData>(result);
+            if (json.status == 500)
                 lastError = ERROR.ERROR_UNKNOWN;
-                throw new Exception("发生了错误，请重试");
+            if (json.status == 400)
+                lastError = ERROR.ERROR_INVALID_KEY;
+            if (json.status == 501)
+                lastError = ERROR.ERROR_INVALID_ANIME;
+            if (json.status == 502)
+                lastError = ERROR.ERROR_INVALID_EPI;
+            if (json.status == 503)
+                lastError = ERROR.ERROR_EXIST_ANIME;
+            if (json.status == 403)
+                lastError = ERROR.METHOD_NOT_ALLOW;
+            if (json.status == 401)
+                lastError = ERROR.ERROR_INVALID_PSW;
+            if (json.status == 407)
+                lastError = ERROR.ERROR_EXIST_EMAIL;
+
+            if (json.status != 500)
+            {
+                throw new Exception(json.message);
+            };
+            return json.data;
+        }
+
+        public class JsonData
+        {
+            public int status
+            {
+                get;
+                set;
             }
+
+            public string message
+            {
+                get;
+                set;
+            }
+
+            public JsonData data
+            {
+                get;
+                set;
+            }
+
+            public string key
+            {
+                get;
+                set;
+            }
+
+            public int email
+            {
+                get;
+                set;
+            }
+
+            public List<JsonData> subscription
+            {
+                get;
+                set;
+            }
+
+            public int isover
+            {
+                get;
+                set;
+            }
+
+            public int episode
+            {
+                get;
+                set;
+            }
+
+            public int watch
+            {
+                get;
+                set;
+            }
+
+            public int isread
+            {
+                get;
+                set;
+            }
+
+            public int id
+            {
+                get;
+                set;
+            }
+
+            public string name
+            {
+                get;
+                set;
+            }
+
+            public List<JsonData> update_list
+            {
+                get;
+                set;
+            }
+
+            public string week
+            {
+                get;
+                set;
+            }
+
+            public string time
+            {
+                get;
+                set;
+            }
+
+            public string url
+            {
+                get;
+                set;
+            }
+
         }
     }
 }
+
+

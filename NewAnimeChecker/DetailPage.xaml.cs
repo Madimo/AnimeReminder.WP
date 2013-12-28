@@ -152,11 +152,11 @@ namespace NewAnimeChecker
             {
                 if ((MarkReadOrUnreadButton.Content as string) == "标记为更新")
                 {
-                    await api.AddHighlight(subscriptionIndex.aid, "2");
+                    await api.Highlight(subscriptionIndex.aid, "add");
                 }
                 else
                 {
-                    await api.DelHighlight(subscriptionIndex.aid);
+                    await api.Highlight(subscriptionIndex.aid, "del");
                 }
                 if (settings.Contains("MustRefresh"))
                     settings.Remove("MustRefresh");
