@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
+﻿using Coding4Fun.Toolkit.Controls;
+using Microsoft.Phone.Controls;
+using System;
 using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using HttpLibrary;
-using Coding4Fun.Toolkit.Controls;
 
 namespace NewAnimeChecker
 {
@@ -39,10 +32,10 @@ namespace NewAnimeChecker
             {
                 subscriptionIndex = App.ViewModel.SubscriptionItems[int.Parse(index)];
                 Pivot.Title = (string)settings["UserName"];
-                if (subscriptionIndex.updated == System.Windows.Visibility.Visible)
-                    MarkReadOrUnreadButton.Content = "标记为已读";
+                if (subscriptionIndex.highlight != "0")
+                    MarkReadOrUnreadButton.Content = "标记为未更新";
                 else
-                    MarkReadOrUnreadButton.Content = "标记为未读";
+                    MarkReadOrUnreadButton.Content = "标记为更新";
                 EpiTextBox.Text = subscriptionIndex.read;
                 EpiTextBlock.Text = "此订阅目前共 " + subscriptionIndex.epi + " 集";
             }
@@ -117,25 +110,6 @@ namespace NewAnimeChecker
             AnimeAPI api = new AnimeAPI();
             try
             {
-/*
-                HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://apianime.ricter.info/del?key=" + settings["UserKey"] + "&id=" + subscriptionIndex.aid);
-                if (result.Contains("ERROR_"))
-                {
-                    if (result == "ERROR_INVALID_KEY")
-                    {
-                        MessageBox.Show("", "您的帐号已在别的客户端登陆，请重新登陆", MessageBoxButton.OK);
-                        settings.Remove("UserKey");
-                        NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
-                        return;
-                    }
-                    if (result == "ERROR_INVALID_ID")
-                    {
-                        throw new Exception("您选择的内容可能已经被删除，请刷新后重试");
-                    }
-                    throw new Exception("发生了错误，但我不知道是什么");
-                }
- */
                 await api.DelAnime(subscriptionIndex.aid);
                 App.ViewModel.SubscriptionItems.Remove(subscriptionIndex);
                 if (settings.Contains("MustRefresh"))
@@ -165,7 +139,7 @@ namespace NewAnimeChecker
         }
         #endregion
 
-        #region 标为已读/未读
+        #region 标为未更新/更新
         private async void MarkReadOrUnread_Click(object sender, RoutedEventArgs e)
         {
             ProgressBar.Text = "执行中...";
@@ -176,52 +150,28 @@ namespace NewAnimeChecker
             AnimeAPI api = new AnimeAPI();
             try
             {
-/*
-                HttpEngine httpRequest = new HttpEngine();
-                string requestUrl = "";
-*/
-                if ((MarkReadOrUnreadButton.Content as string) == "标记为未读")
+                if ((MarkReadOrUnreadButton.Content as string) == "标记为更新")
                 {
-                    await api.AddHighlight(subscriptionIndex.aid, "2");
-/*
-                    requestUrl = "http://apianime.ricter.info/add_highlight?key=" + settings["UserKey"] + "&id=" + subscriptionIndex.aid + "&hash=" + new Random().Next();
-*/
+                    await api.Highlight(subscriptionIndex.aid, "add");
                 }
                 else
                 {
-                    await api.DelHighlight(subscriptionIndex.aid);
-/*
-                    requestUrl = "http://apianime.ricter.info/del_highlight?key=" + settings["UserKey"] + "&id=" + subscriptionIndex.aid + "&hash=" + new Random().Next();
-*/
+                    await api.Highlight(subscriptionIndex.aid, "del");
                 }
-/*
-                string result = await httpRequest.GetAsync(requestUrl);
-                if (result.Contains("ERROR_"))
-                {
-                    if (result == "ERROR_INVALID_KEY")
-                    {
-                        MessageBox.Show("", "您的帐号已在别的客户端登陆，请重新登陆", MessageBoxButton.OK);
-                        settings.Remove("UserKey");
-                        NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
-                        return;
-                    }
-                    throw new Exception("发生了错误，但我不知道是什么");
-                }
- */
                 if (settings.Contains("MustRefresh"))
                     settings.Remove("MustRefresh");
                 settings.Add("MustRefresh", true);
                 settings.Save();
                 ToastPrompt toast = new ToastPrompt();
-                if ((MarkReadOrUnreadButton.Content as string) == "标记为未读")
+                if ((MarkReadOrUnreadButton.Content as string) == "标记为更新")
                 {
-                    MarkReadOrUnreadButton.Content = "标记为已读";
-                    toast.Title = "成功标记为未读";
+                    MarkReadOrUnreadButton.Content = "标记为未更新";
+                    toast.Title = "成功标记为更新";
                 }
                 else
                 {
-                    MarkReadOrUnreadButton.Content = "标记为未读";
-                    toast.Title = "成功标记为已读";
+                    MarkReadOrUnreadButton.Content = "标记为更新";
+                    toast.Title = "成功标记为未更新";
                 }
                 toast.FontSize = 20;
                 toast.Show();
@@ -258,21 +208,6 @@ namespace NewAnimeChecker
             AnimeAPI api = new AnimeAPI();
             try
             {
-/*
-                HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://apianime.ricter.info/epiedit?key=" + settings["UserKey"] + "&aid=" + subscriptionIndex.aid + "&epi=" + EpiTextBox.Text + "&hash=" + new Random().Next());
-                if (result.Contains("ERROR_"))
-                {
-                    if (result == "ERROR_INVALID_KEY")
-                    {
-                        MessageBox.Show("", "您的帐号已在别的客户端登陆，请重新登陆", MessageBoxButton.OK);
-                        settings.Remove("UserKey");
-                        NavigationService.Navigate(new Uri("/LoginPage.xaml", UriKind.Relative));
-                        return;
-                    }
-                    throw new Exception("发生了错误，但我不知道是什么");
-                }
-*/
                 await api.SetReadEpi(subscriptionIndex.aid, EpiTextBox.Text);
                 if (settings.Contains("MustRefresh"))
                     settings.Remove("MustRefresh");

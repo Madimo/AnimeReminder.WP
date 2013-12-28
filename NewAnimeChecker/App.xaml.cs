@@ -1,16 +1,15 @@
-﻿using System;
+﻿using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
+using NewAnimeChecker.Resources;
+using NewAnimeChecker.ViewModels;
+using System;
 using System.Diagnostics;
 using System.IO.IsolatedStorage;
-using System.Resources;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using NewAnimeChecker.Resources;
-using NewAnimeChecker.ViewModels;
 
 namespace NewAnimeChecker
 {
@@ -90,7 +89,7 @@ namespace NewAnimeChecker
                 BitmapImage defaultBackground = new BitmapImage(new Uri("/Assets/Background.jpg", UriKind.Relative));
                 ImageBrush defaultBrush = new ImageBrush();
                 defaultBrush.ImageSource = defaultBackground;
-                defaultBrush.Opacity = 0.7;
+                defaultBrush.Opacity = 0.4;
                 App.Current.Resources.Add("DefaultBackgroundBrush", defaultBrush);
                 BitmapImage background = null;
                 if (isf.FileExists("Background"))
@@ -107,7 +106,7 @@ namespace NewAnimeChecker
                 }
                 ImageBrush brush = new ImageBrush();
                 brush.ImageSource = background;
-                brush.Opacity = 0.7;
+                brush.Opacity = 0.4;
                 App.Current.Resources.Add("BackgroundBrush", brush);
             }
         }

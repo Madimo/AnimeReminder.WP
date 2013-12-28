@@ -1,1 +1,7 @@
-ĞÂ·¬ÌáĞÑÆ÷ Windows Phone ¿Í»§¶Ë
+# æ–°ç•ªæé†’ Windows Phone å®¢æˆ·ç«¯
+
+### å®˜æ–¹ç½‘ç«™
+    http://anime.ricter.info
+
+### å•†åº—é“¾æ¥
+    http://www.windowsphone.com/s?appid=a36600f1-e7f8-4132-81e8-5b6ae65f6b05
