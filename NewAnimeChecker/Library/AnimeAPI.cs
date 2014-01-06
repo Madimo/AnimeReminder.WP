@@ -394,7 +394,7 @@ namespace NewAnimeChecker
             if (json.status == 407)
                 lastError = ERROR.ERROR_EXIST_EMAIL;
 
-            if (json.status != 500)
+            if (json.status != 200)
             {
                 throw new Exception(json.message);
             };
