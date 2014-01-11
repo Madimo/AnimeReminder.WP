@@ -344,10 +344,7 @@ namespace NewAnimeChecker
                 foreach (AnimeAPI.Anime item in api.scheduleList)
                 {
                     string text;
-                    if (item.date == "0")
-                        text = "今天 " + item.time;
-                    else
-                        text = "明天 " + item.time;
+                    text = item.week + " " + item.time;
                     App.ViewModel.ScheduleItems.Add(new ViewModels.ScheduleModel()
                     {
                         num  = item.num,

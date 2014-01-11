@@ -10,12 +10,13 @@ namespace HttpLibrary
 {
     public class HttpEngine
     {
-        public virtual async Task<Stream> PostAsync(string RequestUrl, string Context)
+        public virtual async Task<string> PostAsync(string RequestUrl, string Context)
         {
             try
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(new Uri(RequestUrl, UriKind.Absolute));
                 httpWebRequest.Method = "POST";
+                httpWebRequest.UserAgent = "NewAnimeChecker.Mobile.WindowsPhone.Ver1~3";
                 httpWebRequest.ContentType = "application/x-www-form-urlencoded";
 
                 using (Stream stream = await httpWebRequest.GetRequestStreamAsync())
@@ -25,7 +26,10 @@ namespace HttpLibrary
                 }
 
                 WebResponse response = await httpWebRequest.GetResponseAsync();
-                return response.GetResponseStream();
+                Stream streamResult = response.GetResponseStream();
+                StreamReader sr = new StreamReader(streamResult, Encoding.UTF8);
+                string returnValue = sr.ReadToEnd();
+                return returnValue;
             }
             catch
             {
