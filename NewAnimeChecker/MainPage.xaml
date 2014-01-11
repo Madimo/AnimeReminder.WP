@@ -27,7 +27,7 @@
         <phone:Pivot Name="Pivot" Canvas.ZIndex="0" Margin="0,0,0,0" Title="新番提醒" SelectionChanged="Pivot_SelectionChanged">
             <!-- 第一页 -->
             <phone:PivotItem Header="我的订阅" Margin="0,20,0,0">
-                <phone:LongListSelector Name="LongListSelector" ItemsSource="{Binding SubscriptionItems}" Margin="-13,0,0,0">
+                <phone:LongListSelector Name="LongListSelector" ItemsSource="{Binding SubscriptionItems}">
                     <phone:LongListSelector.ListHeader>
                         <StackPanel>
                             <!-- nothing -->
