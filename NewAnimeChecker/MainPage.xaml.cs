@@ -718,7 +718,7 @@ namespace NewAnimeChecker
             }
             catch
             {
-
+                // do nothing
             }
         }
 
@@ -778,7 +778,7 @@ namespace NewAnimeChecker
             }
             catch
             {
-
+                // do nothing
             }
         }
         #endregion

@@ -461,6 +461,8 @@ namespace NewAnimeChecker
                     break;
             }
 
+            message += "\nerrorcode: " + status.ToString();
+
             throw new Exception(message);
         }
     }
