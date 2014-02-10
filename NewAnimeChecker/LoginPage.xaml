@@ -41,7 +41,7 @@
                     <PasswordBox Name="RegRepasswordBox" HorizontalAlignment="Left" VerticalAlignment="Top" Height="70" Margin="10,150,0,0" Width="436" Visibility="Collapsed" LostFocus="RegRePasswordBox_LostFocus" KeyDown="RegRepasswordBox_KeyDown"/>
                     <Button x:Name="RegButton" Content="注册" HorizontalAlignment="Left" Height="78" Margin="10,302,0,0" VerticalAlignment="Top" Width="436" RenderTransformOrigin="0.477,0.538" Click="RegButton_Click"/>
                     <CheckBox Name="CheckBox" Content="同意" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="183,225,0,0"/>
-                    <HyperlinkButton Content="用户注册协议" NavigateUri="http://anime.ricter.info/help" TargetName="_blank" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="276,246,0,0"/>
+                    <HyperlinkButton Content="用户注册协议" NavigateUri="http://anime.mmmoe.info/disclaimer.html" TargetName="_blank" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="276,246,0,0"/>
                 </Grid>
             </phone:PivotItem>
         </phone:Pivot>
