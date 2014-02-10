@@ -158,6 +158,15 @@ namespace NewAnimeChecker
                     if (anime.highlight != "0")
                         updateNumber++;
                 }
+
+                subscriptionList.Sort((Anime a, Anime b) =>
+                {
+                    if (a.highlight != "0" && b.highlight == "0")
+                        return -1;
+                    return 0;
+                });
+
+
                 for (int i = 0; i < subscriptionList.Count; ++i)
                     subscriptionList[i].num = i + 1;
 
