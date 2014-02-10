@@ -63,7 +63,30 @@ namespace NewAnimeChecker
                 return;
             for (int i = 0; i <= epiCount / 4; ++i)
             {
-                
+                if (i * 4 % 16 == 0 && i * 4 < epiCount)
+                {
+                    TextBlock textBlock = new TextBlock();
+                    int front = i * 4 + 1;
+                    int end   = i * 4 + 16;
+                    if (end > epiCount)
+                        end = epiCount;
+                    if (front == end)
+                        textBlock.Text = front.ToString();
+                    else
+                        textBlock.Text = front.ToString() + " - " + end.ToString();
+                    textBlock.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                    textBlock.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                    textBlock.TextWrapping = TextWrapping.NoWrap;
+                    textBlock.FontSize = 30;
+                    Grid grid = new Grid();
+                    Border border = new Border();
+                    border.Background = new SolidColorBrush((Color)App.Current.Resources["PhoneAccentColor"]);
+                    border.BorderBrush = new SolidColorBrush(Colors.Transparent);
+                    grid.Children.Add(border);
+                    grid.Children.Add(textBlock);
+                    grid.Margin = new Thickness(0, 0, 0, 20);
+                    EpiList.Children.Add(grid);
+                }
                 StackPanel stackPanel = new StackPanel();
                 stackPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
                 stackPanel.Orientation = System.Windows.Controls.Orientation.Horizontal;
@@ -79,7 +102,11 @@ namespace NewAnimeChecker
                     stackPanel.Children.Add(button);
                 }
                 if (stackPanel.Children.Count != 0)
+                {
+                    if ((i + 1) % 4 == 0)
+                        stackPanel.Margin = new Thickness(0, 0, 0, 20);
                     EpiList.Children.Add(stackPanel);
+                }
             }
         }
 
