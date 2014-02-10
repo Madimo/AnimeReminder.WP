@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Navigation;
+using System.Threading;
 
 namespace NewAnimeChecker
 {
@@ -56,9 +57,15 @@ namespace NewAnimeChecker
         private void DetailPage_Loaded(object sender, RoutedEventArgs e)
         {
             Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
+            CreateEpiList();
+        }
+
+        private void CreateEpiList()
+        {
             int epiCount = int.Parse(subscriptionIndex.epi);
             if (epiCount <= 0)
                 return;
+
             int i;
             if (epiCount > 100)
             {
@@ -74,13 +81,14 @@ namespace NewAnimeChecker
             {
                 i = 0;
             }
+
             for (; i <= epiCount / 4; ++i)
             {
                 if (i * 4 % 16 == 0 && i * 4 < epiCount)
                 {
                     TextBlock textBlock = new TextBlock();
                     int front = i * 4 + 1;
-                    int end   = i * 4 + 16;
+                    int end = i * 4 + 16;
                     if (end > epiCount)
                         end = epiCount;
                     if (front == end)
@@ -100,6 +108,7 @@ namespace NewAnimeChecker
                     grid.Margin = new Thickness(0, 0, 0, 20);
                     EpiList.Children.Add(grid);
                 }
+
                 StackPanel stackPanel = new StackPanel();
                 stackPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
                 stackPanel.Orientation = System.Windows.Controls.Orientation.Horizontal;
@@ -114,6 +123,7 @@ namespace NewAnimeChecker
                     button.Click += EpiButton_Click;
                     stackPanel.Children.Add(button);
                 }
+
                 if (stackPanel.Children.Count != 0)
                 {
                     if ((i + 1) % 4 == 0)
