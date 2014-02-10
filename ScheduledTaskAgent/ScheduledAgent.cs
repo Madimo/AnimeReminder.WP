@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Windows;
+using Newtonsoft.Json.Linq;
+
 
 namespace ScheduledTaskAgent
 {
@@ -82,58 +84,21 @@ namespace ScheduledTaskAgent
                     if (Debugger.IsAttached || TimeOffset.TotalHours >= (double)TimeSet)
                     {
                         HttpEngine httpRequest = new HttpEngine();
-                        string result = await httpRequest.GetAsync("http://api2.ricter.info/get_subscription_list?key=" + IsolatedStorageSettings.ApplicationSettings["UserKey"] + "&hash=" + new Random().Next());
-/*
-                        string result = await httpRequest.GetAsync("http://apianime.ricter.info/get_subscription_list?key=" + IsolatedStorageSettings.ApplicationSettings["UserKey"] + "&hash=" + new Random().Next());
-                        if (result.Contains("ERROR_"))
-                        {
-                            throw new Exception(result);
-                        }
-                        string[] list = result.Split('\n');
-                        int updatedNumber = 0;
-                        string[] TileContent = new string[3] { "", "", "" };
-                        string ShowName = "";
-                        for (int i = 0; i < list.Length; ++i)
-                        {
-                            string[] item = list[i].Split('|');
-                            if (item.Length < 5)
-                                continue;
-                            string isUpdate = item[0];
-                            string name     = item[2];
-                            string epi      = item[3];
-                            if (isUpdate == "1")
-                            {
-                                updatedNumber++;
-                                if (updatedNumber == 1)
-                                {
-                                    TileContent[0] = "订阅更新";
-                                    TileContent[1] = name + " 更新到第 " + epi + " 集";
-                                    ShowName = name;
-                                }
-                                else if (updatedNumber == 2)
-                                {
-                                    TileContent[2] = name + " 更新到第 " + epi + " 集";
-                                }
-                            }
-                        }
-*/
+                        string result = await httpRequest.GetAsync("http://api.anime.mmmoe.info/get_user_info?key=" + IsolatedStorageSettings.ApplicationSettings["UserKey"] + "&sb=Ricter&hash=" + new Random().Next());
+                        JObject json = JObject.Parse(result);
+
                         List<Anime> subscriptionList = new List<Anime>();
                         int pushNumber = 0;
                         int updatedNumber = 0;
-                        string[] list = result.Split('\n');
-                        for (int i = 0; i < list.Length; ++i)
+                        JArray subscription = json["data"]["subscription"] as JArray;
+                        foreach (JObject item in subscription)
                         {
-                            string[] item = list[i].Split('|');
-                            if (item.Length < 6)
-                                continue;
-                            Anime anime     = new Anime();
-                            anime.name      = item[1];
-                            anime.epi       = item[3];
-                            anime.highlight = item[5];
+                            Anime anime = new Anime();
+                            anime.name = (string)item["name"];
+                            anime.epi = ((int)item["episode"]).ToString();
+                            anime.highlight = ((int)item["isread"]).ToString();
                             subscriptionList.Add(anime);
 
-                            if (anime.highlight == "1")
-                                pushNumber++;
                             if (anime.highlight != "0")
                                 updatedNumber++;
                         }

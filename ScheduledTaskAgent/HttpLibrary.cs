@@ -10,12 +10,13 @@ namespace HttpMethod
 {
     public class HttpEngine
     {
-        protected virtual async Task<Stream> PostAsync(string RequestUrl, string Context)
+        public virtual async Task<string> PostAsync(string RequestUrl, string Context)
         {
             try
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(new Uri(RequestUrl, UriKind.Absolute));
                 httpWebRequest.Method = "POST";
+                httpWebRequest.UserAgent = "NewAnimeChecker.Mobile.WindowsPhone.Ver2~0";
                 httpWebRequest.ContentType = "application/x-www-form-urlencoded";
 
                 using (Stream stream = await httpWebRequest.GetRequestStreamAsync())
@@ -25,11 +26,14 @@ namespace HttpMethod
                 }
 
                 WebResponse response = await httpWebRequest.GetResponseAsync();
-                return response.GetResponseStream();
+                Stream streamResult = response.GetResponseStream();
+                StreamReader sr = new StreamReader(streamResult, Encoding.UTF8);
+                string returnValue = sr.ReadToEnd();
+                return returnValue;
             }
             catch
             {
-                throw new Exception("网络错误");
+                throw new Exception("网络错误，请检查网络连接或重试");
             }
         }
 
@@ -39,20 +43,32 @@ namespace HttpMethod
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(new Uri(RequestUrl, UriKind.Absolute));
                 httpWebRequest.Method = "GET";
+                httpWebRequest.UserAgent = "NewAnimeChecker.Mobile.WindowsPhone.Ver2~0";
                 WebResponse response = await httpWebRequest.GetResponseAsync();
                 Stream streamResult = response.GetResponseStream();
                 StreamReader sr = new StreamReader(streamResult, Encoding.UTF8);
                 string returnValue = sr.ReadToEnd();
-                streamResult.Close();
-                streamResult.Dispose();
-                httpWebRequest.Abort();
-                response.Close();
-                response.Dispose();
                 return returnValue;
             }
             catch
             {
-                throw new Exception("网络错误");
+                throw new Exception("网络错误，请检查网络连接或重试");
+            }
+        }
+
+        public virtual async Task<Stream> GetAsyncForData(string RequestUrl)
+        {
+            try
+            {
+                HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(new Uri(RequestUrl, UriKind.Absolute));
+                httpWebRequest.Method = "GET";
+                WebResponse response = await httpWebRequest.GetResponseAsync();
+                Stream streamResult = response.GetResponseStream();
+                return streamResult;
+            }
+            catch
+            {
+                throw new Exception("网络错误，请检查网络连接或重试");
             }
         }
     }
