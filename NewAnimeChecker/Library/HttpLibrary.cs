@@ -16,7 +16,7 @@ namespace HttpLibrary
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(new Uri(RequestUrl, UriKind.Absolute));
                 httpWebRequest.Method = "POST";
-                httpWebRequest.UserAgent = "NewAnimeChecker.Mobile.WindowsPhone.Ver1~3";
+                httpWebRequest.UserAgent = "NewAnimeChecker.Mobile.WindowsPhone.Ver2~0";
                 httpWebRequest.ContentType = "application/x-www-form-urlencoded";
 
                 using (Stream stream = await httpWebRequest.GetRequestStreamAsync())
@@ -43,7 +43,7 @@ namespace HttpLibrary
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(new Uri(RequestUrl, UriKind.Absolute));
                 httpWebRequest.Method = "GET";
-                httpWebRequest.UserAgent = "NewAnimeChecker.Mobile.WindowsPhone.Ver1~3";
+                httpWebRequest.UserAgent = "NewAnimeChecker.Mobile.WindowsPhone.Ver2~0";
                 WebResponse response = await httpWebRequest.GetResponseAsync();
                 Stream streamResult = response.GetResponseStream();
                 StreamReader sr = new StreamReader(streamResult, Encoding.UTF8);
