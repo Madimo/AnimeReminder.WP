@@ -6,6 +6,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Navigation;
+using System.Diagnostics;
+using Newtonsoft.Json.Linq;
+using HttpLibrary;
+using System.Threading.Tasks;
+using System.Threading;
+using Microsoft.Phone.Tasks;
+using Microsoft.Phone.Net.NetworkInformation;
 
 namespace NewAnimeChecker
 {
@@ -51,6 +58,87 @@ namespace NewAnimeChecker
         private void DetailPage_Loaded(object sender, RoutedEventArgs e)
         {
             Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
+
+            int epiCount = int.Parse(subscriptionIndex.epi);
+            for (int i = 0; i <= epiCount % 4; ++i)
+            {
+                StackPanel stackPanel = new StackPanel();
+                stackPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                stackPanel.Orientation = System.Windows.Controls.Orientation.Horizontal;
+                for (int j = 1; j <= 4; ++j)
+                {
+                    if (j + i * 4 > epiCount)
+                        break;
+                    Button button = new Button();
+                    button.Width = EpiList.RenderSize.Width / 4;
+                    button.Content = (j + i * 4).ToString();
+                    button.Tag = (j + i * 4).ToString();
+                    button.Click += EpiButton_Click;
+                    stackPanel.Children.Add(button);
+                }
+                if (stackPanel.Children.Count != 0)
+                    EpiList.Children.Add(stackPanel);
+            }
+        }
+
+        private async void EpiButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (!DeviceNetworkInformation.IsWiFiEnabled)
+            {
+                MessageBoxResult result = MessageBox.Show("检测到您正在使用移动数据网络，跳转到播放页面可能会使用您的数据流量，是否继续？", "提示", MessageBoxButton.OKCancel);
+                if (result == MessageBoxResult.Cancel)
+                    return;
+            }
+
+
+            LodingGrid.Visibility = System.Windows.Visibility.Visible;
+
+            string id = null;
+            string aid = subscriptionIndex.aid;
+
+            try
+            {
+                string url = "http://data.pad.kankan.com/mobile/sub_detail/" + aid[0] + aid[1] + "/" + aid + ".json";
+                HttpEngine httpRequest = new HttpEngine();
+                string result = await httpRequest.GetAsync(url);
+                JObject json = JObject.Parse(result);
+                foreach (JObject item in (json["episodes"] as JArray))
+                {
+                    if (((int)item["index"] + 1).ToString() == ((sender as Button).Tag as string))
+                    {
+                        foreach (JObject part in (item["parts"] as JArray))
+                        {
+                            if (((int)part["index"]) == 0)
+                            {
+                                id = ((int)part["id"]).ToString();
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                LodingGrid.Visibility = System.Windows.Visibility.Collapsed;
+                MessageBox.Show(exception.Message, "获取播放地址失败", MessageBoxButton.OK);
+            }
+
+            if (id != null)
+            {
+                string playUrl = "http://m.kankan.com/v/" + aid[0] + aid[1] + "/" + aid + ".shtml?subid=" + id + "&quality=2";
+                Debug.WriteLine(playUrl);
+                LodingGrid.Visibility = System.Windows.Visibility.Collapsed;
+                WebBrowserTask task = new WebBrowserTask();
+                task.Uri = new Uri(playUrl, UriKind.Absolute);
+                task.Show();
+            }
+            else
+            {
+                LodingGrid.Visibility = System.Windows.Visibility.Collapsed;
+                MessageBox.Show("", "获取播放地址失败", MessageBoxButton.OK);
+            }
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)

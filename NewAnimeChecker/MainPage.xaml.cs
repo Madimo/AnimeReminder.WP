@@ -286,6 +286,7 @@ namespace NewAnimeChecker
                         readText  = readText,
                         highlight = item.highlight,
                         text      = text,
+                        pic       = "http://images.movie.xunlei.com/submovie_img/" + item.aid[0] + item.aid[1] + "/" + item.aid + "/" + item.epi + "_1_115x70.jpg"
                     });
                 }
 
@@ -339,8 +340,10 @@ namespace NewAnimeChecker
             {
                 await api.GetUpdateSchedule();
                 while (App.ViewModel.ScheduleItems.Count > 0)
-                    App.ViewModel.ScheduleItems.RemoveAt(0);
-                LongListSelector.UpdateLayout();
+                {
+                    App.ViewModel.ScheduleItems.RemoveAt(App.ViewModel.ScheduleItems.Count - 1);
+                    LongListSelector.UpdateLayout();
+                }
                 foreach (AnimeAPI.Anime item in api.scheduleList)
                 {
                     string text;
@@ -350,7 +353,8 @@ namespace NewAnimeChecker
                         num  = item.num,
                         aid  = item.aid,
                         name = item.name,
-                        time = text
+                        time = text,
+                        pic  = "http://images.movie.xunlei.com/submovie_img/" + item.aid[0] + item.aid[1] + "/" + item.aid + "/1_1_115x70.jpg"
                     });
                 }
             }

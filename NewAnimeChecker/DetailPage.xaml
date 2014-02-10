@@ -29,7 +29,7 @@
         <phone:Pivot Name="Pivot" Title="MadimoZhang@gmail.com">
             <phone:PivotItem Header="订阅编辑">
                 <Grid Margin="0,0,0,0">
-                    <TextBlock Name="EpiTextBlock" Text="此订阅目前共 0 集" Margin="0,52,0,510" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="48"/>
+                    <TextBlock Name="EpiTextBlock" Text="此订阅目前共 0 集" Margin="34,41,33,489" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="48" Height="73"/>
                     <Button HorizontalAlignment="Left" Height="78" Margin="10,162,0,0" VerticalAlignment="Top" Width="78" BorderThickness="0" Click="Add_Click">
                         <Button.Background>
                             <ImageBrush ImageSource="/Toolkit.Content/Add.png" Stretch="None"/>
@@ -46,16 +46,20 @@
                     <Button Name="DeleteButton" Content="删除此订阅" HorizontalAlignment="Left" Margin="0,478,0,0" VerticalAlignment="Top" Width="456" Click="Delete_Click"/>
                 </Grid>
             </phone:PivotItem>
-            <!--
-            <phone:PivotItem Header="取名字！">
+            <phone:PivotItem Header="分集列表">
                 <Grid Margin="0,0,0,0">
-                    
+                    <StackPanel Name="EpiList">
+                        
+                    </StackPanel>
+                    <Grid Name="LodingGrid" Background="Black" Opacity="0.6" Visibility="Collapsed">
+                        <ProgressBar IsIndeterminate="True"/>
+                        <TextBlock Text="正在获取播放地址" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Grid>
                 </Grid>
             </phone:PivotItem>
-            !-->
         </phone:Pivot>
     </Grid>
-<!--
+    <!--
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar Opacity="0.5" BackgroundColor="Black" ForegroundColor="White" StateChanged="ApplicationBar_StateChanged">
             <shell:ApplicationBarIconButton IconUri="Toolkit.Content/ApplicationBar.MarkUnread.png" Text="标为未读" Click="MarkReadOrUnread_Click"/>

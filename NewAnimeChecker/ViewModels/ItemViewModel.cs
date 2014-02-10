@@ -65,6 +65,23 @@ namespace NewAnimeChecker.ViewModels
             }
         }
 
+        private string _pic;
+        public string pic
+        {
+            get
+            {
+                return _pic;
+            }
+            set
+            {
+                if (value != _pic)
+                {
+                    _pic = value;
+                    NotifyPropertyChanged("pic");
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(String propertyName)
         {
@@ -113,6 +130,23 @@ namespace NewAnimeChecker.ViewModels
                 {
                     _time = value;
                     NotifyPropertyChanged("time");
+                }
+            }
+        }
+
+        private string _pic;
+        public string pic
+        {
+            get
+            {
+                return _pic;
+            }
+            set
+            {
+                if (value != _pic)
+                {
+                    _pic = value;
+                    NotifyPropertyChanged("pic");
                 }
             }
         }
