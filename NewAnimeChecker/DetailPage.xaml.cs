@@ -58,10 +58,12 @@ namespace NewAnimeChecker
         private void DetailPage_Loaded(object sender, RoutedEventArgs e)
         {
             Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
-
             int epiCount = int.Parse(subscriptionIndex.epi);
+            if (epiCount <= 0)
+                return;
             for (int i = 0; i <= epiCount / 4; ++i)
             {
+                
                 StackPanel stackPanel = new StackPanel();
                 stackPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
                 stackPanel.Orientation = System.Windows.Controls.Orientation.Horizontal;
