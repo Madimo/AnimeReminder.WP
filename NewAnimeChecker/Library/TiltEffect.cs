@@ -44,7 +44,7 @@ namespace NewAnimeChecker
         static TiltEffect()
         {
             // The tiltable items list.
-            TiltableItems = new List<Type>() { typeof(ButtonBase), typeof(StackPanel) };
+            TiltableItems = new List<Type>() { typeof(ButtonBase) };
             UseLogarithmicEase = false;
         }
 

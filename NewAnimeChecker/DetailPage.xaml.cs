@@ -1,18 +1,16 @@
 ﻿using Coding4Fun.Toolkit.Controls;
+using HttpLibrary;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Net.NetworkInformation;
+using Microsoft.Phone.Tasks;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Diagnostics;
 using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Navigation;
-using System.Diagnostics;
-using Newtonsoft.Json.Linq;
-using HttpLibrary;
-using System.Threading.Tasks;
-using System.Threading;
-using Microsoft.Phone.Tasks;
-using Microsoft.Phone.Net.NetworkInformation;
 
 namespace NewAnimeChecker
 {
@@ -61,7 +59,22 @@ namespace NewAnimeChecker
             int epiCount = int.Parse(subscriptionIndex.epi);
             if (epiCount <= 0)
                 return;
-            for (int i = 0; i <= epiCount / 4; ++i)
+            int i;
+            if (epiCount > 100)
+            {
+                i = epiCount / 4 - 12 - (epiCount % 16) / 4;
+                TextBlock textBlock = new TextBlock();
+                textBlock.Text = "提示：由于集数太多，仅加载最后的 50 集左右";
+                textBlock.Margin = new Thickness(0, 0, 0, 20);
+                textBlock.TextAlignment = TextAlignment.Center;
+                textBlock.Foreground = new SolidColorBrush(Colors.Gray);
+                EpiList.Children.Add(textBlock);
+            }
+            else
+            {
+                i = 0;
+            }
+            for (; i <= epiCount / 4; ++i)
             {
                 if (i * 4 % 16 == 0 && i * 4 < epiCount)
                 {
