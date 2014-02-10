@@ -103,7 +103,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.PostAsync("http://api.ricter.info/login?hash=" + new Random().Next(), "u=" + username + "&p=" + password);
+                string result = await httpRequest.PostAsync("http://api.anime.mmmoe.info/login?hash=" + new Random().Next(), "u=" + username + "&p=" + password);
                 JObject json = JObject.Parse(result);
                 ErrorProcessor(json);
                 key = (string)json["data"]["key"];
@@ -120,7 +120,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.PostAsync("http://api.ricter.info/reg?hash=" + new Random().Next(), "u=" + username + "&p=" + password);
+                string result = await httpRequest.PostAsync("http://api.anime.mmmoe.info/reg?hash=" + new Random().Next(), "u=" + username + "&p=" + password);
                 JObject json = JObject.Parse(result);
                 ErrorProcessor(json);
                 key = (string)json["data"]["key"];
@@ -137,7 +137,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api.ricter.info/get_user_info?key=" + key + "&sb=Ricter&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.anime.mmmoe.info/get_user_info?key=" + key + "&sb=Ricter&hash=" + new Random().Next());
                 JObject json = JObject.Parse(result);
                 ErrorProcessor(json);
 
@@ -174,7 +174,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api.ricter.info/add_anime?key=" + key + "&aid=" + aid + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.anime.mmmoe.info/add_anime?key=" + key + "&aid=" + aid + "&hash=" + new Random().Next());
                 JObject json = JObject.Parse(result);
                 ErrorProcessor(json);
                 return true;
@@ -190,7 +190,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api.ricter.info/del_anime?key=" + key + "&aid=" + aid + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.anime.mmmoe.info/del_anime?key=" + key + "&aid=" + aid + "&hash=" + new Random().Next());
                 JObject json = JObject.Parse(result);
                 ErrorProcessor(json);
                 return true;
@@ -206,7 +206,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api.ricter.info/get_user_info?key=" + key + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.anime.mmmoe.info/get_user_info?key=" + key + "&hash=" + new Random().Next());
                 JObject json = JObject.Parse(result);
                 ErrorProcessor(json);
 
@@ -233,7 +233,7 @@ namespace NewAnimeChecker
                     enable = "1";
                 else
                     enable = "0";
-                string result = await httpRequest.GetAsync("http://api.ricter.info/email_reminder_set?key=" + key + "&enable=" + enable + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.anime.mmmoe.info/email_reminder_set?key=" + key + "&enable=" + enable + "&hash=" + new Random().Next());
                 JObject json = JObject.Parse(result);
                 ErrorProcessor(json);
                 emailReminderStatus = status;
@@ -250,7 +250,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api.ricter.info/highlight?key=" + key + "&aid=" + aid + "&status=" + status + "&method=add&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.anime.mmmoe.info/highlight?key=" + key + "&aid=" + aid + "&status=" + status + "&method=add&hash=" + new Random().Next());
                 JObject json = JObject.Parse(result);
                 ErrorProcessor(json);
                 return true;
@@ -266,7 +266,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api.ricter.info/highlight?key=" + key + "&aid=" + aid + "&method=del&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.anime.mmmoe.info/highlight?key=" + key + "&aid=" + aid + "&method=del&hash=" + new Random().Next());
                 JObject json = JObject.Parse(result);
                 ErrorProcessor(json);
                 return true;
@@ -282,7 +282,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api.ricter.info/epiedit?key=" + key + "&aid=" + aid + "&epi=" + epi + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.anime.mmmoe.info/epiedit?key=" + key + "&aid=" + aid + "&epi=" + epi + "&hash=" + new Random().Next());
                 JObject json = JObject.Parse(result);
                 ErrorProcessor(json);
                 return true;
@@ -298,7 +298,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api.ricter.info/changepw?key=" + key + "&oldpw=" + oldPsw + "&newpw=" + newPsw + "&hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.anime.mmmoe.info/changepw?key=" + key + "&oldpw=" + oldPsw + "&newpw=" + newPsw + "&hash=" + new Random().Next());
                 JObject json = JObject.Parse(result);
                 ErrorProcessor(json);
                 return true;
@@ -314,7 +314,7 @@ namespace NewAnimeChecker
             try
             {
                 HttpEngine httpRequest = new HttpEngine();
-                string result = await httpRequest.GetAsync("http://api.ricter.info/get_update_schedule?hash=" + new Random().Next());
+                string result = await httpRequest.GetAsync("http://api.anime.mmmoe.info/get_update_schedule?hash=" + new Random().Next());
                 JObject json = JObject.Parse(result);
                 ErrorProcessor(json);
 
