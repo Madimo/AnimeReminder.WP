@@ -29,7 +29,7 @@
         <phone:Pivot Name="Pivot" Title="MadimoZhang@gmail.com">
             <phone:PivotItem Header="订阅编辑">
                 <Grid Margin="0,0,0,0">
-                    <TextBlock Name="EpiTextBlock" Text="此订阅目前共 0 集" Margin="34,41,33,489" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="48" Height="73"/>
+                    <TextBlock Name="EpiTextBlock" Text="此订阅目前共 0 集" Margin="0,41,0,489" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="48" Height="73" Width="456" TextAlignment="Center"/>
                     <Button HorizontalAlignment="Left" Height="78" Margin="10,162,0,0" VerticalAlignment="Top" Width="78" BorderThickness="0" Click="Add_Click">
                         <Button.Background>
                             <ImageBrush ImageSource="/Toolkit.Content/Add.png" Stretch="None"/>
@@ -48,9 +48,11 @@
             </phone:PivotItem>
             <phone:PivotItem Header="分集列表">
                 <Grid Margin="0,0,0,0">
-                    <StackPanel Name="EpiList">
-                        
-                    </StackPanel>
+                    <ScrollViewer>
+                        <StackPanel Name="EpiList">
+
+                        </StackPanel>
+                    </ScrollViewer>
                     <Grid Name="LodingGrid" Background="Black" Opacity="0.6" Visibility="Collapsed">
                         <ProgressBar IsIndeterminate="True"/>
                         <TextBlock Text="正在获取播放地址" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Center"/>

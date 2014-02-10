@@ -60,7 +60,7 @@ namespace NewAnimeChecker
             Pivot.Background = (ImageBrush)App.Current.Resources["BackgroundBrush"];
 
             int epiCount = int.Parse(subscriptionIndex.epi);
-            for (int i = 0; i <= epiCount % 4; ++i)
+            for (int i = 0; i <= epiCount / 4; ++i)
             {
                 StackPanel stackPanel = new StackPanel();
                 stackPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
