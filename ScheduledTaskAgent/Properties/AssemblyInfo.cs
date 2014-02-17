@@ -7,11 +7,11 @@ using System.Resources;
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("ScheduledTaskAgent")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("ScheduledTaskAgent")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Madimo")]
 [assembly: AssemblyProduct("ScheduledTaskAgent")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCopyright("Copyright Madimo 2013-2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,6 +32,6 @@ using System.Resources;
 //
 // 可以指定所有这些值，也可以使用“修订号”和“内部版本号”的默认值，
 // 方法是按如下方式使用“*”:
-[assembly: AssemblyVersion("1.2.0.520")]
-[assembly: AssemblyFileVersion("1.2.0.520")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("zh-CN")]
