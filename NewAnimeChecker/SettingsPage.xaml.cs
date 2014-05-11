@@ -52,7 +52,7 @@ namespace NewAnimeChecker
 
             emailComposeTask.Subject = "新番提醒WindowsPhone 反馈";
             emailComposeTask.To = "MadimoZhang@gmail.com";
-            emailComposeTask.Body = "请在下面写下您的意见或bug反馈：\n\n\n\n\n\n下面是我们需要的信息，不涉及您的隐私\nApplicationVersion: 2.0\nCurrentMemoryUsage: " + DeviceStatus.ApplicationCurrentMemoryUsage
+            emailComposeTask.Body = "请在下面写下您的意见或bug反馈：\n\n\n\n\n\n下面是我们需要的信息，不涉及您的隐私\nApplicationVersion:2.1\nCurrentMemoryUsage: " + DeviceStatus.ApplicationCurrentMemoryUsage
                 + "\nMemoryUsageLimit: " + DeviceStatus.ApplicationMemoryUsageLimit + "\nPeakMemoryUsage: " + DeviceStatus.ApplicationPeakMemoryUsage + "\nFirmwareVersion: "
                 + DeviceStatus.DeviceFirmwareVersion + "\nHardwareVersion: " + DeviceStatus.DeviceHardwareVersion + "\nManufacturer: " + DeviceStatus.DeviceManufacturer + "\nDeviceName: "
                 + DeviceStatus.DeviceName + "\nTotalMemory: " + DeviceStatus.DeviceTotalMemory;
