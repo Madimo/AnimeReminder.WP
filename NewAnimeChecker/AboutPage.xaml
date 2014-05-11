@@ -52,7 +52,7 @@
                     </TextBlock>
                     <TextBlock Text="官方QQ群：329881279" FontSize="22" Margin="-6,436,22,137"/>
                     <HyperlinkButton Content="RicterZheng@gmail.com" TargetName="_blank" Margin="103,378,0,0" VerticalAlignment="Top" Width="330" FontSize="22" NavigateUri="mailto:RicterZheng@gmail.com" HorizontalAlignment="Left" HorizontalContentAlignment="Left"/>
-                    <HyperlinkButton Content="http://anime.mmmoe.info" TargetName="_blank" Margin="103,465,0,0" VerticalAlignment="Top" Width="330" FontSize="22" NavigateUri="http://anime.ricter.info/" HorizontalAlignment="Left" HorizontalContentAlignment="Left"/>
+                    <HyperlinkButton Content="http://www.sellmoe.com" TargetName="_blank" Margin="103,465,0,0" VerticalAlignment="Top" Width="330" FontSize="22" NavigateUri="http://www.sellmoe.com" HorizontalAlignment="Left" HorizontalContentAlignment="Left"/>
                     <TextBlock HorizontalAlignment="Left" Height="39" Margin="10,10,0,0" TextWrapping="Wrap" Text="#" VerticalAlignment="Top" Width="31" FontSize="24"/>
                     <TextBlock HorizontalAlignment="Left" Height="39" Margin="10,270,0,0" TextWrapping="Wrap" Text="#" VerticalAlignment="Top" Width="31" FontSize="24"/>
                 </Grid>
